@@ -17,11 +17,25 @@ gem 'turbolinks',              '2.3.0'
 gem 'jbuilder',                '2.2.3'
 gem 'sdoc',                    '0.4.0', group: :doc
 
+# For SMS framework
+
+gem 'twilio-ruby' # SMS
+gem 'delayed_job_active_record' # Cron SMS jobs
+gem 'daemons' # Required for Cron jobs
+
+
 group :development, :test do
   gem 'sqlite3',     '1.3.9'
   gem 'byebug',      '3.4.0'
   gem 'web-console', '2.0.0.beta3'
   gem 'spring',      '1.1.3'
+
+  # Testing / Troubleshooting tools
+  gem 'factory_girl_rails'
+  gem 'better_errors'
+  gem 'binding_of_caller'
+  gem 'rails-erd'
+  gem 'pry-byebug'
 end
 
 group :test do
