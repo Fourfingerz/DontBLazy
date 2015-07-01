@@ -25,5 +25,8 @@ module SampleApp
     
     # Include the authenticity token in remote forms.
     config.action_view.embed_authenticity_token_in_remote_forms = true
+
+    # Sets up Delayed_Job for Rails 4.2
+    config.active_job.queue_adapter = :delayed_job
   end
 end
