@@ -40,3 +40,4 @@ $ git checkout log-in-log-out
 ```
 
 This should help you track down any discrepancies between your code and the code in the tutorial.
+# DontBLazy
