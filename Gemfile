@@ -36,6 +36,7 @@ group :development, :test do
   gem 'binding_of_caller'
   gem 'rails-erd'
   gem 'pry-byebug'
+  gem 'rspec-rails'
 end
 
 group :test do
