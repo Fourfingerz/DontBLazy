@@ -5,10 +5,9 @@ FactoryGirl.define do
   	password "foobar"
   	password_confirmation "foobar"
 
-  	after(:build) do |user|
-  	  [:name, :phone].each do |recipient|
-  	    user.recipients << FactoryGirl.build(:name,
-  	      :phone, user: user)
+  	factory :user_with_recipient do
+  	  after(:create) do |user|
+  	  	create(:recipient, user: user)
   	  end
   	end
   end
