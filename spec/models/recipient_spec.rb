@@ -33,4 +33,18 @@ describe Recipient do
     recipient.valid?
     expect(recipient.errors[:user_id]).to include("can't be blank")
   end
+
+  it "does not allow duplicate phone numbers per user" do
+  	recipient = create(:recipient)
+  	create(:recipient,
+  	  user_id: rand(100),
+  	  phone: '17180000000'
+  	  )
+  	another_phone = build(:recipient,
+  	  user_id: rand(100),
+  	  phone: '17180000000'
+  	  )
+  	another_phone.valid?
+  	expect(another_phone.errors[:phone]).to include('has already been taken')
+  end
 end

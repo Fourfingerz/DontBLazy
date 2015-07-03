@@ -1,7 +1,9 @@
 FactoryGirl.define do
   factory :recipient do
-  	name "Zadie Smith"
-  	user_id '89'
-  	sequence(:phone) { |n| "12345678{n}"}
+  	# association :user  # this is fucking up
+  	name { Faker::Name.name }
+  	user_id { rand(100) }
+  	phone { Faker::PhoneNumber.phone_number }
   end
 end
+
