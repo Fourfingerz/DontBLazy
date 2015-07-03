@@ -1,8 +1,7 @@
 FactoryGirl.define do
   factory :recipient do
-    name "MyString"
-	phone "MyString"
-	user_id 1
+  	name "Zadie Smith"
+  	user_id '89'
+  	sequence(:phone) { |n| "12345678{n}"}
   end
-
 end

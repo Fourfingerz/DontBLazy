@@ -1,34 +1,35 @@
 require 'rails_helper'
 
 describe Recipient do
+  it "has a valid factory" do
+  	expect(FactoryGirl.build(:recipient)).to be_valid
+  end
+
   it "is valid with a name, phone, and belongs to a user" do
-  	recipient = Recipient.new(
-  	  name: 'Beth Gibbons',
-  	  phone: '1234567890',
-  	  user_id: '89')
+  	recipient = FactoryGirl.build(:recipient)
   	expect(recipient).to be_valid
   end
 
   it "is invalid without a name" do
-  	recipient = Recipient.new(name: nil)
+  	recipient = FactoryGirl.build(:recipient, name: '')
   	recipient.valid?
   	expect(recipient.errors[:name]).to include("can't be blank")
   end
 
   it "is invalid with a name shorter than three characters" do
-  	recipient = Recipient.new(name: 'Bo')
+  	recipient = FactoryGirl.build(:recipient, name: 'Bo')
   	recipient.valid?	
   	expect(recipient.errors[:name]).to include("is too short (minimum is 3 characters)")
   end
 
   it "is invalid without a phone" do
-  	recipient = Recipient.new(phone: '')
+  	recipient = FactoryGirl.build(:recipient, phone: '')
   	recipient.valid?
   	expect(recipient.errors[:phone]).to include("can't be blank")
   end
 
   it "is invalid if it doesn't belong to a user" do
-    recipient = Recipient.new(user_id: '')
+    recipient = FactoryGirl.build(:recipient, user_id: '')
     recipient.valid?
     expect(recipient.errors[:user_id]).to include("can't be blank")
   end
