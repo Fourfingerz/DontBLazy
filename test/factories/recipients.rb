@@ -4,5 +4,9 @@ FactoryGirl.define do
   	user_id { rand(100) }
   	phone { Faker::PhoneNumber.phone_number }
   end
+
+  factory :invalid_recipient do
+  	name nil
+  end
 end
 

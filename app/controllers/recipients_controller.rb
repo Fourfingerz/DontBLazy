@@ -1,9 +1,4 @@
 class RecipientsController < ApplicationController
-  def index
-  	@user = current_user
-  	@recipients = @user.recipients.paginate(page: params[:page])
-  end
-
   def new
   	@recipient = Recipient.new
   end
@@ -17,6 +12,12 @@ class RecipientsController < ApplicationController
   	  flash.now[:danger] = "Invalid Recipient"
   	  render 'static_pages/home'
   	 end
+  end
+
+  def show
+    # Paginates and lists only all of USER's recipients
+    @user = current_user
+    @recipients = @user.recipients.paginate(page: params[:page])
   end
 
   def edit
