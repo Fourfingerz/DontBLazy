@@ -1,14 +1,7 @@
 require 'rails_helper'
 
 describe RecipientsController do
-
   describe 'GET #show' do
-  	# it "assigns the current user to @user" 
-  	#   user = create(:user)  # create method undefined
-  	#   get :show, id: user
-  	#   expect(assigns(:user)).to eq user
-  	# end
-
   	it "assigns the requested USER'S recipients to @recipients" do
   	  recipient = create(:user_with_recipient)
   	  get :show, id: recipient
@@ -32,7 +25,8 @@ describe RecipientsController do
   	  get :new
   	  expect(response).to render_template :new
   	end
-  end
+
+
   
 
   describe 'GET #edit' do
@@ -83,3 +77,4 @@ describe RecipientsController do
   	it "deletes the recipient from the database"
   	it "redirects to root_url"
   end
+end
