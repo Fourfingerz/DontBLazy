@@ -3,7 +3,6 @@ require 'rails_helper'
 describe RecipientsController do
 
   describe 'GET #show' do
-
   	# it "assigns the current user to @user" 
   	#   user = create(:user)  # create method undefined
   	#   get :show, id: user
@@ -24,7 +23,6 @@ describe RecipientsController do
   end
 
   describe 'GET #new' do
-
   	it "assigns a new Recipient to @contact"
   	  get :new
   	  expect(assigns(:recipient)).to be_a_new(Recipient)
@@ -34,10 +32,10 @@ describe RecipientsController do
   	  get :new
   	  expect(response).to render_template :new
   	end
+  end
   
 
   describe 'GET #edit' do
-
   	it "assigns the requested USER'S recipients to @recipients" do
   	  recipient = create(:user)
   	  get :show, id: user
@@ -58,7 +56,6 @@ describe RecipientsController do
   end
 
   describe "POST #create" do
-
   	context "with valid attributes" do
   	  it "saves the new recipient in the database"
   	  it "redirects to recipients#show"
@@ -71,7 +68,6 @@ describe RecipientsController do
   end
 
   describe 'PATCH #update' do
-
   	context "with valid attributes" do
   	  it "updates the recipient in the database"
   	  it "redirects to the recipient"
