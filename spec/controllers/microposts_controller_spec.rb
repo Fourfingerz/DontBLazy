@@ -1,8 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe MicropostsController, :type => :controller do
-  include SmsSpec::Helpers
-  include SmsSpec::Matchers
+  # include SmsSpec::Helpers
+  # include SmsSpec::Matchers
 
   # Remember to update scheduled time if testing
   describe 'will schedule and send sms' do
@@ -13,7 +13,7 @@ RSpec.describe MicropostsController, :type => :controller do
 
   	after(:each) { Timecop.return }
 
-  	it "will only at time specified by its scheduled_time column" do
+  	it "only at time specified by its scheduled_time column" do
   	  valid_logged_in_user
   	  valid_SMS_form_input
   	  expect(Delayed::Job.count).to eq(1)
