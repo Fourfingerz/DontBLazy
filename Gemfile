@@ -23,12 +23,12 @@ gem 'twilio-ruby' # SMS
 gem 'delayed_job_active_record' # Cron SMS jobs
 gem 'daemons' # Required for Cron jobs
 
-
 group :development, :test do
   gem 'sqlite3',     '1.3.9'
   gem 'byebug',      '3.4.0'
   gem 'web-console', '2.0.0.beta3'
   gem 'spring',      '1.1.3'
+  gem 'timecop'
 
   # Testing / Troubleshooting tools
   gem 'better_errors'
@@ -50,7 +50,6 @@ group :test do
   gem 'launchy',            '~> 2.4.2'
   gem 'selenium-webdriver', '~> 2.43.0'
   gem 'sms-spec'
-  gem 'timecop'
 end
 
 group :production do
