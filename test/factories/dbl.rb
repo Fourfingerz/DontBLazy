@@ -10,6 +10,15 @@ FactoryGirl.define do
   factory :micropost do
     activity { Faker::Lorem.sentence }
     content { Faker::Lorem.sentence }
+
+    trait :with_author do
+      user do
+        User.find_by(name: "By Sample User") || FactoryGirl.create(:user, name: "Sample User")
+      end
+    end
+
+    # Call:
+    # owned_micropost = FactoryGirl.create(:micropost, :with_author)"
   end
 
   factory :recipient do
