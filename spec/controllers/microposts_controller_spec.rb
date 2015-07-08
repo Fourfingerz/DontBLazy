@@ -1,22 +1,13 @@
 require 'rails_helper'
-require 'sessions_helper'
-
 RSpec.describe MicropostsController, :type => :controller do
 
   # Typical user login 
   describe 'logged in user'
     before :each do
   	  user = create(:user)
+  	  session
   	  log_in(user)
     end
-
-  # # Remember to update scheduled time if testing
-  # describe 'will schedule and send sms' do
-  # 	before :each do
-  # 	  test_time = Time.utc(2015, 7, 6, 22, 0, 0)
-  # 	  Timecop.freeze(test_time)
-  # 	end
-  # 	after(:each) { Timecop.return }
 
   	it "only at time specified by its scheduled_time column" do
   	  expect logged_in?.to eq(true)
@@ -31,4 +22,15 @@ RSpec.describe MicropostsController, :type => :controller do
   	  expect(Delayed::Job.count).to eq(0)
   	  expect(Micropost.first.sms_sent).to eq(true)
   	end
+
 end
+	
+  # ARCHIVE TESTS
+  #
+  # # Remember to update scheduled time if testing
+  # describe 'will schedule and send sms' do
+  # 	before :each do
+  # 	  test_time = Time.utc(2015, 7, 6, 22, 0, 0)
+  # 	  Timecop.freeze(test_time)
+  # 	end
+  # 	after(:each) { Timecop.return }

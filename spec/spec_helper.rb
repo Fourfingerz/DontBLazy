@@ -14,12 +14,13 @@
 # users commonly want.
 #
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
-
+  
+require 'factory_girl_rails'
+require 'database_cleaner'
+require 'timecop'
 
 RSpec.configure do |config|
-  require 'factory_girl_rails'
-  require 'timecop'
-  # require 'sms_spec'
+
   # rspec-expectations config goes here. You can use an alternate
   # assertion/expectation library such as wrong or the stdlib/minitest
   # assertions if you prefer.
@@ -42,6 +43,25 @@ RSpec.configure do |config|
     # `true` in RSpec 4.
     mocks.verify_partial_doubles = true
   end
+
+  config.before(:suite) do
+    begin
+      DatabaseCleaner.start
+    ensure
+      DatabaseCleaner.clean
+    end
+  end
+  
+end
+
+
+
+
+
+
+
+
+
 
   # Spec::Runner.configure do |config|
   #   config.include(SmsSpec::Helpers)
@@ -92,4 +112,3 @@ RSpec.configure do |config|
   # as the one that triggered the failure.
   Kernel.srand config.seed
 =end
-end
