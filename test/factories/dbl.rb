@@ -19,7 +19,7 @@ FactoryGirl.define do
   	password_confirmation "foobar"
     activated true
 
-    trait :with_micropost do
+    trait :with_microposts do
       ignore do 
         number_of_microposts 5
       end
@@ -40,8 +40,8 @@ FactoryGirl.define do
     end
 
     trait :with_the_works do
-      with_micropost
-      with_recipient
+      with_microposts
+      with_recipients
     end
 
     # Call:
