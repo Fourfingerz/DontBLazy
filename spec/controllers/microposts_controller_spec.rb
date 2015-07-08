@@ -5,7 +5,7 @@ RSpec.describe MicropostsController, :type => :controller do
   describe 'user access' do
   	# Sample account with a micropost and a recipient
     before :each do
-  	  user = FactoryGirl.create(:user, :with_the_works)
+  	  user = create(:user, :with_the_works)
       session
   	  log_in(user)
     end
