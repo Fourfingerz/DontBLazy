@@ -18,7 +18,7 @@ RSpec.describe MicropostsController, :type => :controller do
   
   describe 'POST #schedule' do
   	it "only at time specified by its scheduled_time column" do
-  	  expect (user.logged_in?).to eq(true)
+  	  expect logged_in?.to eq(true)
   	  valid_SMS_form_input
   	  expect(Delayed::Job.count).to eq(1)
   	  scheduled_time_of_test_sms = Time.utc(2015, 7, 6, 22, 0, 0)

@@ -1,5 +1,16 @@
 FactoryGirl.define do
 
+  factory :recipient do
+    name { Faker::Name.name }
+    phone { Faker::PhoneNumber.phone_number }
+    user_id { 1 }
+  end
+
+  factory :micropost do
+    activity { Faker::Lorem.sentence }
+    content { Faker::Lorem.sentence }
+  end
+
   factory :user do
   	name { Faker::Name.name }
   	email { Faker::Internet.email }
@@ -8,29 +19,17 @@ FactoryGirl.define do
 
     trait :with_micropost_and_recipient do
       micropost do
-        FactoryGirl.create(:micropost, 
-                            activity: Faker::Lorem.sentence, 
-                            content: Faker::Lorem.sentence
-                          )
+        FactoryGirl.create(:micropost)
       end
 
       recipient do
-        FactoryGirl.create(:recipient,
-                            name: Faker::Name.name,
-                            phone: Faker::PhoneNumber.phone_number
-                          )
+        FactoryGirl.create(:recipient)
       end
     end
 
     # Call:
     # user = FactoryGirl.create(:user, :with_micropost_and_recipient)
   end
-
-  # factory :micropost_recipient do
-  #   micropost_id 1
-  #   recipient_id 1
-  # end
-
 end
 
 
