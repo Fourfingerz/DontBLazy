@@ -2,15 +2,15 @@ require 'rails_helper'
 RSpec.describe MicropostsController, :type => :controller do
 
   # Typical user login 
-  describe 'logged in user'
+  describe 'user access' do
     before :each do
   	  user = create(:user)
-  	  session
   	  log_in(user)
     end
 
+  describe 'POST #schedule' do
   	it "only at time specified by its scheduled_time column" do
-  	  expect logged_in?.to eq(true)
+  	  expect (user.logged_in?).to eq(true)
   	  valid_SMS_form_input
   	  expect(Delayed::Job.count).to eq(1)
   	  scheduled_time_of_test_sms = Time.utc(2015, 7, 6, 22, 0, 0)
@@ -22,6 +22,8 @@ RSpec.describe MicropostsController, :type => :controller do
   	  expect(Delayed::Job.count).to eq(0)
   	  expect(Micropost.first.sms_sent).to eq(true)
   	end
+
+  end
 
 end
 	
