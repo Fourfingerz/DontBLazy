@@ -3,11 +3,19 @@ RSpec.describe MicropostsController, :type => :controller do
 
   # Typical user login 
   describe 'user access' do
+  	# Sample account with a micropost and a recipient
     before :each do
-  	  user = create(:user)
+  	  user = FactoryGirl.create(:user, :with_micropost_and_recipient)
   	  log_in(user)
     end
+  end
 
+  describe 'GET #home'
+    # User logging into home and seeing a list of followed's and personal tasks (microposts)
+    it "populates an array of followed's tasks (microposts) by most recent date" do
+  end
+
+  
   describe 'POST #schedule' do
   	it "only at time specified by its scheduled_time column" do
   	  expect (user.logged_in?).to eq(true)
@@ -22,7 +30,6 @@ RSpec.describe MicropostsController, :type => :controller do
   	  expect(Delayed::Job.count).to eq(0)
   	  expect(Micropost.first.sms_sent).to eq(true)
   	end
-
   end
 
 end

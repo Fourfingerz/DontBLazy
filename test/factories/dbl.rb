@@ -5,36 +5,31 @@ FactoryGirl.define do
   	email { Faker::Internet.email }
   	password "foobar"
   	password_confirmation "foobar"
-  end
 
-  factory :micropost do
-    activity { Faker::Lorem.sentence }
-    content { Faker::Lorem.sentence }
+    trait :with_micropost_and_recipient do
+      micropost do
+        FactoryGirl.create(:micropost, 
+                            activity: Faker::Lorem.sentence, 
+                            content: Faker::Lorem.sentence
+                          )
+      end
 
-    trait :with_author do
-      user do
-        User.find_by(name: "By Sample User") || FactoryGirl.create(:user, name: "Sample User")
+      recipient do
+        FactoryGirl.create(:recipient,
+                            name: Faker::Name.name,
+                            phone: Faker::PhoneNumber.phone_number
+                          )
       end
     end
 
     # Call:
-    # owned_micropost = FactoryGirl.create(:micropost, :with_author)"
+    # user = FactoryGirl.create(:user, :with_micropost_and_recipient)
   end
 
-  factory :recipient do
-    name { Faker::Name.name }
-    user_id { 1 }
-    phone { Faker::PhoneNumber.phone_number }
-  end
-
-  factory :invalid_recipient do
-    name nil
-  end
-
-  factory :micropost_recipient do
-    micropost_id 1
-    recipient_id 1
-  end
+  # factory :micropost_recipient do
+  #   micropost_id 1
+  #   recipient_id 1
+  # end
 
 end
 
