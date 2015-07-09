@@ -16,6 +16,7 @@ FactoryGirl.define do
   factory :micropost do
     activity { Faker::Lorem.sentence }
     content { Faker::Lorem.sentence }
+    schedule_time { Time.now }
     user_id { 1 }
 
     factory :micropost_with_recipients do

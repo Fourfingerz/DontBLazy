@@ -6,10 +6,11 @@ class Micropost < ActiveRecord::Base
   validates :content, presence: true, length: { maximum: 140 }
   validate  :picture_size
   # DBL
-  validates :activity, presence: true, length: { minimum: 5, maximum: 75 }
   has_many :micropost_recipients, dependent: :destroy
   has_many :recipients, through: :micropost_recipients
-  
+  validates :activity, presence: true, length: { minimum: 5, maximum: 75 }
+  validates :schedule_time, presence: true
+
   private
   
     # Validates the size of an uploaded picture.
