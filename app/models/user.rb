@@ -8,7 +8,6 @@ class User < ActiveRecord::Base
                                    foreign_key: "followed_id",
                                    dependent:   :destroy
   has_many :followers, through: :passive_relationships, source: :follower
-  has_many :recipients, dependent: :destroy
   attr_accessor :remember_token, :activation_token, :reset_token
   before_save   :downcase_email
   before_create :create_activation_digest
@@ -19,6 +18,8 @@ class User < ActiveRecord::Base
                     uniqueness: { case_sensitive: false }
   has_secure_password
   validates :password, presence: true, length: { minimum: 6 }, allow_nil: true
+  # DBL
+  has_many :recipients, dependent: :destroy
 
   # Returns the hash digest of the given string.
   def User.digest(string)

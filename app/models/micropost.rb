@@ -1,13 +1,14 @@
 class Micropost < ActiveRecord::Base
   belongs_to :user
-  has_many :micropost_recipients, dependent: :destroy
-  has_many :recipients, through: :micropost_recipients
   default_scope -> { order('created_at DESC') }
   mount_uploader :picture, PictureUploader
   validates :user_id, presence: true
-  validates :activity, presence: true, length: { minimum: 5, maximum: 75 }
   validates :content, presence: true, length: { maximum: 140 }
   validate  :picture_size
+  # DBL
+  validates :activity, presence: true, length: { minimum: 5, maximum: 75 }
+  has_many :micropost_recipients, dependent: :destroy
+  has_many :recipients, through: :micropost_recipients
   
   private
   
