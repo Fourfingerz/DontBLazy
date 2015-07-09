@@ -1,5 +1,7 @@
 class Micropost < ActiveRecord::Base
   belongs_to :user
+  has_many :micropost_recipients, dependent: :destroy
+  has_many :recipients, through: :micropost_recipients
   default_scope -> { order('created_at DESC') }
   mount_uploader :picture, PictureUploader
   validates :user_id, presence: true
