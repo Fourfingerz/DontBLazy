@@ -13,42 +13,35 @@ FactoryGirl.define do
     activated true
   end
 
-    factory :micropost do
-      activity { Faker::Lorem.sentence }
-      content { Faker::Lorem.sentence }
-      user_id { 1 }
+  factory :micropost do
+    activity { Faker::Lorem.sentence }
+    content { Faker::Lorem.sentence }
+    user_id { 1 }
 
-      factory :micropost_with_recipients do
-        ignore do 
-          recipients_count 1
-        end
+    factory :micropost_with_recipients do
+      ignore do 
+        recipients_count 1
+      end
 
-        after(:create) do |micropost, evaluator|
-          create_list(:micropost_recipient, evaluator.recipients_count, micropost: micropost)
-        end
+      after(:create) do |micropost, evaluator|
+        create_list(:micropost_recipient, evaluator.recipients_count, micropost: micropost)
       end
     end
+  end
 
-    factory :recipient do
-      name { Faker::Name.name }
-      phone { Faker::PhoneNumber.phone_number }
-      user_id { 1 }
+  factory :recipient do
+    name { Faker::Name.name }
+    phone { Faker::PhoneNumber.phone_number }
+    user_id { 1 }
 
-      factory :recipient_with_microposts do
-        ignore do 
-          microposts_count 1
-        end
+    factory :recipient_with_microposts do
+      ignore do 
+        microposts_count 1
+      end
 
-        after(:create) do |recipient, evaluator|
-          create_list(:micropost_recipient, evaluator.microposts_count, recipient: recipient)
-        end
+      after(:create) do |recipient, evaluator|
+        create_list(:micropost_recipient, evaluator.microposts_count, recipient: recipient)
       end
     end
-
-    # factory :the_works do
-    #   after(:create) do |user|
-    #     create_list(:micropost, 5, user: user)
-    #     create_list(:recipient, 3, user: user)
-    #   end
-    # end
+  end
 end

@@ -29,4 +29,10 @@ class MicropostTest < ActiveSupport::TestCase
   test "order should be most recent first" do
     assert_equal Micropost.first, microposts(:most_recent)
   end
+
+  # DBL
+  test "activity should be named" do
+    @micropost.activity = nil
+    assert_not @micropost.valid?
+  end
 end
