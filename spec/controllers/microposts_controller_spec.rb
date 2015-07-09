@@ -6,6 +6,7 @@ RSpec.describe MicropostsController, :type => :controller do
   	# Sample account with a micropost and a recipient
     before :each do
   	  user = create(:user)
+      microposts = create(:micropost_with_recipients) 
       session
   	  log_in(user)
     end
