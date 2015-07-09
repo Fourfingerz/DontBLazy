@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe Micropost, :type => :model do
 
   # Tests for proper DBL behavior
-  it "is valid with content(sms), a named activity, a schedule_time, a delayed job and belongs to a user" do
+  it "is valid with content(sms), a named activity, a schedule_time, and belongs to a user" do
     micropost = build(:micropost)
     expect(micropost).to be_valid
   end
@@ -27,5 +27,12 @@ RSpec.describe Micropost, :type => :model do
    micropost = build(:micropost, schedule_time: '')
    micropost.valid?
    expect(micropost.errors[:schedule_time]).to include("can't be blank")
+  end
+
+  # A task can't be an orphan, it needs an account owner
+  it "is invalid without an owner" do
+    micropost = build(:micropost, user_id: '')
+    recipient.valid?
+    expect(recipient.errors[:user_id]).to include("can't be blank")
   end
 end
