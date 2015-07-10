@@ -13,10 +13,13 @@
                                       ['A week', Time.now + 1.week]  
                                     ])) %>
   </div>
-  <%= f.submit "Post", class: "btn btn-primary" %>
   <span class="picture">
+    <%= f.label "Attached picture" %>
     <%= f.file_field :picture, accept: 'image/jpeg,image/gif,image/png' %>
   </span>
+
+  <%= f.submit "Post", class: "btn btn-primary" %>
+    <small>Disclaimer: After you hit "Post", you must CHECK OUT your goal within 24 hours or your friends will recieve a text message that you failed your goal for the day.</small>
 <% end %>
 
 <script type="text/javascript">
