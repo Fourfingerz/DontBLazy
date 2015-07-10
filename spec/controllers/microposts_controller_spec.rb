@@ -9,12 +9,22 @@ RSpec.describe MicropostsController, :type => :controller do
 
   describe 'GET #home'
     # User logging into home and seeing a list of followed's and personal tasks (microposts)
-    it "populates an array of followed's tasks (microposts) by most recent date"
+    it "shows followed's ACTIVE tasks (microposts) by most recent date"
+    it "doesn't show followed's INACTIVE tasks (microposts)"
+    it "shows personal ACTIVE tasks (microposts) sorted by DAILY schedule_time nearest end"
 
-  describe 'POST #schedule' 
+  describe 'GET #micropost'
+    # Click on individual task (micropost) for task info page \ PAUSE \ KILLSWITCH functionality
+    it "shows all info on task (micropost)"
+    it "shows all task's recipients"
+    it "has button to START inactive/new task"
+    it "has link to KILL active task (immediate failure)"
+
+  describe 'POST BUTTON #start_micropost_task' 
   	it "only at time specified by its scheduled_time column" do
   	  expect(logged_in?).to eq(true)
   	  expect(recipients_present?(@content)).to eq(true)
+      # all systems go, start core functionality
   	  expect(Delayed::Job.count).to eq(1)
   	  scheduled_time_of_test_sms = Time.utc(2015, 7, 15, 22, 0, 0)
   	  expect(Micropost.first.scheduled_time).to eq(scheduled_time_of_test_sms)
