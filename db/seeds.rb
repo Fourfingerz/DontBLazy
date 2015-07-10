@@ -1,4 +1,4 @@
-# Users
+Users
 User.create!(name:  "Example User",
              email: "example@railstutorial.org",
              password:              "foobar",
@@ -22,6 +22,7 @@ end
 users = User.order(:created_at).take(6)
 50.times do
   content = Faker::Lorem.sentence(5)
+  activity = Faker::Lorem.sentence(3)
   users.each { |user| user.microposts.create!(content: content) }
 end
 
