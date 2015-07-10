@@ -9,5 +9,7 @@ describe "New DBL features for Micropost form" do
 
   context "when I write a new micropost with new dropdown schedule_time" do
     it "does amazing things"
+    it "adds dropdown to Time.now to create a schedule_time"
   end
+
 end
