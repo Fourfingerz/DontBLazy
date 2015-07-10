@@ -53,4 +53,5 @@ RSpec.configure do |config|
 
   # Include app helper files
   config.include SessionsHelper
+  config.include MicropostsHelper
 end
