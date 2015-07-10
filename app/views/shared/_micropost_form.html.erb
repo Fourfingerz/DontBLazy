@@ -1,7 +1,17 @@
 <%= form_for(@micropost, html: { multipart: true }) do |f| %>
   <%= render 'shared/error_messages', object: f.object %>
   <div class="field">
-    <%= f.text_area :content, placeholder: "What is your goal?" %>
+    <%= f.label "Describe Goal:" %>
+    <%= f.text_area :content, placeholder: "I want to ..." %>
+  </div>
+  <div class="select">
+    <%= f.label "For" %>
+    <%= f.select(:schedule_time, options_for_select([
+                                      ['Today', Time.now + 1.days], ['2 days', Time.now + 2.days],
+                                      ['3 days', Time.now + 3.days], ['4 days', Time.now + 4.days],
+                                      ['5 days', Time.now + 5.days], ['6 days', Time.now + 6.days],
+                                      ['A week', Time.now + 1.week]  
+                                    ])) %>
   </div>
   <%= f.submit "Post", class: "btn btn-primary" %>
   <span class="picture">

@@ -35,6 +35,9 @@ RSpec.describe MicropostsController, :type => :controller do
   	  expect(Delayed::Job.count).to eq(0)
   	  expect(Micropost.first.sms_sent).to eq(true)
   	end
+
+  describe 'POST BUTTON #check_in'
+    it "cannot be pressed unless it's been an hour of posting goal"
 end
 	
   # ARCHIVE TESTS

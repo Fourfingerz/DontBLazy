@@ -9,7 +9,7 @@ class Micropost < ActiveRecord::Base
   has_many :micropost_recipients, dependent: :destroy
   has_many :recipients, through: :micropost_recipients
   validates :schedule_time, presence: true
-
+  
   private
   
     # Validates the size of an uploaded picture.
