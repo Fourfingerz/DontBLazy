@@ -11,11 +11,13 @@ FactoryGirl.define do
     activity { Faker::Lorem.sentence }
     content { Faker::Lorem.sentence }
     schedule_time { Time.now }
+    user_id { 1 }
   end
 
   factory :recipient do
     name { Faker::Name.name }
     phone { Faker::PhoneNumber.phone_number }
+    user_id { 1 }
   end
 
   factory :micropost_recipient do

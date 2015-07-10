@@ -3,19 +3,18 @@ RSpec.describe MicropostsController, :type => :controller do
   
   before(:each) do
     user = create(:user)
-    content = user.create(:micropost_with_recipients)
+    @content = create(:micropost_recipient, user: user)
     log_in(user)
   end
 
   describe 'GET #home'
     # User logging into home and seeing a list of followed's and personal tasks (microposts)
-    it "populates an array of followed's tasks (microposts) by most recent date" do
-  end
+    it "populates an array of followed's tasks (microposts) by most recent date"
 
   describe 'POST #schedule' 
   	it "only at time specified by its scheduled_time column" do
   	  expect(logged_in?).to eq(true)
-  	  expect(recipients_present?(@more_content)).to eq(true) #fail
+  	  expect(recipients_present?(@content)).to eq(true)
       expect_micropost_to_have_at_least_one_recipient
   	  expect(Delayed::Job.count).to eq(1)
   	  scheduled_time_of_test_sms = Time.utc(2015, 7, 15, 22, 0, 0)
