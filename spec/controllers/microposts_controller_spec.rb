@@ -15,7 +15,6 @@ RSpec.describe MicropostsController, :type => :controller do
   	it "only at time specified by its scheduled_time column" do
   	  expect(logged_in?).to eq(true)
   	  expect(recipients_present?(@content)).to eq(true)
-      expect_micropost_to_have_at_least_one_recipient
   	  expect(Delayed::Job.count).to eq(1)
   	  scheduled_time_of_test_sms = Time.utc(2015, 7, 15, 22, 0, 0)
   	  expect(Micropost.first.scheduled_time).to eq(scheduled_time_of_test_sms)
