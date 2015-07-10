@@ -8,7 +8,6 @@ class Micropost < ActiveRecord::Base
   # DBL
   has_many :micropost_recipients, dependent: :destroy
   has_many :recipients, through: :micropost_recipients
-  validates :activity, presence: true, length: { minimum: 5, maximum: 75 }
   validates :schedule_time, presence: true
 
   private

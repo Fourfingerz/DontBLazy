@@ -8,7 +8,6 @@ FactoryGirl.define do
   end
 
   factory :micropost do
-    activity { Faker::Lorem.sentence }
     content { Faker::Lorem.sentence }
     schedule_time { Time.now }
     user_id { 1 }
