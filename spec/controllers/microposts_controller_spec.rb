@@ -3,7 +3,7 @@ RSpec.describe MicropostsController, :type => :controller do
   
   before(:each) do
     user = create(:user)
-    @content = create(:micropost_recipient, user: user)
+    @content = create(:micropost_recipient, user: user) # instanced so can be called from helpers
     log_in(user)
   end
 
