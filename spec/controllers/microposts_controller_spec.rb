@@ -13,8 +13,6 @@ RSpec.describe MicropostsController, :type => :controller do
   end
 
   describe 'POST #schedule' 
-
-
   	it "only at time specified by its scheduled_time column" do
   	  expect(logged_in?).to eq(true)
   	  expect(recipients_present?(@more_content)).to eq(true) #fail
