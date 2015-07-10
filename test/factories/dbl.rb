@@ -17,7 +17,7 @@ FactoryGirl.define do
     activity { Faker::Lorem.sentence }
     content { Faker::Lorem.sentence }
     schedule_time { Time.now }
-    user_id { 1 }
+    user_id { that user here }
 
     factory :micropost_with_recipients do
       ignore do 
@@ -33,7 +33,7 @@ FactoryGirl.define do
   factory :recipient do
     name { Faker::Name.name }
     phone { Faker::PhoneNumber.phone_number }
-    user_id { 1 }
+    user_id { that user here }
 
     factory :recipient_with_microposts do
       ignore do 
