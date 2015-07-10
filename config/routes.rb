@@ -17,5 +17,5 @@ Rails.application.routes.draw do
   resources :microposts,          only: [:create, :show, :edit, :update, :destroy]
   resources :relationships,       only: [:create, :destroy]
   # DBL
-  resources :recipients
+  resources :recipients,          only: [:new, :create, :edit, :update, :destroy]
 end

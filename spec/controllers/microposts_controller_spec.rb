@@ -7,13 +7,13 @@ RSpec.describe MicropostsController, :type => :controller do
     log_in(user)
   end
 
-  describe 'GET #home'
+  describe 'GET #home LANDING'
     # User logging into home and seeing a list of followed's and personal tasks (microposts)
     it "shows followed's ACTIVE tasks (microposts) by most recent date"
     it "doesn't show followed's INACTIVE tasks (microposts)"
     it "shows personal ACTIVE tasks (microposts) sorted by DAILY schedule_time nearest end"
 
-  describe 'GET #micropost'
+  describe 'GET #micropost MICROPOST PAGE'
     # Click on individual task (micropost) for task info page \ PAUSE \ KILLSWITCH functionality
     it "shows all info on task (micropost)"
     it "shows all task's recipients"
