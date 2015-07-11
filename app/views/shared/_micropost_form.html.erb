@@ -7,10 +7,8 @@
   <div class="select">
     <%= f.label "For" %>
     <%= f.select(:schedule_time, options_for_select([
-                                      ['Today', Time.now + 1.days], ['2 days', Time.now + 2.days],
-                                      ['3 days', Time.now + 3.days], ['4 days', Time.now + 4.days],
-                                      ['5 days', Time.now + 5.days], ['6 days', Time.now + 6.days],
-                                      ['A week', Time.now + 1.week]  
+                                      ['Today (one check-in)', Time.now + 1.days], ['2 days (two check-ins)', Time.now + 2.days],
+                                      ['3 days (three check-ins)', Time.now + 3.days]
                                     ])) %>
   </div>
   <span class="picture">
@@ -19,7 +17,7 @@
   </span>
 
   <%= f.submit "Post", class: "btn btn-primary" %>
-    <small>Disclaimer: After you hit "Post", you must CHECK OUT your goal within 24 hours or your friends will recieve a text message that you failed your goal for the day.</small>
+
 <% end %>
 
 <script type="text/javascript">

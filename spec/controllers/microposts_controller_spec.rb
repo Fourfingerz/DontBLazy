@@ -21,20 +21,27 @@ RSpec.describe MicropostsController, :type => :controller do
     it "has link to KILL active task (immediate failure)"
 
   describe 'POST BUTTON #start_micropost_task' 
-  	it "only at time specified by its scheduled_time column" do
-  	  expect(logged_in?).to eq(true)
-  	  expect(recipients_present?(@content)).to eq(true)
-      # all systems go, start core functionality
-  	  expect(Delayed::Job.count).to eq(1)
-  	  scheduled_time_of_test_sms = Time.utc(2015, 7, 15, 22, 0, 0)
-  	  expect(Micropost.first.scheduled_time).to eq(scheduled_time_of_test_sms)
-  	  Timecop.travel(Time.now + 5.days)
-  	  successes, failures = Delayed::Worker.new.work_off
-  	  expect(successes).to eq(1)
-  	  expect(failures).to eq(0)
-  	  expect(Delayed::Job.count).to eq(0)
-  	  expect(Micropost.first.sms_sent).to eq(true)
-  	end
+  
+    context "when I write a new micropost with new dropdown schedule_time" do
+      it "does amazing things"
+      it "adds dropdown to Time.now to create a schedule_time"
+    end
+
+
+  	# it "only at time specified by its scheduled_time column" do
+  	#   expect(logged_in?).to eq(true)
+  	#   expect(recipients_present?(@content)).to eq(true)
+    #    # all systems go, start core functionality
+  	#   expect(Delayed::Job.count).to eq(1)
+  	#   scheduled_time_of_test_sms = Time.utc(2015, 7, 15, 22, 0, 0)
+  	#   expect(Micropost.first.scheduled_time).to eq(scheduled_time_of_test_sms)
+  	#   Timecop.travel(Time.now + 5.days)
+  	#   successes, failures = Delayed::Worker.new.work_off
+  	#   expect(successes).to eq(1)
+  	#   expect(failures).to eq(0)
+  	#   expect(Delayed::Job.count).to eq(0)
+  	#   expect(Micropost.first.sms_sent).to eq(true)
+  	# end
 
   describe 'POST BUTTON #check_in'
     it "cannot be pressed unless it's been an hour of posting goal"
