@@ -1,11 +1,23 @@
 require 'rails_helper'
 
-feature "Adding recipients for Microposts" do
-  scenario "adds a new micropost with two associated recipients" do
+feature "Micropost form" do
+  scenario "add a new micropost with two associated recipients and began delayed job" do
+    user = create(:user)
+    micropost = create(:micropost)
 
-  user = create(:user)
-  @content = create(:micropost_recipient, user: user) # instanced so can be called from helpers
-  log_in(user)
+    visit root_path
+    click_link 'Log In'
+    fill_in 'Email', with: user.email
+    fill_in 'Password', with: user.password
+    click_button 'Log In'
 
- end
+    visit root_path
+    expect{
+      fill_in 'content', with: micropost.content
+      fill_in 'schedule_time', with: micropost.schedule_time
+      # fill_in 'recipients', with: recipients
+      click_button 'Post'
+    }.to change(Micropost, :count).by(1)
+    expect(current_path).to eq root_path
+  end
 end

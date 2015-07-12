@@ -9,7 +9,7 @@ FactoryGirl.define do
 
   factory :micropost do
     content { Faker::Lorem.sentence }
-    schedule_time { Time.now }
+    schedule_time { Time.now + 2.days }
     user_id { 1 }
   end
 
