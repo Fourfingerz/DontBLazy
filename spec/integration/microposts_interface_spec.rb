@@ -7,9 +7,8 @@ describe "New DBL features for Micropost form" do
     log_in(user)
   end
 
-  context "when I write a new micropost with new dropdown schedule_time" do
-    it "does amazing things"
-    it "adds dropdown to Time.now to create a schedule_time"
-  end
-
+  describe "micropost interface" 
+    # Checks if interface correctly posts data to DB that makes gears turn
+    it "saves to the db correctly with micropost input sans RECIPIENTS"
+    it "saves to the db correctly with micropost data with RECIPIENTS"
 end

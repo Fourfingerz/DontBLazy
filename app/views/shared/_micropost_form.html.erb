@@ -8,7 +8,8 @@
     <%= f.label "For" %>
     <%= f.select(:schedule_time, options_for_select([
                                       ['Today (one check-in)', Time.now + 1.days], ['2 days (two check-ins)', Time.now + 2.days],
-                                      ['3 days (three check-ins)', Time.now + 3.days]
+                                      ['3 days (three check-ins)', Time.now + 3.days], ['4 days (four check-ins)', Time.now + 4.days],
+                                      ['5 days (five check-ins)', Time.now + 5.days]
                                     ])) %>
   </div>
   <span class="picture">
