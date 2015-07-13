@@ -6,15 +6,15 @@ feature "Micropost form" do
     micropost = create(:micropost)
 
     visit root_path
-    click_link 'Log In'
+    click_link 'Log in'
     fill_in 'Email', with: user.email
     fill_in 'Password', with: user.password
-    click_button 'Log In'
+    click_button 'Log in'
 
     visit root_path
     expect{
-      fill_in 'content', with: micropost.content
-      fill_in 'schedule_time', with: micropost.schedule_time
+      fill_in 'micropost_content', with: micropost.content
+      fill_in 'micropost_schedule_time', with: micropost.schedule_time
       # fill_in 'recipients', with: recipients
       click_button 'Post'
     }.to change(Micropost, :count).by(1)
