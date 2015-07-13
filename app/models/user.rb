@@ -102,6 +102,26 @@ class User < ActiveRecord::Base
     following.include?(other_user)
   end
 
+  # DBL
+
+  def twilio_client
+    Twilio::REST::Client.new(ENV['TWILIO_ACCOUNT_SID'], ENV['TWILIO_AUTH_TOKEN'])
+  end
+
+  # Pin for phone verification.
+  def generate_pin
+    self.pin = rand(0000..9999).to_s.rjust(4, "0")
+    save
+  end
+
+  def send_pin
+    twilio_client.messages.create(
+      to: phone_number,
+      from: ENV['TWILIO_PHONE_NUMBER'],
+      body: "Your PIN is #{pin}"
+    )
+  end
+
   private
 
     # Converts email to all lower-case.

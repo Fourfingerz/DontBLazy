@@ -59,12 +59,29 @@ class UsersController < ApplicationController
     @users = @user.followers.paginate(page: params[:page])
     render 'show_follow'
   end
+
+  # DBL
+
+  def add_phone
+    @user.generate_pin
+    @user.send_pin
+    respond_to do |format|
+      format.js # render app/views/shared/_phone_form.html.erb
+    end
+    if @user.update_attributes(phone_number: params[:phone_number][:phone_number])
+      flash[:success] = "Phone added"
+      redirect_to root_url
+    else
+      render '_phone_form'
+    end
+  end
   
   private
     
     def user_params
       params.require(:user).permit(:name, :email, :password,
-                                   :password_confirmation)
+                                   :password_confirmation,
+                                   :phone_number)
     end
     
     # Before filters

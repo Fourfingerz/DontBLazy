@@ -1,0 +1,26 @@
+<!-- Form for phone after new sign up -->
+
+<div id="send-pin">
+  <h3>Verify your phone number to begin:</h3>
+  <%= form_for @user, remote: true do |f| %>
+    <div class="form-group">
+      <%= f.text_field :phone_number %>
+    </div>
+      <%= f.submit "Send PIN", class: "btn btn-primary", id: 'send-pin-link' %>
+  <% end %>
+</div>
+
+<div id="verify-pin">
+  <h3>Enter your PIN</h3>
+  <%= form_tag phone_numbers_verify_path, remote: true do |f| %>
+	<%= hidden_field_tag 'hidden_phone_number', '' %>
+	  <div class="form-group">
+		<%= text_field_tag :pin %>
+	  </div>
+	  <%= submit_tag "Verify PIN", class: "btn btn-primary" %>
+	<% end %>
+</div>
+
+<div id="status-box" class="alert alert-success">
+  <p id="status-message">Status: Haven't done anything yet</p>
+</div>
