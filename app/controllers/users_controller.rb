@@ -68,11 +68,19 @@ class UsersController < ApplicationController
     respond_to do |format|
       format.js # render app/views/shared/_phone_form.html.erb
     end
+
     if @user.update_attributes(phone_number: params[:phone_number][:phone_number])
       flash[:success] = "Phone added"
       redirect_to root_url
     else
       render '_phone_form'
+    end
+  end
+
+  def verify_phone
+    @user.verify(params[:pin])
+    respond_to do |format|
+      format.js
     end
   end
   

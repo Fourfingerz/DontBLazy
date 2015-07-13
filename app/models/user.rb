@@ -122,6 +122,10 @@ class User < ActiveRecord::Base
     )
   end
 
+  def verify(entered_pin)
+    update(phone_verified: true) if self.pin == entered_pin
+  end
+  
   private
 
     # Converts email to all lower-case.
