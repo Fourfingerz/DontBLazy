@@ -22,6 +22,7 @@ gem 'sdoc',                    '0.4.0', group: :doc
 gem 'twilio-ruby' # SMS
 gem 'delayed_job_active_record' # Cron SMS jobs
 gem 'daemons' # Required for Cron jobs
+gem 'phony_rails' # Phone validations
 
 group :development, :test do
   gem 'sqlite3',     '1.3.9'
