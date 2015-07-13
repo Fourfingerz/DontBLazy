@@ -14,7 +14,7 @@ feature "Micropost form" do
     visit root_path
     expect{
       fill_in 'micropost_content', with: micropost.content
-      fill_in 'micropost_schedule_time', with: micropost.schedule_time
+      select '2 days (two check-ins)', from: 'micropost_schedule_time'
       # fill_in 'recipients', with: recipients
       click_button 'Post'
     }.to change(Micropost, :count).by(1)
