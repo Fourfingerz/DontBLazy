@@ -62,12 +62,12 @@ class UsersController < ApplicationController
 
   # DBL
 
-  def phone_form # Let's make this work
+  def add_phone # Let's make this work
     @user = current_user
     @user.generate_pin
     @user.send_pin
     respond_to do |format|
-      format.js # render app/views/users/_phone_form.html.erb
+      format.js # render app/views/users/_add_phone.html.erb
     end
   end
 
@@ -81,7 +81,7 @@ class UsersController < ApplicationController
     #   flash[:success] = "Phone added"
     #   redirect_to root_url
     # else
-    #   render '_phone_form'
+    #   render '_add_phone'
     # end
   end
   
