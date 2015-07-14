@@ -1,21 +1,35 @@
 <% if logged_in? %>
+  <% if no_valid_phone? %>
   <div class="row">
     <aside class="col-md-4">
-      <section class="user_info">
-        <%= render 'shared/user_info' %>
-      </section>
-      <section class="stats">
-        <%= render 'shared/stats' %>
-      </section>
-      <section class="micropost_form">
-        <%= render 'shared/micropost_form' %>
-      </section>
     </aside>
-    <div class="col-md-8">
-      <h3>Goals Feed</h3>
-      <%= render 'shared/feed' %>
+    <div class="col-md-4">
+      <section class="verify_form">
+        <%= render 'users/phone_form' %>
+      </section>
     </div>
+    <aside class="col-md-4">
+    </aside>
   </div>
+  <% else %>
+    <div class="row">
+      <aside class="col-md-4">
+        <section class="user_info">
+          <%= render 'shared/user_info' %>
+        </section>
+        <section class="stats">
+          <%= render 'shared/stats' %>
+        </section>
+        <section class="micropost_form">
+          <%= render 'shared/micropost_form' %>
+        </section>
+      </aside>
+      <div class="col-md-8">
+        <h3>Goals Feed</h3>
+        <%= render 'shared/feed' %>
+      </div>
+    </div>
+  <% end %>
 <% else %>
   <div class="center jumbotron">
     <h1>Study for five hours. Write 200 words a night. Go for a morning run.</h1>

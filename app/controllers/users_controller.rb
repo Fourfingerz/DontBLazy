@@ -62,26 +62,27 @@ class UsersController < ApplicationController
 
   # DBL
 
-  def add_phone
+  def phone_form # Let's make this work
+    @user = current_user
     @user.generate_pin
     @user.send_pin
     respond_to do |format|
-      format.js # render app/views/shared/_phone_form.html.erb
-    end
-
-    if @user.update_attributes(phone_number: params[:phone_number][:phone_number])
-      flash[:success] = "Phone added"
-      redirect_to root_url
-    else
-      render '_phone_form'
+      format.js # render app/views/users/_phone_form.html.erb
     end
   end
 
-  def verify_phone
-    @user.verify(params[:pin])
+  def verify
+    @user = User.find_by(phone_number: params[:hidden_phone_number])
+    @user.verify(params[:phone_pin])
     respond_to do |format|
       format.js
     end
+    # if @user.update_attributes(user_params)
+    #   flash[:success] = "Phone added"
+    #   redirect_to root_url
+    # else
+    #   render '_phone_form'
+    # end
   end
   
   private
@@ -89,7 +90,7 @@ class UsersController < ApplicationController
     def user_params
       params.require(:user).permit(:name, :email, :password,
                                    :password_confirmation,
-                                   :phone_number)
+                                   :phone_number, :phone_pin, :phone_verified)
     end
     
     # Before filters
