@@ -62,7 +62,7 @@ class UsersController < ApplicationController
 
   # DBL
 
-  def add_phone # Let's make this work
+  def add_phone
     @user = current_user
     @user.generate_pin
     @user.send_pin

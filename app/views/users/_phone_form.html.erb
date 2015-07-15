@@ -1,8 +1,9 @@
 <!-- Form for phone after new sign up -->
 
 <div id="send-pin">
-  <h3>Verify your phone number</h3>
-  <%= form_for @user, remote: true do |f| %>
+  <h3>First Time?</h3>
+  <p>Let's Verify Your Cell Number To Post First Goal!</p>
+  <%= form_for @user, remote: true, :url => phone_entry_users_path do |f| %>
     <div class="form-group">
       <%= f.text_field :phone_number %>
     </div>

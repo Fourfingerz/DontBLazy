@@ -9,6 +9,9 @@ Rails.application.routes.draw do
   post   'users/verify'  => 'users#verify'
   delete 'logout'  => 'sessions#destroy'
   resources :users do
+    collection do
+      patch 'phone_entry', :action => :add_phone
+    end
     member do
       get :following, :followers
     end
