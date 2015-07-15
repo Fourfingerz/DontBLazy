@@ -64,6 +64,7 @@ class UsersController < ApplicationController
 
   def add_phone
     @user = current_user
+    @user.update_attributes(user_params)
     @user.generate_pin
     @user.send_pin
     respond_to do |format|
@@ -75,14 +76,8 @@ class UsersController < ApplicationController
     @user = User.find_by(phone_number: params[:hidden_phone_number])
     @user.verify(params[:phone_pin])
     respond_to do |format|
-      format.js
+        format.js
     end
-    # if @user.update_attributes(user_params)
-    #   flash[:success] = "Phone added"
-    #   redirect_to root_url
-    # else
-    #   render '_add_phone'
-    # end
   end
   
   private
