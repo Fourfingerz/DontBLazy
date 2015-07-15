@@ -35,7 +35,7 @@ module SessionsHelper
     !current_user.nil?
   end
 
-  # Returns true if the user doesn't have an associated phone.
+  # Returns true if the user doesn't have an associated phone or its verification.
   def no_valid_phone?
     !current_user.phone_number || !current_user.phone_verified
   end

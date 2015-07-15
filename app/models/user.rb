@@ -104,10 +104,6 @@ class User < ActiveRecord::Base
 
   # DBL
 
-  def twilio_client
-    Twilio::REST::Client.new(ENV["TWILIO_ACCOUNT_SID"], ENV["TWILIO_AUTH_TOKEN"])
-  end
-
   # Pin for phone verification.
   def generate_pin
     self.phone_pin = rand(0000..9999).to_s.rjust(4, "0")
@@ -115,10 +111,11 @@ class User < ActiveRecord::Base
   end
 
   def send_pin
-    twilio_client.messages.create(
+    @twilio_client = Twilio::REST::Client.new(ENV["TWILIO_ACCOUNT_SID"], ENV["TWILIO_AUTH_TOKEN"])
+    @twilio_client.messages.create(
       to: phone_number,
       from: ENV["TWILIO_PHONE_NUMBER"],
-      body: "Your PIN is #{phone_pin}"
+      body: "Your verification PIN is #{phone_pin}"
     )
   end
 

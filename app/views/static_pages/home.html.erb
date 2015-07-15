@@ -8,8 +8,8 @@
         <%= render 'shared/stats' %>
       </section>
       <% if no_valid_phone? %>
-      <section class="verify_form">
-        <%= render 'users/phone_form' %>
+      <section class="phone_form">
+        <%= render 'users/add_phone' %>
       </section>
       <% else %>
       <section class="micropost_form">
