@@ -60,7 +60,7 @@ class UsersController < ApplicationController
     render 'show_follow'
   end
 
-  # DBL
+  # DBL Phone Verification
 
   def add_phone
     @user = current_user

@@ -8,10 +8,11 @@ $failing_sms = "Your friend failed to complete their goal today" # Outbound SMS 
 puts "What is your goal?"
 $goal = gets.downcase
 $completion_sms = "Your friend has accomplished their goal of #$goal"
-
 puts ''
 puts "How many days do you want to do your goal?"
 $days = gets.to_i
+
+### SET VARIABLES 
 $days_to_complete = $days
 $days_remaining = $days
 $current_day = 1
