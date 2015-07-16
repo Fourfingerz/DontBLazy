@@ -16,8 +16,8 @@ $days_completed = 0
 for i in ($days).downto(1)
     puts ''
     puts("Today is the #$current_day day" )
-    puts("Restarted 24 hour timer") # Delayed job
-    puts("Did you complete today's task?") # DJ texts User a prompt SMS 
+    puts("Restarted 24 hour timer") # reboot DELAYED JOB for 24 hours
+    puts("Did you complete today's task?") # DJ texts User a PROMPT_SMS 
     reply = gets.chomp.downcase # LOGIC to RECIEVE TEXT MESSAGES FROM TWILIO API
     if reply == "yes"
         puts("Cool! Thank you for being so productive")

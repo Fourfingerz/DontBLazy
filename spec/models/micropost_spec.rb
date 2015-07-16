@@ -28,4 +28,44 @@ RSpec.describe Micropost, :type => :model do
     micropost.valid?
     expect(micropost.errors[:user_id]).to include("can't be blank")
   end
+
+# EXAMPLES OF MODEL METHOD TESTS
+#   it "adds to the list of addresses if the student's address changes" do
+#   student = build(:student)
+#   student.current_address = "first address"
+#   student.current_address = "second address"
+#   student.addresses.count.should == 2
+# end
+
+# Failure/Error: student.addresses.count.should == 2
+#      expected: 2
+#           got: 1 (using ==)
+
+# it "provides the student's current address" do
+#   student = build(:student)
+#   student.current_address = "first address"
+#   student.current_address = "second address"
+#   student.current_address = ""
+#   student.current_address.should == "second address"
+# end
+
+# Failure/Error: student.current_address.should == "second address"
+#      expected: "second address"
+#           got: "" (using ==)
+
+# # return the last address from the array
+# def current_address
+#   addresses && addresses.last
+# end
+
+# # add the current address to the array of addresses
+# # if the current address is not blank and is not the same as the last address
+# def current_address=(value)
+#   list = self.addresses
+#   list ||= []
+#   if !value.empty? && value != list.last
+#     list << value
+#   end
+#   write_attribute(:addresses, list)
+# end
 end
