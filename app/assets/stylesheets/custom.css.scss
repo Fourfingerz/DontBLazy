@@ -254,6 +254,10 @@ input {
     margin-top: 5em;
     padding-top: 0;
   }
+  .title {
+    font-size: 2em;
+    display: block;
+  }
   .content {
     display: block;
     margin-left: 60px;
@@ -288,6 +292,15 @@ span.picture {
   }
 }
 
+/* Phone Verification */
+
 #verify-pin, #status-box {
   display: none;
 }
+
+/* Deadline Right Sidebar */
+
+.deadlines {
+  
+}
+
