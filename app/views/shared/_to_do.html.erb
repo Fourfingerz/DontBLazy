@@ -1,0 +1,15 @@
+<% if @deadlines.any? %>
+<table class="table table-hover">
+  <tr>
+    <th>Deadline</th>
+    <th>Goal</th>
+  </tr>
+ 
+<% @deadlines.each do |deadline| %>
+  <tr>
+    <td><%= deadline.schedule_time %></td>
+    <td><%= deadline.title %></td>
+  </tr>
+<% end %>
+</table>
+<% end %>
