@@ -3,10 +3,16 @@ require 'rails_helper'
 RSpec.describe Micropost, :type => :model do
 
   # Tests for proper DBL behavior
-  it "is valid with content(sms), a schedule_time, and belongs to a user" do
+  it "is valid with title, content(sms), a schedule_time, and belongs to a user" do
     micropost = build(:micropost)
     expect(micropost).to be_valid
   end
+
+  # A task must have a title
+  it "is invalid without a title" do
+    micropost = build(:micropost, title: ' ')
+    micropost.valid?
+    expect(micropost.errors[:title]).to include("can't be blank")
 
   # A task must have SMS content
   it "is invalid without content(sms)" do

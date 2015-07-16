@@ -1,8 +1,13 @@
 <%= form_for(@micropost, html: { multipart: true }) do |f| %>
   <%= render 'shared/error_messages', object: f.object %>
   <div class="field">
-    <%= f.label "Describe Goal:" %>
-    <%= f.text_area :content, placeholder: "I want to ..." %>
+    <%= f.label "Name your goal:" %>
+    <%= f.text_field :title, placeholder: "ex. BAR exam session, creative writing..." %>
+  </div>
+  <div class="field">
+    <%= f.label "You want to:" %>
+    <%= f.text_area :content, placeholder: "ex. study at least 3 hours today..." %>
+    <small>^ This message will be sent via SMS to notify selected accountability buddies.</small>
   </div>
   <div class="select">
     <%= f.label "For" %>
