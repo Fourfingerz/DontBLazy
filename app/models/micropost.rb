@@ -19,8 +19,9 @@ class Micropost < ActiveRecord::Base
   end
 
   # Schedules a SMS sent out at deadline.
-  def schedule_deadline_text
-    job = self.delay(run_at: self.schedule_time).send_text_messages(deadline_text_content)
+  def schedule_user_deadline_text
+    # Starts SINGULAR 24 hour delay then sends deadline SMS at that time.
+    job = self.delay(run_at: 24.hours.from_now).send_text_messages(deadline_text_content)
     update_column(:delayed_job_id, job.id)
   end
 

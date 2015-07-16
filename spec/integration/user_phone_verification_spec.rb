@@ -12,6 +12,11 @@ feature "User form" do
     click_button 'Log in'
 
     # Make sure fresh user SANS phone_number sees add_phone form
+    fill_in 'user_phone_number', with: '00000000'
+    click_button 'send-pin-link'
+
+    fill_in 'user_phone_pin', with: '0000'
+    click_button 'verify-pin-link'
 
     # Now she can make a new goal with a number.
     visit root_path

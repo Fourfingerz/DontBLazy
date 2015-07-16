@@ -6,6 +6,8 @@ FactoryGirl.define do
     password "foobar"
     password_confirmation "foobar"
     activated true
+    phone_number "0000000000"
+    phone_pin "0000"
   end
 
   factory :micropost do
