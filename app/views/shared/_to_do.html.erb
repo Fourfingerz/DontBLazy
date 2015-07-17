@@ -4,12 +4,23 @@
     <th>Days To Complete</th> <!-- Colors based on current 24 hour cycle proximity to deadline -->
     <th>Goal</th>
   </tr>
- 
+
 <% @deadlines.each do |deadline| %>
+  <% if deadline_danger? %>
   <tr>
     <td><%= distance_of_time_in_words(Time.now, deadline.schedule_time, include_seconds: true) %></td>
     <td><%= deadline.title %></td>
   </tr>
+  <% elsif deadline_warning? %>
+  <tr>
+    <td><%= distance_of_time_in_words(Time.now, deadline.schedule_time, include_seconds: true) %></td>
+    <td><%= deadline.title %></td>
+  </tr>
+  <% else deadline_healthy? %>
+  <tr>
+    <td><%= distance_of_time_in_words(Time.now, deadline.schedule_time, include_seconds: true) %></td>
+    <td><%= deadline.title %></td>
+   </tr>
 <% end %>
 </table>
 <% end %>
