@@ -18,6 +18,9 @@ class MicropostsController < ApplicationController
     flash[:success] = "Goal Abandoned."
     redirect_to request.referrer || root_url
   end
+
+  def receive_sms
+  end
   
   private
     
