@@ -10,14 +10,10 @@ class Micropost < ActiveRecord::Base
   has_many :micropost_recipients, dependent: :destroy
   has_many :recipients, through: :micropost_recipients
   validates :schedule_time, presence: true
+  #after_create :send_status_sms
   #after_create :schedule_deadline_text
 
   # DBL Logic
-
-  # Deadline SMS content
-  def deadline_text_content
-    self.content # for now, write customized message later
-  end
 
   # Schedules a SMS sent out at deadline.
   def schedule_user_deadline_text
@@ -31,7 +27,7 @@ class Micropost < ActiveRecord::Base
   end
 
   # Twilio magic
-  def send_text_message(content)
+  def send_text_message(content, target_phone)
     phones = self.recipients.map(&:phone)
 
     twilio_sid = ENV["TWILIO_ACCOUNT_SID"]
@@ -43,11 +39,26 @@ class Micropost < ActiveRecord::Base
     phones.each do |recipient_phone|
       @twilio_client.messages.create(
         :from => twilio_phone,
-        :to => recipient_phone,
+        :to => target_phone,
         :body => content
       )
     end
   end
+
+  # Send user's phone a SMS list of active goals menu on create
+  def send_status_sms
+    goals = current_user.microposts
+    arr = []
+    goals.each do |goal|
+      i += 1
+      sms = i.to_s + ". " + goal.title
+      arr << sms 
+    end
+    active_goals = arr.join(" ")
+    active_goals_summary = "Thank you! To complete a task, REPLY with your goal's corresponding number: " + active_goals
+    send_text_message(active_goals_summary, current_user.phone_number)
+  end
+  
   
   private
   

@@ -24,14 +24,14 @@ class MicropostsController < ApplicationController
   def receive_sms
     @message_body = params["Body"]
     @from_number = params["From"]
-    @micropost = Micropost.find(@message_body) # Column in Micropost?
+    @micropost = Micropost.find(@message_body) # But which micropost?
     if @micropost.include? "Done" || "done"
       @micropost.check_in_current? = true
     end
     @micropost.save
     render xml: "<Response/>"
   end
-  
+
   private
     
     def micropost_params
