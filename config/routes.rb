@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   post   'login'   => 'sessions#create'
   post   'users/verify'  => 'users#verify'
   delete 'logout'  => 'sessions#destroy'
+  post 'process_sms' => 'microposts#receive_sms'
   resources :users do
     collection do
       patch 'phone_entry', :action => :add_phone

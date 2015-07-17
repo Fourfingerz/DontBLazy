@@ -1,5 +1,6 @@
 class MicropostsController < ApplicationController
-  skip_before_filter :force_ssl # check later if needed
+  #skip_before_filter :force_ssl # check later if needed
+  protect_from_forgery :except => ["receive_sms"]
   before_action :logged_in_user, only: [:create, :destroy]
   before_action :correct_user,   only: :destroy
   
@@ -25,7 +26,7 @@ class MicropostsController < ApplicationController
     @from_number = params["From"]
     @micropost = Micropost.find(@message_body) # Column in Micropost?
     if @micropost.include? "Done" || "done"
-      @micropost.check_in_current = true
+      @micropost.check_in_current? = true
     end
     @micropost.save
     render xml: "<Response/>"
