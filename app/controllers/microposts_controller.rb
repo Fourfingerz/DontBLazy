@@ -24,10 +24,12 @@ class MicropostsController < ApplicationController
   def receive_sms  #receives and parses SMS content from users
     @message_body = params["Body"]
     @from_number = params["From"]
-    @micropost = Micropost.find(@message_body) # But which micropost?
-    if @micropost.include? "Done" || "done"
-      @micropost.check_in_current? = true
-    end
+    @micropost = Micropost.find(@message_body)  # Looks for corresponding ID
+
+    # If it detects ID number, marks micropost as Complete
+  
+    @micropost.check_in_current = true  
+
     @micropost.save
     render xml: "<Response/>"
   end
