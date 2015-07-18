@@ -31,7 +31,10 @@ class MicropostsController < ApplicationController
     @micropost.check_in_current = true  
 
     @micropost.save
-    render xml: "<Response/>"
+    #render xml: "<Response/>"
+    render xml: "<Response>
+                    <Message>Thank you for checking into your goal!</Message>
+                </Response>"
   end
 
   private
