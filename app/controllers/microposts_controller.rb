@@ -21,7 +21,7 @@ class MicropostsController < ApplicationController
     redirect_to request.referrer || root_url
   end
 
-  def receive_sms
+  def receive_sms  #receives and parses SMS content from users
     @message_body = params["Body"]
     @from_number = params["From"]
     @micropost = Micropost.find(@message_body) # But which micropost?
