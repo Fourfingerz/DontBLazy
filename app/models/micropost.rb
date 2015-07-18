@@ -48,13 +48,17 @@ class Micropost < ActiveRecord::Base
   def send_status_sms
     user = User.find_by(:id => self.user_id)
     goals = user.microposts
-    arr = [], i = 0
+
+    sms_arr = [], id_arr = [], i = 0
+
     goals.each do |goal|
       i += 1
       sms = i.to_s + ". " + goal.title
-      arr << sms 
+      ids = Hash[i => goal.id.to_s]
+      id_arr << ids    # Maps corresponding numbers to IDs
+      sms_arr << sms    # Generates goals map for user SMS
     end
-    # trim 0 with string match here
+
     active_goals = arr.join(" ")
     active_goals_summary = "Thank you! To mark a task complete, REPLY with your goal's corresponding number:" + active_goals
     send_text_message(active_goals_summary, user.phone_number)
