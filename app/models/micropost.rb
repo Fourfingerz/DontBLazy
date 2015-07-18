@@ -28,7 +28,7 @@ class Micropost < ActiveRecord::Base
 
   # Twilio magic
   def send_text_message(content, target_phone)
-    phones = self.recipients.map(&:phone)
+    #phones = self.recipients.map(&:phone)
 
     twilio_sid = ENV["TWILIO_ACCOUNT_SID"]
     twilio_token = ENV["TWILIO_AUTH_TOKEN"]
@@ -36,27 +36,29 @@ class Micropost < ActiveRecord::Base
 
     @twilio_client = Twilio::REST::Client.new twilio_sid, twilio_token
 
-    phones.each do |recipient_phone|
+    #phones.each do |recipient_phone|
       @twilio_client.messages.create(
-        :from => twilio_phone,
+        :from => twilio_phone_number,
         :to => target_phone,
         :body => content
       )
-    end
+    #end
   end
 
   # Send user's phone a SMS list of active goals menu on create
   def send_status_sms
-    goals = current_user.microposts
-    arr = []
+    user = User.find_by(:id => self.user_id)
+    goals = user.microposts
+    arr = [], i = 0
     goals.each do |goal|
       i += 1
       sms = i.to_s + ". " + goal.title
       arr << sms 
     end
+    # trim 0 with string match here
     active_goals = arr.join(" ")
-    active_goals_summary = "Thank you! To complete a task, REPLY with your goal's corresponding number: " + active_goals
-    send_text_message(active_goals_summary, current_user.phone_number)
+    active_goals_summary = "Thank you! To mark a task complete, REPLY with your goal's corresponding number" + active_goals
+    send_text_message(active_goals_summary, user.phone_number)
   end
   
   
