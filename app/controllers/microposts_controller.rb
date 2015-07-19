@@ -7,7 +7,7 @@ class MicropostsController < ApplicationController
   def create
     @micropost = current_user.microposts.build(micropost_params)
     if @micropost.save
-      flash[:success] = "Goal Added! A Text Will Be Sent In 24 Hours!"
+      flash[:success] = "Goal Added! A text message has been sent to your phone!"
       redirect_to root_url
     else
       @feed_items = []
@@ -24,7 +24,9 @@ class MicropostsController < ApplicationController
   def receive_sms  #receives and parses SMS content from users
     @message_body = params["Body"]
     @from_number = params["From"]
-    @micropost = Micropost.find(@message_body)  # Looks for corresponding ID from SMS body
+    # LOGIC HERE TO SETUP id_arr map from send_status_sms method
+
+    @micropost = Micropost.find()  # Looks for corresponding ID from SMS body
 
     # If it detects ID number, marks micropost as Complete
     @micropost.check_in_current = true  

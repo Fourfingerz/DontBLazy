@@ -10,7 +10,7 @@ class Micropost < ActiveRecord::Base
   has_many :micropost_recipients, dependent: :destroy
   has_many :recipients, through: :micropost_recipients
   validates :schedule_time, presence: true
-  after_create :schedule_user_deadline_text
+  #after_create :schedule_user_deadline_text
   after_create :send_status_sms
 
 
@@ -49,18 +49,23 @@ class Micropost < ActiveRecord::Base
     user = User.find_by(:id => self.user_id)
     goals = user.microposts
 
-    sms_arr = [], id_arr = [], i = 0
+    sms_arr = [], @id_arr = [], i = 0
 
     goals.each do |goal|
       i += 1
-      sms = i.to_s + ". " + goal.title
-      ids = Hash[i => goal.id.to_s]
-      id_arr << ids    # Maps corresponding numbers to IDs
-      sms_arr << sms    # Generates goals map for user SMS
+      count = i.to_s
+      sms = count + ". " + goal.title
+      ids = Hash[count => goal.id.to_s]
+      @id_arr << ids    # Maps corresponding numbers to IDs
+                          #   [{1=>"9"}, {2=>"8"}, {3=>"7"}, {4=>"6"}
+      sms_arr << sms   # Generates goals map for user SMS
+                          #   ["1 Medical Volunteering", 
+                          #    "2 Himalayan Altitude Acclimatization", 
+                          #    "3 Rowing Session", "4 Yoga Session"]
     end
 
     active_goals = arr.join(" ")
-    active_goals_summary = "Thank you! To mark a task complete, REPLY with your goal's corresponding number:" + active_goals
+    active_goals_summary = "To mark a task complete, REPLY to this text with your goal's corresponding number:" + active_goals
     send_text_message(active_goals_summary, user.phone_number)
   end
   

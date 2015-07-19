@@ -6,21 +6,12 @@
   </tr>
 
 <% @deadlines.each do |deadline| %>
-  <% if deadline_danger? %>
+
   <tr>
     <td><%= distance_of_time_in_words(Time.now, deadline.schedule_time, include_seconds: true) %></td>
     <td><%= deadline.title %></td>
   </tr>
-  <% elsif deadline_warning? %>
-  <tr>
-    <td><%= distance_of_time_in_words(Time.now, deadline.schedule_time, include_seconds: true) %></td>
-    <td><%= deadline.title %></td>
-  </tr>
-  <% else deadline_healthy? %>
-  <tr>
-    <td><%= distance_of_time_in_words(Time.now, deadline.schedule_time, include_seconds: true) %></td>
-    <td><%= deadline.title %></td>
-   </tr>
-<% end %>
+
 </table>
+<% end %>
 <% end %>
