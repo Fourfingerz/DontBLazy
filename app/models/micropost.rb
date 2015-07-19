@@ -65,9 +65,9 @@ class Micropost < ActiveRecord::Base
     end
     user.current_tasks_map = @id_arr  # Saves ID map to user column
     user.save
-
-    active_goals = arr.join(" ")
-    active_goals_summary = "To mark a task complete, REPLY to this text with your goal's corresponding number:" + active_goals
+    
+    active_goals = sms_arr.join(" ")
+    active_goals_summary = "To mark tasks complete, REPLY to this text with your goal's corresponding number, separated by a space:" + active_goals
     send_text_message(active_goals_summary, user.phone_number)
   end
   

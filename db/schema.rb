@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150717190432) do
+ActiveRecord::Schema.define(version: 20150719203924) do
 
   create_table "delayed_jobs", force: :cascade do |t|
     t.integer  "priority",   default: 0, null: false
@@ -87,6 +87,7 @@ ActiveRecord::Schema.define(version: 20150717190432) do
     t.string   "phone_number"
     t.string   "phone_pin"
     t.boolean  "phone_verified"
+    t.text     "current_tasks_map"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true
