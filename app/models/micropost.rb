@@ -57,12 +57,14 @@ class Micropost < ActiveRecord::Base
       sms = count + ". " + goal.title
       ids = Hash[count => goal.id.to_s]
       @id_arr << ids    # Maps corresponding numbers to IDs
-                          #   [{1=>"9"}, {2=>"8"}, {3=>"7"}, {4=>"6"}
+                          #   [{"1"=>"9"}, {"2"=>"8"}, {"3"=>"7"}, {"4"=>"6"}
       sms_arr << sms   # Generates goals map for user SMS
                           #   ["1 Medical Volunteering", 
                           #    "2 Himalayan Altitude Acclimatization", 
                           #    "3 Rowing Session", "4 Yoga Session"]
     end
+    user.current_tasks_map = @id_arr  # Saves ID map to user column
+    user.save
 
     active_goals = arr.join(" ")
     active_goals_summary = "To mark a task complete, REPLY to this text with your goal's corresponding number:" + active_goals

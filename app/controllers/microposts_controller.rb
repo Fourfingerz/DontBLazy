@@ -24,15 +24,34 @@ class MicropostsController < ApplicationController
   def receive_sms  #receives and parses SMS content from users
     @message_body = params["Body"]
     @from_number = params["From"]
+
     # LOGIC HERE TO SETUP id_arr map from send_status_sms method
+    if @from_number == current_user.phone  # * MAKE SURE PHONE MATCHES USERS PHONE
+      if @message_body.include? "1 "  # Looks for corresponding ID from SMS body
+        @micropost = Micropost.find(current_user.current_tasks_map.find{|id| [1]}["1"])
+          @micropost.check_in_current = true  # If it detects ID number, marks micropost as Complete
+          @micropost.save
+      elsif @message_body.include? "2 "
+        @micropost = Micropost.find(current_user.current_tasks_map.find{|id| [2]}["2"])
+          @micropost.check_in_current = true  
+          @micropost.save
+      elsif @message_body.include? "3 "
+        @micropost = Micropost.find(current_user.current_tasks_map.find{|id| [3]}["3"])
+          @micropost.check_in_current = true  
+          @micropost.save
+      elsif @message_body.include? "4 "
+        @micropost = Micropost.find(current_user.current_tasks_map.find{|id| [4]}["4"])
+          @micropost.check_in_current = true  
+          @micropost.save
+      else @message_body.include? "5 " 
+        @micropost = Micropost.find(current_user.current_tasks_map.find{|id| [5]}["5"])
+          @micropost.check_in_current = true  
+          @micropost.save
+      end
+    end
 
-    @micropost = Micropost.find()  # Looks for corresponding ID from SMS body
-
-    # If it detects ID number, marks micropost as Complete
-    @micropost.check_in_current = true  
-    @micropost.save
     render xml: "<Response>
-                    <Message>You just checked in your goal. Thank you!</Message>
+                    <Message>You just checked into your goals. Thank you!</Message>
                 </Response>"
   end
 
