@@ -16,10 +16,9 @@ class Micropost < ActiveRecord::Base
 
   # DBL Logic
 
-  # Schedules a SMS sent out at deadline.
-  def schedule_user_deadline_text
-    # Starts SINGULAR 24 hour delay then sends deadline SMS at that time.
-    job = self.delay(run_at: 24.hours.from_now).send_text_messages(deadline_text_content)
+  # Schedules a single delayed job
+  def schedule_deadline_task(n, task)  # accepts N of days and task to do
+    job = self.delay(run_at: n.days.from_now).task # DO THIS JOB AFTER SCHEDULED TIME
     update_column(:delayed_job_id, job.id)
   end
 
