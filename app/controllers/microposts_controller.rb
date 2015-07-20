@@ -24,7 +24,7 @@ class MicropostsController < ApplicationController
   def receive_sms  #receives and parses SMS content from users
     @message_body = params["Body"]
     @from_number = params["From"]
-    @db_friendly_num = @from_number.sub /[+]/, ''
+    @db_friendly_num = @from_number.sub /[+]/, ''  # Plucks plus sign 
     @phone_owner = User.find_by(:phone_number => @db_friendly_num)
 
     # CURRENT SUPPORT: SINGLE DIGITS ONLY
