@@ -17,9 +17,9 @@ class Micropost < ActiveRecord::Base
   # DBL Logic
 
   # Schedule multiple delayed job based on number of days and task
-  def schedule_deadline_task(days_to_schedule, task)  # accepts N of days and task to do
+  def schedule_deadline_task(days_to_complete, task)  # accepts N of days and task to do
     number_of = 1
-    days_to_schedule.downto(1) do |n|
+    days_to_complete.downto(1) do |n|
       job = self.delay(run_at: Time.now + number_of.days.from_now).task # DO THIS JOB AFTER SCHEDULED TIME
       update_column(:delayed_job_id, job.id)
       number_of += 1
