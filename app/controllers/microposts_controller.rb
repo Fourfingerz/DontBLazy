@@ -52,7 +52,7 @@ class MicropostsController < ApplicationController
           @micropost.check_in_current = true  
           @micropost.save
       end
-    end  
+    end
 
     render xml: "<Response>
                     <Message>You just checked into your goals. Thank you!</Message>

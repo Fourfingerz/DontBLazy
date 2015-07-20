@@ -10,19 +10,52 @@ class Micropost < ActiveRecord::Base
   has_many :micropost_recipients, dependent: :destroy
   has_many :recipients, through: :micropost_recipients
   validates :days_to_complete, presence: true
-  after_create :schedule_check_in_deadlines(check_in)
-  after_create :send_status_sms
   after_create :set_initial_state
+  after_create :schedule_check_in_deadlines
+  after_create :send_status_sms
+
 
 
   # DBL Logic
 
   # UNTESTED BY RSPEC
+  def good_check_in_tally
+    self.days_completed += 1  # DB Column
+    self.days_remaining -= 1  # DB Column
+    self.current_day += 1     # DB Column
+    self.check_in_current = false  # Sets this column for next day
+    self.save
+  end
+
+  # UNTESTED BY RSPEC
+  def bad_check_in_tally
+    self.days_remaining -= 1  # DB Column
+    self.current_day += 1     # DB Column
+    self.check_in_current = false  # Sets this column for next day
+    self.save
+  end
+
+  # UNTESTED BY RSPEC
   def send_check_in_sms
+    user = User.find_by(:id => self.user_id)
+    map = user.current_tasks_map
+    map.each do |id|
+      if id.key(self.id)
+        @map_num = id.key(self.id)
+      end
+    end
+    # Find id number value that matches key of map
+    activity = @map_num.to_s + self.title
+    check_in_sms = "DontBLazy Bot: Time's up! Did you do your task: " + activity + "? Text me back with the corresponding number on your task!"
+    send_text_message(check_in_sms, user.phone_number)
   end
 
   # UNTESTED BY RSPEC
   def send_day_completed_sms
+    user = User.find_by(:id => self.user_id)
+    activity = self.title
+    day_completed_message = "Thank you for checking in to your task: " + activity + "!"
+    send_text_message(day_completed_message, user.phone_number)
   end
 
   # UNTESTED BY RSPEC
@@ -38,23 +71,18 @@ class Micropost < ActiveRecord::Base
   # After 24 hours, DBL runs this check-in
   def check_in
     if self.check_in_current == true  # User already checked in thru SMS before deadline
-      self.send_day_completed_sms  # WRITE THIS
-      self.days_completed += 1  # DB Column
-      self.days_remaining -= 1  # DB Column
-      self.current_day += 1     # DB Column
-      self.check_in_current = false  # Sets this column for next day
-      self.save
+      good_check_in_tally
     else 
-      send_check_in_sms  # WRITE THIS
+      send_check_in_sms
     end
   end
 
   # UNTESTED BY RSPEC
   # Schedule multiple delayed job based on number of days and task
-  def schedule_check_in_deadlines(task)
+  def schedule_check_in_deadlines
     number_of = 1
     self.days_to_complete.downto(1) do |n|  # Value from column
-      job = self.delay(run_at: Time.now + number_of.days.from_now).task # DO THIS JOB AFTER SCHEDULED TIME
+      job = self.delay(run_at: Time.now + number_of.days.from_now).check_in # DO THIS JOB AFTER SCHEDULED TIME
       update_column(:delayed_job_id, job.id)
       number_of += 1
     end
