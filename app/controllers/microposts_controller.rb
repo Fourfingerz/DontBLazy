@@ -24,28 +24,29 @@ class MicropostsController < ApplicationController
   def receive_sms  #receives and parses SMS content from users
     @message_body = params["Body"]
     @from_number = params["From"]
-    @phone_owner = User.find_by(:phone_number => @from_number)
+    @db_friendly_num = @from_number.sub /[+]/, ''
+    @phone_owner = User.find_by(:phone_number => @db_friendly_num)
 
-    # LOGIC HERE TO SETUP id_arr map from send_status_sms method
+    # Checks each character in SMS against goals ID map from User's column
     @message_body.each_char do |c| 
-      if c.include? "1"  # Looks for corresponding ID from SMS body
-        @micropost = Micropost.find(@phone_owner.current_tasks_map.find{|id| [1]}["1"])
+      if c == "1"  # Looks for corresponding ID from SMS body
+        @micropost = Micropost.find(@phone_owner.current_tasks_map.find{|id| id["1"]}["1"])
           @micropost.check_in_current = true  # If it detects ID number, marks micropost as Complete
           @micropost.save
-      elsif c.include? "2"
-        @micropost = Micropost.find(@phone_owner.current_tasks_map.find{|id| [2]}["2"])
+      elsif c == "2"
+        @micropost = Micropost.find(@phone_owner.current_tasks_map.find{|id| id["2"]}["2"])
           @micropost.check_in_current = true  
           @micropost.save
-      elsif c.include? "3"
-        @micropost = Micropost.find(@phone_owner.current_tasks_map.find{|id| [3]}["3"])
+      elsif c == "3"
+        @micropost = Micropost.find(@phone_owner.current_tasks_map.find{|id| id["3"]}["3"])
           @micropost.check_in_current = true  
           @micropost.save
-      elsif c.include? "4"
-        @micropost = Micropost.find(@phone_owner.current_tasks_map.find{|id| [4]}["4"])
+      elsif c == "4"
+        @micropost = Micropost.find(@phone_owner.current_tasks_map.find{|id| id["4"]}["4"])
           @micropost.check_in_current = true  
           @micropost.save
-      elsif c.include? "5" 
-        @micropost = Micropost.find(@phone_owner.current_tasks_map.find{|id| [5]}["5"])
+      elsif c == "5" 
+        @micropost = Micropost.find(@phone_owner.current_tasks_map.find{|id| id["5"]}["5"])
           @micropost.check_in_current = true  
           @micropost.save
       end
