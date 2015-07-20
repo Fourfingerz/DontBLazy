@@ -8,7 +8,7 @@
 <% @deadlines.each do |deadline| %>
 
   <tr>
-    <td><%= distance_of_time_in_words(Time.now, deadline.schedule_time, include_seconds: true) %></td>
+    <td><%#= distance_of_time_in_words(Time.now, Time.now + deadline.days. , include_seconds: true) %></td>
     <td><%= deadline.title %></td>
   </tr>
 

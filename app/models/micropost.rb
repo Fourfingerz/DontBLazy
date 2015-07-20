@@ -9,7 +9,7 @@ class Micropost < ActiveRecord::Base
   # DBL
   has_many :micropost_recipients, dependent: :destroy
   has_many :recipients, through: :micropost_recipients
-  validates :schedule_time, presence: true
+  validates :days_to_complete, presence: true
   #after_create :schedule_user_deadline_text
   after_create :send_status_sms
 
