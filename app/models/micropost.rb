@@ -16,6 +16,7 @@ class Micropost < ActiveRecord::Base
 
   # DBL Logic
 
+  # UNTESTED BY RSPEC
   # Schedule multiple delayed job based on number of days and task
   def schedule_deadline_task(days_to_complete, task)  # accepts N of days and task to do
     number_of = 1
