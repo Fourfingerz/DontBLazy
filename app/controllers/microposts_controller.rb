@@ -21,6 +21,7 @@ class MicropostsController < ApplicationController
     redirect_to request.referrer || root_url
   end
 
+  # Untested by RSPEC
   def receive_sms  #receives and parses SMS content from users
     @message_body = params["Body"]
     @from_number = params["From"]
