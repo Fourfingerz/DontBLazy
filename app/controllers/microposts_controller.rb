@@ -27,6 +27,7 @@ class MicropostsController < ApplicationController
     @db_friendly_num = @from_number.sub /[+]/, ''
     @phone_owner = User.find_by(:phone_number => @db_friendly_num)
 
+    # CURRENT SUPPORT: SINGLE DIGITS ONLY
     # Checks each character in SMS against goals ID map from User's column
     @message_body.each_char do |c| 
       if c == "1"  # Looks for corresponding ID from SMS body
