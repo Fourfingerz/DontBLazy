@@ -10,17 +10,50 @@ class Micropost < ActiveRecord::Base
   has_many :micropost_recipients, dependent: :destroy
   has_many :recipients, through: :micropost_recipients
   validates :days_to_complete, presence: true
-  #after_create :schedule_user_deadline_text
+  after_create :schedule_check_in_deadlines(check_in)
   after_create :send_status_sms
+  after_create :set_initial_state
 
 
   # DBL Logic
 
   # UNTESTED BY RSPEC
+  def send_check_in_sms
+  end
+
+  # UNTESTED BY RSPEC
+  def send_day_completed_sms
+  end
+
+  # UNTESTED BY RSPEC
+  # Sets a default state for every freshly minted Micropost (goal)
+  def set_initial_state
+    self.check_in_current = false
+    self.days_completed = 0
+    self.days_remaining = self.days_to_complete
+    self.current_day = 1
+  end
+
+  # UNTESTED BY RSPEC
+  # After 24 hours, DBL runs this check-in
+  def check_in
+    if self.check_in_current == true  # User already checked in thru SMS before deadline
+      self.send_day_completed_sms  # WRITE THIS
+      self.days_completed += 1  # DB Column
+      self.days_remaining -= 1  # DB Column
+      self.current_day += 1     # DB Column
+      self.check_in_current = false  # Sets this column for next day
+      self.save
+    else 
+      send_check_in_sms  # WRITE THIS
+    end
+  end
+
+  # UNTESTED BY RSPEC
   # Schedule multiple delayed job based on number of days and task
-  def schedule_deadline_task(days_to_complete, task)  # accepts N of days and task to do
+  def schedule_check_in_deadlines(task)
     number_of = 1
-    days_to_complete.downto(1) do |n|
+    self.days_to_complete.downto(1) do |n|  # Value from column
       job = self.delay(run_at: Time.now + number_of.days.from_now).task # DO THIS JOB AFTER SCHEDULED TIME
       update_column(:delayed_job_id, job.id)
       number_of += 1
