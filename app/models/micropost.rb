@@ -64,7 +64,7 @@ class Micropost < ActiveRecord::Base
   def send_bad_entry_sms
     user = User.find_by(:id => self.user_id)
     if @from_number == user.phone_number
-      try_again_sms = "Try again with a valid entry."
+      try_again_sms = "Oh Dear, I'm just a bot. I don't understand (yet)! Try again with your task number or YES and NO if a task is currently due. Pretty please!"
       send_text_message(try_again_sms, user.phone_number)
     end
   end

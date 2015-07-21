@@ -65,6 +65,8 @@ class MicropostsController < ApplicationController
         @micropost.bad_check_in_tally
         @phone_owner.micropost_id_due_now = nil
         @phone_owner.save  
+      elsif @message_body.include? "LIST" or "List" or "list"
+        @phone_owner.send_status_SMS
       else
         @micropost.send_bad_entry_sms
       end   
