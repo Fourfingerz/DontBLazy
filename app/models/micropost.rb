@@ -36,7 +36,7 @@ class Micropost < ActiveRecord::Base
   # UNTESTED BY RSPEC
   def send_check_in_sms
     user = User.find_by(:id => self.user_id)
-    user.due_now = self.id  # Set the current task ID being PROMPTED about
+    user.micropost_id_due_now = self.id  # Set the current task ID being PROMPTED about
 
     # Find id number value that matches key of map
     activity = @map_num.to_s + self.title
