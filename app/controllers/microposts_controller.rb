@@ -69,7 +69,7 @@ class MicropostsController < ApplicationController
         @phone_owner.micropost_id_due_now = nil
         @phone_owner.save  
       elsif @message_body.include? "LIST" or "List" or "list"
-        @phone_owner.send_status_SMS  # move these to user
+        @phone_owner.send_status_SMS(@phone_owner.microposts)
       else
         @phone_owner.send_bad_entry_sms  # move these to user
       end   

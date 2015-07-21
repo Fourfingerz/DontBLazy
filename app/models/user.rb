@@ -105,6 +105,22 @@ class User < ActiveRecord::Base
 
   # DBL
 
+  # Twilio magic
+  def send_text_message(content, target_phone)
+
+    twilio_sid = ENV["TWILIO_ACCOUNT_SID"]
+    twilio_token = ENV["TWILIO_AUTH_TOKEN"]
+    twilio_phone_number = ENV["TWILIO_PHONE_NUMBER"]
+
+    @twilio_client = Twilio::REST::Client.new twilio_sid, twilio_token
+
+      @twilio_client.messages.create(
+        :from => twilio_phone_number,
+        :to => target_phone,
+        :body => content
+      )
+  end
+
   # Pin for phone verification.
   def generate_pin
     self.phone_pin = rand(0000..9999).to_s.rjust(4, "0")
@@ -122,6 +138,37 @@ class User < ActiveRecord::Base
 
   def verify(entered_pin)
     update(phone_verified: true) if self.phone_pin == entered_pin
+  end
+
+    # UNTESTED by Rspec
+  # Send user's phone a SMS list of active goals menu on create
+  def send_status_sms(microposts)   ### move to user.rb
+    goals = microposts
+
+    id_arr = [], i = 0
+    goals.each do |goal|
+      i += 1
+      count = i.to_s
+      ids = Hash[count => goal.id.to_s]
+      id_arr << ids    # Maps corresponding numbers to IDs
+                          #   [{"1"=>"9"}, {"2"=>"8"}, {"3"=>"7"}, {"4"=>"6"}
+    end
+    self.current_tasks_map = id_arr  # Saves ID map to user column
+    self.save
+
+    sms_arr = [], j = 0
+    goals.each do |goal|
+      j += 1
+      count = j.to_s
+      sms = count + ". " + goal.title
+      sms_arr << sms   # Generates goals map for user SMS
+                          #   ["1 Medical Volunteering", 
+                          #    "2 Himalayan Altitude Acclimatization", 
+                          #    "3 Rowing Session", "4 Yoga Session"]
+    end
+    active_goals = sms_arr.join(" ")
+    active_goals_summary = "To mark goals complete before deadline, REPLY with your goal's corresponding number, separated by a space: " + active_goals
+    send_text_message(active_goals_summary, self.phone_number)
   end
 
   private
