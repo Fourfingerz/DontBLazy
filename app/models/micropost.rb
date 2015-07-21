@@ -48,7 +48,7 @@ class Micropost < ActiveRecord::Base
   end
 
   # UNTESTED BY RSPEC
-  def send_check_in_sms
+  def send_check_in_sms 
     user = User.find_by(:id => self.user_id)
     user.micropost_id_due_now = self.id  # Set the current task ID being PROMPTED about
     user.save
@@ -61,7 +61,7 @@ class Micropost < ActiveRecord::Base
 
   # UNTESTED BY RSPEC
   # When user sends SMS gibberish and is not understood, this will go out.
-  def send_bad_entry_sms
+  def send_bad_entry_sms ###
     user = User.find_by(:id => self.user_id)
     if @from_number == user.phone_number
       try_again_sms = "Oh Dear, I'm just a bot. I don't understand (yet)! Try again with your task number or YES and NO if a task is currently due. Pretty please!"
@@ -120,7 +120,7 @@ class Micropost < ActiveRecord::Base
 
   # UNTESTED by Rspec
   # Send user's phone a SMS list of active goals menu on create
-  def send_status_sms
+  def send_status_sms   ###
     user = User.find_by(:id => self.user_id)
     goals = user.microposts
 

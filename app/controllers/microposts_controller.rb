@@ -55,20 +55,21 @@ class MicropostsController < ApplicationController
         end
       end
     else 
-      @micropost = Micropost.find(@phone_owner.micropost_id_due_now)
       if @message_body.include? "YES" or "Yes" or "yes"
+        @micropost = Micropost.find(@phone_owner.micropost_id_due_now)
         @micropost.good_check_in_tally
         @micropost.send_day_completed_sms
         @phone_owner.micropost_id_due_now = nil 
         @phone_owner.save 
       elsif @message_body.include? "NO" or "No" or "no"
+        @micropost = Micropost.find(@phone_owner.micropost_id_due_now)
         @micropost.bad_check_in_tally
         @phone_owner.micropost_id_due_now = nil
         @phone_owner.save  
       elsif @message_body.include? "LIST" or "List" or "list"
-        @phone_owner.send_status_SMS
+        @phone_owner.send_status_SMS  # move these to user
       else
-        @micropost.send_bad_entry_sms
+        @phone_owner.send_bad_entry_sms  # move these to user
       end   
     end
   end
