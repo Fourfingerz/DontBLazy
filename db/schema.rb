@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150721010225) do
+ActiveRecord::Schema.define(version: 20150721010409) do
 
   create_table "delayed_jobs", force: :cascade do |t|
     t.integer  "priority",   default: 0, null: false
@@ -47,6 +47,9 @@ ActiveRecord::Schema.define(version: 20150721010225) do
     t.string   "title"
     t.boolean  "check_in_current"
     t.integer  "days_to_complete"
+    t.integer  "days_completed"
+    t.integer  "days_remaining"
+    t.integer  "current_day"
   end
 
   add_index "microposts", ["user_id", "created_at"], name: "index_microposts_on_user_id_and_created_at"
