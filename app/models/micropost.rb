@@ -78,6 +78,14 @@ class Micropost < ActiveRecord::Base
   end
 
   # UNTESTED BY RSPEC
+  def send_day_incomplete_sms
+    user = User.find_by(:id => self.user_id)
+    activity = self.title
+    day_incomplete_message = "Sorry to hear that you missed your task: " + activity + ". Recipients of your choosing have been notified. Tell them to be nice! You're trying!"
+    send_text_message(day_incomplete_message, user.phone_number)
+  end
+
+  # UNTESTED BY RSPEC
   # After 24 hours, DBL runs this check-in
   def check_in
     if self.check_in_current == true  # User already checked in thru SMS before deadline

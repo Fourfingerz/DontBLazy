@@ -64,6 +64,8 @@ class MicropostsController < ApplicationController
       elsif @message_body.include? "NO" or "No" or "no"
         @micropost = Micropost.find(@phone_owner.micropost_id_due_now)
         @micropost.bad_check_in_tally
+        # @micropost.send_bad_news_to_recipients   ### Future implimentation
+        @micropost.send_day_incomplete_sms
         @phone_owner.micropost_id_due_now = nil
         @phone_owner.save  
       elsif @message_body.include? "LIST" or "List" or "list"
