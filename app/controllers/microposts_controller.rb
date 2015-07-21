@@ -58,11 +58,9 @@ class MicropostsController < ApplicationController
         if @message_body.includes? "YES" or "Yes" or "yes"
           @micropost.good_check_in_tally
           @micropost.send_day_completed_sms
-
           @phone_owner.micropost_id_due_now = nil  
         elsif @message_body.includes? "NO" or "No" or "no"
           @micropost.bad_check_in_tally
-
           @phone_owner.micropost_id_due_now = nil  
         else
           @micropost.send_bad_entry_sms
