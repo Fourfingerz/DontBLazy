@@ -14,8 +14,6 @@ class Micropost < ActiveRecord::Base
   after_create :schedule_check_in_deadlines
   after_create :send_status_sms
 
-
-
   # DBL Logic
 
   # UNTESTED BY RSPEC
@@ -38,16 +36,22 @@ class Micropost < ActiveRecord::Base
   # UNTESTED BY RSPEC
   def send_check_in_sms
     user = User.find_by(:id => self.user_id)
-    map = user.current_tasks_map
-    map.each do |id|
-      if id.key(self.id)
-        @map_num = id.key(self.id)
-      end
-    end
+    user.due_now = self.id  # Set the current task ID being PROMPTED about
+
     # Find id number value that matches key of map
     activity = @map_num.to_s + self.title
-    check_in_sms = "DontBLazy Bot: Time's up! Did you do your task: " + activity + "? Text me back with the corresponding number on your task!"
+    check_in_sms = "DontBLazy Bot: Time's up! Did you do your task: " + activity + "? Reply YES or NO."
     send_text_message(check_in_sms, user.phone_number)
+  end
+
+  # UNTESTED BY RSPEC
+  # When user sends SMS gibberish and is not understood, this will go out.
+  def send_bad_entry_sms
+    user = User.find_by(:id => self.user_id)
+    if @from_number == user.phone_number
+      try_again_sms = "Try again with a valid entry."
+      send_text_message(try_again_sms, user.phone_number)
+    end
   end
 
   # UNTESTED BY RSPEC

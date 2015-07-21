@@ -28,30 +28,47 @@ class MicropostsController < ApplicationController
     @db_friendly_num = @from_number.sub /[+]/, ''  # Plucks plus sign 
     @phone_owner = User.find_by(:phone_number => @db_friendly_num)
 
+    if @message_body =~ /\d/ 
     # CURRENT SUPPORT: SINGLE DIGITS ONLY
     # Checks each character in SMS against goals ID map from User's column
-    @message_body.each_char do |c| 
-      if c == "1"  # Looks for corresponding ID from SMS body
-        @micropost = Micropost.find(@phone_owner.current_tasks_map.find{|id| id["1"]}["1"])
-          @micropost.check_in_current = true  # If it detects ID number, marks micropost as Complete
-          @micropost.save
-      elsif c == "2"
-        @micropost = Micropost.find(@phone_owner.current_tasks_map.find{|id| id["2"]}["2"])
-          @micropost.check_in_current = true  
-          @micropost.save
-      elsif c == "3"
-        @micropost = Micropost.find(@phone_owner.current_tasks_map.find{|id| id["3"]}["3"])
-          @micropost.check_in_current = true  
-          @micropost.save
-      elsif c == "4"
-        @micropost = Micropost.find(@phone_owner.current_tasks_map.find{|id| id["4"]}["4"])
-          @micropost.check_in_current = true  
-          @micropost.save
-      elsif c == "5" 
-        @micropost = Micropost.find(@phone_owner.current_tasks_map.find{|id| id["5"]}["5"])
-          @micropost.check_in_current = true  
-          @micropost.save
-      end
+      @message_body.each_char do |c| 
+        if c == "1"  # Looks for corresponding ID from SMS body
+          @micropost = Micropost.find(@phone_owner.current_tasks_map.find{|id| id["1"]}["1"])
+            @micropost.check_in_current = true  # If it detects ID number, marks micropost as Complete
+            @micropost.save
+        elsif c == "2"
+          @micropost = Micropost.find(@phone_owner.current_tasks_map.find{|id| id["2"]}["2"])
+            @micropost.check_in_current = true  
+            @micropost.save
+        elsif c == "3"
+          @micropost = Micropost.find(@phone_owner.current_tasks_map.find{|id| id["3"]}["3"])
+            @micropost.check_in_current = true  
+            @micropost.save
+        elsif c == "4"
+          @micropost = Micropost.find(@phone_owner.current_tasks_map.find{|id| id["4"]}["4"])
+            @micropost.check_in_current = true  
+            @micropost.save
+        elsif c == "5" 
+          @micropost = Micropost.find(@phone_owner.current_tasks_map.find{|id| id["5"]}["5"])
+            @micropost.check_in_current = true  
+            @micropost.save
+        end
+      else 
+        @micropost = Micropost.find(@phone_owner.due_now)
+        if @message_body.includes? "YES" or "Yes" or "yes"
+          @micropost.good_check_in_tally
+          @micropost.send_day_completed_sms
+
+          @phone_owner.due_now = nil  
+        elsif @message_body.includes? "NO" or "No" or "no"
+          @micropost.bad_check_in_tally
+
+          @phone_owner.due_now = nil  
+        else
+          @micropost.send_bad_entry_sms
+        end
+      end    
+
     end
 
     render xml: "<Response>
