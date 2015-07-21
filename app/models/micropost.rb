@@ -17,6 +17,16 @@ class Micropost < ActiveRecord::Base
   # DBL Logic
 
   # UNTESTED BY RSPEC
+  # Sets a default state for every freshly minted Micropost (goal)
+  def set_initial_state
+    self.check_in_current = false
+    self.days_completed = 0
+    self.days_remaining = self.days_to_complete
+    self.current_day = 1
+    self.save
+  end
+
+  # UNTESTED BY RSPEC
   def good_check_in_tally
     if self.days_remaining > 0
       self.days_completed += 1  # DB Column
@@ -41,6 +51,7 @@ class Micropost < ActiveRecord::Base
   def send_check_in_sms
     user = User.find_by(:id => self.user_id)
     user.micropost_id_due_now = self.id  # Set the current task ID being PROMPTED about
+    user.save
 
     # Find id number value that matches key of map
     activity = self.title
@@ -67,16 +78,6 @@ class Micropost < ActiveRecord::Base
   end
 
   # UNTESTED BY RSPEC
-  # Sets a default state for every freshly minted Micropost (goal)
-  def set_initial_state
-    self.check_in_current = false
-    self.days_completed = 0
-    self.days_remaining = self.days_to_complete
-    self.current_day = 1
-    self.save
-  end
-
-  # UNTESTED BY RSPEC
   # After 24 hours, DBL runs this check-in
   def check_in
     if self.check_in_current == true  # User already checked in thru SMS before deadline
@@ -91,7 +92,7 @@ class Micropost < ActiveRecord::Base
   def schedule_check_in_deadlines
     number_of = 1
     self.days_to_complete.downto(1) do |n|  # Value from column
-      job = self.delay(run_at: Time.now + number_of.days.from_now).check_in # DO THIS JOB AFTER SCHEDULED TIME
+      job = self.delay(run_at: number_of.days.from_now).check_in # RUN THIS JOB AFTER SCHEDULED TIME
       update_column(:delayed_job_id, job.id)
       number_of += 1
     end

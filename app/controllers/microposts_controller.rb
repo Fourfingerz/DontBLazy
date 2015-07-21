@@ -53,31 +53,32 @@ class MicropostsController < ApplicationController
             @micropost.check_in_current = true  
             @micropost.save
         end
-      else 
-        @micropost = Micropost.find(@phone_owner.micropost_id_due_now)
-        if @message_body.includes? "YES" or "Yes" or "yes"
-          @micropost.good_check_in_tally
-          @micropost.send_day_completed_sms
-          @phone_owner.micropost_id_due_now = nil  
-        elsif @message_body.includes? "NO" or "No" or "no"
-          @micropost.bad_check_in_tally
-          @phone_owner.micropost_id_due_now = nil  
-        else
-          @micropost.send_bad_entry_sms
-        end
-      end    
-
+      end
+    else 
+      @micropost = Micropost.find(@phone_owner.micropost_id_due_now)
+      if @message_body.include? "YES" or "Yes" or "yes"
+        @micropost.good_check_in_tally
+        @micropost.send_day_completed_sms
+        @phone_owner.micropost_id_due_now = nil 
+        @phone_owner.save 
+      elsif @message_body.include? "NO" or "No" or "no"
+        @micropost.bad_check_in_tally
+        @phone_owner.micropost_id_due_now = nil
+        @phone_owner.save  
+      else
+        @micropost.send_bad_entry_sms
+      end   
     end
-
-    render xml: "<Response>
-                    <Message>You just checked into your goals. Thank you!</Message>
-                </Response>"
   end
 
   private
     
     def micropost_params
-      params.require(:micropost).permit(:title, :content, :picture, :days_to_complete)
+      params.require(:micropost).permit(:title, :content, :picture, 
+                                        :delayed_job_id, 
+                                        :completed, :check_in_current, 
+                                        :days_to_complete, :days_completed, 
+                                        :days_remaining, :current_day)
     end
     
     def correct_user
