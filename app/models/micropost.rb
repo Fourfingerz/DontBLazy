@@ -39,7 +39,7 @@ class Micropost < ActiveRecord::Base
     user.micropost_id_due_now = self.id  # Set the current task ID being PROMPTED about
 
     # Find id number value that matches key of map
-    activity = @map_num.to_s + self.title
+    activity = self.title
     check_in_sms = "DontBLazy Bot: Time's up! Did you do your task: " + activity + "? Reply YES or NO."
     send_text_message(check_in_sms, user.phone_number)
   end
@@ -140,7 +140,7 @@ class Micropost < ActiveRecord::Base
                           #    "3 Rowing Session", "4 Yoga Session"]
     end
     active_goals = sms_arr.join(" ")
-    active_goals_summary = "To mark goals complete, REPLY to this text with your goal's corresponding number, separated by a space:" + active_goals
+    active_goals_summary = "To mark goals complete before deadline, REPLY with your goal's corresponding number, separated by a space: " + active_goals
     send_text_message(active_goals_summary, user.phone_number)
   end
   
