@@ -39,6 +39,10 @@ Web app for personal productivity with accountability via shared SMS to friends 
 			render micropost_form as usual.
 
 
+	*** FUTURE FUNCTIONALITY
+
+	Set manual time due. ie. picking kids up from school at 4PM seven hours from now.
+
 
 		
 
