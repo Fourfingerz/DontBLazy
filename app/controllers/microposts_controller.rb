@@ -33,25 +33,30 @@ class MicropostsController < ApplicationController
     # Checks each character in SMS against goals ID map from User's column
       @message_body.each_char do |c| 
         if c == "1"  # Looks for corresponding ID from SMS body
-          @micropost = Micropost.find(@phone_owner.current_tasks_map.find{|id| id["1"]}["1"])
-            @micropost.check_in_current = true  # If it detects ID number, marks micropost as Complete
-            @micropost.save
+          @micropost = Micropost.find(@phone_owner.current_tasks_map.find{|id| id["task"] == 1 }["micropost id"])
+          @micropost.check_in_current = true  # If it detects ID number, marks micropost as Complete
+          @micropost.save
+          @micropost.send_day_completed_sms
         elsif c == "2"
-          @micropost = Micropost.find(@phone_owner.current_tasks_map.find{|id| id["2"]}["2"])
-            @micropost.check_in_current = true  
-            @micropost.save
+          @micropost = Micropost.find(@phone_owner.current_tasks_map.find{|id| id["task"] == 2 }["micropost id"])
+          @micropost.check_in_current = true  
+          @micropost.save
+          @micropost.send_day_completed_sms
         elsif c == "3"
-          @micropost = Micropost.find(@phone_owner.current_tasks_map.find{|id| id["3"]}["3"])
-            @micropost.check_in_current = true  
-            @micropost.save
+          @micropost = Micropost.find(@phone_owner.current_tasks_map.find{|id| id["task"] == 3 }["micropost id"])
+          @micropost.check_in_current = true  
+          @micropost.save
+          @micropost.send_day_completed_sms
         elsif c == "4"
-          @micropost = Micropost.find(@phone_owner.current_tasks_map.find{|id| id["4"]}["4"])
-            @micropost.check_in_current = true  
-            @micropost.save
+          @micropost = Micropost.find(@phone_owner.current_tasks_map.find{|id| id["task"] == 4 }["micropost id"])
+          @micropost.check_in_current = true  
+          @micropost.save
+          @micropost.send_day_completed_sms
         elsif c == "5" 
-          @micropost = Micropost.find(@phone_owner.current_tasks_map.find{|id| id["5"]}["5"])
-            @micropost.check_in_current = true  
-            @micropost.save
+          @micropost = Micropost.find(@phone_owner.current_tasks_map.find{|id| id["task"] == 5 }["micropost id"])
+          @micropost.check_in_current = true  
+          @micropost.save
+          @micropost.send_day_completed_sms
         end
       end
     else 
@@ -69,11 +74,13 @@ class MicropostsController < ApplicationController
         @phone_owner.micropost_id_due_now = nil
         @phone_owner.save  
       elsif @message_body.include? "LIST" or "List" or "list"
-        @phone_owner.send_status_SMS(@phone_owner.microposts)
+        @micropost = Micropost.find(@phone_owner.microposts.first)
+        @phone_owner.send_status_SMS
       else
-        @phone_owner.send_bad_entry_sms  # move these to user
-      end   
+        @phone_owner.send_bad_entry_sms(@from_number)  # move these to user
+      end  
     end
+    render nothing: true
   end
 
   private

@@ -1,5 +1,5 @@
 class User < ActiveRecord::Base
-  serialize :current_tasks_map, Array
+  serialize :current_tasks_map
   has_many :microposts, dependent: :destroy
   has_many :active_relationships, class_name:  "Relationship",
                                   foreign_key: "follower_id",
@@ -121,6 +121,15 @@ class User < ActiveRecord::Base
       )
   end
 
+  # UNTESTED BY RSPEC
+  # When user sends SMS gibberish and is not understood, this will go out.
+  def send_bad_entry_sms(from_number)
+    if from_number == self.phone_number
+      try_again_sms = "Oh Dear, I'm just a bot. I don't understand (yet)! Try again with your task number or YES and NO if a task is currently due. Pretty please!"
+      send_text_message(try_again_sms, self.phone_number)
+    end
+  end
+
   # Pin for phone verification.
   def generate_pin
     self.phone_pin = rand(0000..9999).to_s.rjust(4, "0")
@@ -142,18 +151,18 @@ class User < ActiveRecord::Base
 
     # UNTESTED by Rspec
   # Send user's phone a SMS list of active goals menu on create
-  def send_status_sms(microposts)   ### move to user.rb
-    goals = microposts
+  def send_status_sms   ### move to user.rb
+    goals = self.microposts
 
     id_arr = [], i = 0
     goals.each do |goal|
       i += 1
-      count = i.to_s
-      ids = Hash[count => goal.id.to_s]
-      id_arr << ids    # Maps corresponding numbers to IDs
-                          #   [{"1"=>"9"}, {"2"=>"8"}, {"3"=>"7"}, {"4"=>"6"}
+      id = { "task" => i, "micropost id" => goal.id }
+      id_arr << id    # Maps corresponding numbers to IDs
+                      # [{"task"=>1, "micropost id"=>9}, {"task"=>2, "micropost id"=>8}, 
+                      #  {"task"=>3, "micropost id"=>7}, {"task"=>4, "micropost id"=>6}]
     end
-    self.current_tasks_map = id_arr  # Saves ID map to user column
+    self.current_tasks_map = id_arr.flatten.drop(1)  # Saves ID map to user column
     self.save
 
     sms_arr = [], j = 0
