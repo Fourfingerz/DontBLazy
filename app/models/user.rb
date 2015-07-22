@@ -176,6 +176,7 @@ class User < ActiveRecord::Base
                           #    "3 Rowing Session", "4 Yoga Session"]
     end
     active_goals = sms_arr.join(" ")
+    active_goals.slice! "0"
     active_goals_summary = "To mark goals complete before deadline, REPLY with your goal's corresponding number, separated by a space: " + active_goals
     send_text_message(active_goals_summary, self.phone_number)
   end
