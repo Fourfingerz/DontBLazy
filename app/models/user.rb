@@ -151,7 +151,7 @@ class User < ActiveRecord::Base
 
     # UNTESTED by Rspec
   # Send user's phone a SMS list of active goals menu on create
-  def send_status_sms   ### move to user.rb
+  def send_status_sms
     goals = self.microposts
 
     id_arr = [], i = 0

@@ -50,6 +50,7 @@ class Micropost < ActiveRecord::Base
     end
   end
 
+  # Tested by hand
   # UNTESTED BY RSPEC
   def send_check_in_sms 
     user = User.find_by(:id => self.user_id)
@@ -62,6 +63,7 @@ class Micropost < ActiveRecord::Base
     send_text_message(check_in_sms, user.phone_number)
   end
 
+  # Tested by hand
   # UNTESTED BY RSPEC
   def send_day_completed_sms
     user = User.find_by(:id => self.user_id)
@@ -70,6 +72,7 @@ class Micropost < ActiveRecord::Base
     send_text_message(day_completed_message, user.phone_number)
   end
 
+  # Tested by hand
   # UNTESTED BY RSPEC
   def send_day_incomplete_sms
     user = User.find_by(:id => self.user_id)
@@ -78,6 +81,7 @@ class Micropost < ActiveRecord::Base
     send_text_message(day_incomplete_message, user.phone_number)
   end
 
+  # Tested by hand
   # UNTESTED BY RSPEC
   # After 24 hours, DBL runs this check-in
   def check_in
