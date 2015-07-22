@@ -16,6 +16,7 @@ class Micropost < ActiveRecord::Base
 
   # DBL Logic
 
+  # Tested by hand
   # UNTESTED BY RSPEC
   # Sets a default state for every freshly minted Micropost (goal)
   def set_initial_state
@@ -26,6 +27,7 @@ class Micropost < ActiveRecord::Base
     self.save
   end
 
+  # Tested by hand
   # UNTESTED BY RSPEC
   def good_check_in_tally
     if self.days_remaining > 0
@@ -37,6 +39,7 @@ class Micropost < ActiveRecord::Base
     end
   end
 
+  # Tested by hand
   # UNTESTED BY RSPEC
   def bad_check_in_tally
     if self.days_remaining > 0
