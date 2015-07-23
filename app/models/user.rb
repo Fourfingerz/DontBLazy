@@ -177,7 +177,7 @@ class User < ActiveRecord::Base
     end
     active_goals = sms_arr.join(" ")
     active_goals.slice! "0"  # Temporary solution for annoying ZERO
-    active_goals_summary = "To mark goquitals complete before deadline, REPLY with your goal's corresponding number, separated by a space: " + active_goals
+    active_goals_summary = "To mark goals complete before deadline, REPLY with your goal's corresponding number, separated by a space: " + active_goals
     send_text_message(active_goals_summary, self.phone_number)
   end
 

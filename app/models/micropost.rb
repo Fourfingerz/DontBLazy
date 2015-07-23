@@ -12,7 +12,6 @@ class Micropost < ActiveRecord::Base
   validates :days_to_complete, presence: true
   after_create :set_initial_state
   after_create :schedule_check_in_deadlines
-  after_create :send_status_sms
 
   # DBL Logic
 
@@ -101,8 +100,11 @@ class Micropost < ActiveRecord::Base
       update_column(:delayed_job_id, job.id)
       number_of += 1
     end
+    user = User.find_by(:id => self.user_id)
+    user.send_status_sms
   end
 
+  # 
   def delayed_job
     Delayed::Job.find(delayed_job_id)
   end
