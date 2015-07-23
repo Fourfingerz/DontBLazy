@@ -91,6 +91,9 @@ GEM
     delayed_job_active_record (4.0.3)
       activerecord (>= 3.0, < 5.0)
       delayed_job (>= 3.0, < 4.1)
+    delayed_job_recurring (0.3.5)
+      delayed_job (>= 3.0)
+      delayed_job_active_record
     diff-lcs (1.2.5)
     dotenv (1.0.2)
     dotenv-rails (1.0.2)
@@ -148,6 +151,10 @@ GEM
     i18n (0.7.0)
     i18n_data (0.7.0)
     inflecto (0.0.2)
+    interactor (3.1.0)
+    interactor-rails (2.0.1)
+      interactor (~> 3.0)
+      rails (>= 3, < 5)
     ipaddress (0.8.0)
     jbuilder (2.2.3)
       activesupport (>= 3.0.0, < 5)
@@ -337,11 +344,13 @@ DEPENDENCIES
   daemons
   database_cleaner (~> 1.3.0)
   delayed_job_active_record
+  delayed_job_recurring
   dotenv-rails
   factory_girl_rails (~> 4.4.1)
   faker (= 1.4.2)
   fog (= 1.23.0)
   guard-minitest (= 2.3.1)
+  interactor-rails (~> 2.0)
   jbuilder (= 2.2.3)
   jquery-rails (= 4.0.3)
   launchy (~> 2.4.2)

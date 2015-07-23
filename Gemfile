@@ -21,8 +21,10 @@ gem 'sdoc',                    '0.4.0', group: :doc
 
 gem 'twilio-ruby' # SMS
 gem 'delayed_job_active_record' # Cron SMS jobs
+gem 'delayed_job_recurring'
 gem 'daemons' # Required for Cron jobs
 gem 'phony_rails' # Phone validations
+gem "interactor-rails", "~> 2.0"  # Get out of bloated models!
 
 group :development, :test do
   gem 'sqlite3',     '1.3.9'
