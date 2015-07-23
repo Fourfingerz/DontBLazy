@@ -12,11 +12,11 @@
 </div>
 
 <div id="verify-pin">
-  <h3>Enter your PIN</h3>
+  <h3>Enter your four-digit PIN</h3>
   <%= form_tag users_verify_path, remote: true do |f| %>
 	<%= hidden_field_tag 'hidden_phone_number', '' %>
 	  <div class="form-group">
-		<%= text_field_tag :phone_pin, :placeholder => "ex: 0000" %>
+		<%= text_field_tag :phone_pin %>
 	  </div>
 	  <%= submit_tag "Verify PIN", class: "btn btn-primary" %>
 	<% end %>

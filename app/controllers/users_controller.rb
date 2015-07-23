@@ -85,7 +85,7 @@ class UsersController < ApplicationController
     def user_params
       params.require(:user).permit(:name, :email, :password,
                                    :password_confirmation,
-                                   :phone_number, :phone_pin, :phone_verified
+                                   :phone_number, :phone_pin, :phone_verified,
                                    :current_tasks_map, :micropost_id_due_now)
     end
     

@@ -80,7 +80,7 @@ class MicropostsController < ApplicationController
         @phone_owner.send_bad_entry_sms(@from_number)  # move these to user
       end  
     end
-    render nothing: true
+    render xml: "<Response/>"
   end
 
   private
