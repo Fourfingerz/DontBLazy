@@ -7,6 +7,7 @@
     <span class="glyphicon glyphicon-comment" aria-hidden="true"></span>   
     <%= micropost.content %>
     <%= image_tag micropost.picture.url if micropost.picture? %>
+    </br>
     Deadline: <%= distance_of_time_in_words(Time.now, Time.now + micropost.days_to_complete, include_seconds: true) %> 
   </span>
   <span class="timestamp">

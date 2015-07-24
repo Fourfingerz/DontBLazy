@@ -25,6 +25,7 @@ gem 'delayed_job_recurring'
 gem 'daemons' # Required for Cron jobs
 gem 'phony_rails' # Phone validations
 gem "interactor-rails", "~> 2.0"  # Get out of bloated models!
+gem 'protected_attributes'  # Allows use of attr_accessible in Rails 4
 
 group :development, :test do
   gem 'sqlite3',     '1.3.9'

@@ -98,6 +98,8 @@ class Micropost < ActiveRecord::Base
     self.days_to_complete.downto(1) do |n|  # Value from column
       job = self.delay(run_at: number_of.days.from_now).check_in # RUN THIS JOB AFTER SCHEDULED TIME
       update_column(:delayed_job_id, job.id)
+      update_column(:owner_type, "Micropost")  # Associates delayed_job with Micropost ID
+      update_column(:owner_id, self.id)
       number_of += 1
     end
     user = User.find_by(:id => self.user_id)
@@ -124,6 +126,11 @@ class Micropost < ActiveRecord::Base
         :body => content
       )
   end
+
+  # Associates Delayed Jobs with "owners" models
+  def foo
+  end
+  handle_asynchronously :foo, :owner => Proc.new { |o| o  }
   
   private
   
