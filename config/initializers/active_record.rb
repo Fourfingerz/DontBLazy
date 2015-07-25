@@ -10,6 +10,7 @@ has_many :jobs, :class_name => "Delayed::Job", :as => :owner
   end
 
   def find_all_by_owner_type
+    #write this
   end
 
   def self.jobs
