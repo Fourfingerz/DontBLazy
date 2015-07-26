@@ -10,7 +10,10 @@ has_many :jobs, :class_name => "Delayed::Job", :as => :owner
   end
 
   def find_all_by_owner_type
-    #write this
+    # owner = job.name[/[^#]+/]  # Finds Controller Action and trims everything after # 
+    # # ex: Micropost
+    # job.owner_type = owner
+
   end
 
   def self.jobs
