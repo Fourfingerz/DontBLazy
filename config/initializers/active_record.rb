@@ -9,7 +9,7 @@ has_many :jobs, :class_name => "Delayed::Job", :as => :owner
     end
   end
 
-  def find_all_by_owner_type
+  def find_all_by_owner_type(table_name)
     # When setting a delayed_job, set owner_type like this:
     # owner = job.name[/[^#]+/]  # Finds Controller Action and trims everything after # 
     # # ex: Micropost
