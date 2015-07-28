@@ -61,11 +61,26 @@ class MicropostsController < ApplicationController
       end
     else 
       if @message_body.include? "YES" or "Yes" or "yes"
-        @micropost = Micropost.find(@phone_owner.micropost_id_due_now)
-        @micropost.good_check_in_tally
-        @micropost.send_day_completed_sms
-        @phone_owner.micropost_id_due_now = nil 
-        @phone_owner.save 
+        # if Time.now < due_time  # Check in BEFORE two hours (check_in time + 2 hours)
+          @micropost = Micropost.find(@phone_owner.micropost_id_due_now)
+          @micropost.good_check_in_tally
+          @micropost.send_day_completed_sms
+
+          # @micropost.current_deadline = nil
+
+          @phone_owner.micropost_id_due_now = nil 
+          @phone_owner.save 
+        # # else   # Checking in AFTER two hours
+        #   @micropost = Micropost.find(@phone_owner.micropost_id_due_now)
+        #   @micropost.bad_check_in_tally
+        #   # @micropost.send_bad_news_to_recipients   ### Future implimentation
+        #   @micropost.send_day_incomplete_sms
+        #   @phone_owner.micropost_id_due_now = nil
+
+        #   # @micropost.current_deadline = nil
+
+        #   @phone_owner.save
+        # end 
       elsif @message_body.include? "NO" or "No" or "no"
         @micropost = Micropost.find(@phone_owner.micropost_id_due_now)
         @micropost.bad_check_in_tally

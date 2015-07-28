@@ -52,6 +52,7 @@ class Micropost < ActiveRecord::Base
   # Tested by hand
   # UNTESTED BY RSPEC
   def send_check_in_sms 
+    # Sets micropost ID that is in question at due date.
     user = User.find_by(:id => self.user_id)
     user.micropost_id_due_now = self.id  # Set the current task ID being PROMPTED about
     user.save
@@ -60,6 +61,7 @@ class Micropost < ActiveRecord::Base
     activity = self.title
     check_in_sms = "DontBLazy Bot: Time's up! Did you do your task: " + activity + "? Reply YES or NO."
     send_text_message(check_in_sms, user.phone_number)
+    # self.current_deadline = Time.now + 2.hours 
   end
 
   # Tested by hand
@@ -86,7 +88,7 @@ class Micropost < ActiveRecord::Base
   def check_in
     if self.check_in_current == true  # User already checked in thru SMS before deadline
       good_check_in_tally
-      schedule_check_in_deadline  # After 24 hours, restart timer
+      schedule_check_in_deadline  # After 24 hours, restart another delayed_job if there are more days
     else 
       send_check_in_sms
       schedule_check_in_deadline 
@@ -97,7 +99,10 @@ class Micropost < ActiveRecord::Base
   # Schedule multiple delayed job based on number of days and task
   def schedule_check_in_deadline
     if self.days_remaining > 0
-      job = self.delay(run_at: 24.hours.from_now).check_in # RUN THIS JOB AFTER SCHEDULED TIME
+
+      job = self.delay(run_at: 3.minutes.from_now).check_in
+
+      # job = self.delay(run_at: 24.hours.from_now).check_in # RUN THIS JOB AFTER SCHEDULED TIME
       update_column(:delayed_job_id, job.id)  # Update Delayed_job
 
       Delayed::Job.find_by(:id => job.id).update_columns(owner_type: "Micropost")  # Associates delayed_job with Micropost ID
