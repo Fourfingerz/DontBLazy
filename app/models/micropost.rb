@@ -54,7 +54,7 @@ class Micropost < ActiveRecord::Base
   def send_check_in_sms 
     # Sets micropost ID that is in question at due date.
     user = User.find_by(:id => self.user_id)
-    user.micropost_id_due_now = self.id  # Set the current task ID being PROMPTED about
+    user.micropost_id_due_now = self.id  # Set the current task ON STAGE
     user.save
 
     # Find id number value that matches key of map
@@ -62,8 +62,12 @@ class Micropost < ActiveRecord::Base
     check_in_sms = "DontBLazy Bot: Time's up! Did you do your task: " + activity + "? Reply YES or NO."
     send_text_message(check_in_sms, user.phone_number)
     
-    # Sets two hour deadline counter for SMS reply
-    self.two_hour_deadline = Time.now + 2.hours 
+    # Sets two hour deadline check in
+    # CODE GOES HERE
+  end
+
+  # UNTESTED BY RSPEC and HAND
+  def two_hour_check_in
   end
 
   # Tested by hand
@@ -92,6 +96,7 @@ class Micropost < ActiveRecord::Base
       good_check_in_tally
       schedule_check_in_deadline  # After 24 hours, restart another delayed_job if there are more days
     else 
+      # 2 hour delayed_job for checking self.late_but_current
       send_check_in_sms
       schedule_check_in_deadline 
     end
