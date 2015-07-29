@@ -61,7 +61,9 @@ class Micropost < ActiveRecord::Base
     activity = self.title
     check_in_sms = "DontBLazy Bot: Time's up! Did you do your task: " + activity + "? Reply YES or NO."
     send_text_message(check_in_sms, user.phone_number)
-    # self.current_deadline = Time.now + 2.hours 
+    
+    # Sets two hour deadline counter for SMS reply
+    self.two_hour_deadline = Time.now + 2.hours 
   end
 
   # Tested by hand
@@ -99,8 +101,8 @@ class Micropost < ActiveRecord::Base
   # Schedule multiple delayed job based on number of days and task
   def schedule_check_in_deadline
     if self.days_remaining > 0
-
-      job = self.delay(run_at: 3.minutes.from_now).check_in
+      # Keep times short
+      job = self.delay(run_at: 3.minutes.from_now).check_in # temp test column
 
       # job = self.delay(run_at: 24.hours.from_now).check_in # RUN THIS JOB AFTER SCHEDULED TIME
       update_column(:delayed_job_id, job.id)  # Update Delayed_job
