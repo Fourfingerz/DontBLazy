@@ -54,7 +54,7 @@ class Micropost < ActiveRecord::Base
   def send_check_in_sms 
     # Find id number value that matches key of map
     activity = self.title
-    check_in_sms = "DontBLazy Bot: Time's up! Did you do your task: " + activity + "? Reply YES or NO."
+    check_in_sms = "DontBLazy Bot: Time's up! Did you do your task: " + activity + "? Reply YES or NO. (You have two hours to respond)"
     send_text_message(check_in_sms, user.phone_number)
     
     # Sets two hour deadline check in
@@ -88,6 +88,7 @@ class Micropost < ActiveRecord::Base
   end
 
   # UNTESTED BY RSPEC and HAND
+  # After 2 hours from deadline
   def two_hour_check_in
     user = User.find_by(:id => self.user_id)
     if self.late_but_current == true
@@ -96,6 +97,7 @@ class Micropost < ActiveRecord::Base
       queue_check
     else
       bad_check_in_tally
+      # send_bad_news_to_recipients # FUTURE implimentation
       user.micropost_id_due_now = nil
       queue_check
     end
@@ -147,7 +149,6 @@ class Micropost < ActiveRecord::Base
       schedule_check_in_deadline  # After 24 hours, restart another delayed_job if there are more days
     else 
     # User has NOT checked in via SMS or website and is NOW DUE
-      ## 2 hour delayed_job for checking self.late_but_current
 
       if any_goals_on_stage? # If there is already something on stage
         go_on_queue
