@@ -153,7 +153,7 @@ class User < ActiveRecord::Base
     # UNTESTED by Rspec
   # Send user's phone a SMS list of active goals menu on create
   def send_status_sms
-    goals = self.microposts.where(:active => true)  # filter by active only?
+    goals = self.microposts.where(:active => true)  # finds user's ACTIVE goals 
 
     id_arr = [], i = 0
     goals.each do |goal|
