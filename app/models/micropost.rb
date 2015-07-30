@@ -86,16 +86,24 @@ class Micropost < ActiveRecord::Base
   end
 
   # UNTESTED BY RSPEC and HAND
+  # Set INACTIVE if no more days remaining
+  def check_if_still_active
+      self.active = false if self.days_remaining < 1
+  end
+
+  # UNTESTED BY RSPEC and HAND
   # After 2 hours from deadline, awaiting YES/NO or two hour expires
   def two_hour_check_in
     user = User.find_by(:id => self.user_id)
     if self.late_but_current == true
       good_check_in_tally
+      check_if_still_active
       user.micropost_id_due_now = nil
       queue_check
     else
       bad_check_in_tally
       # send_bad_news_to_recipients # FUTURE implimentation
+      check_if_still_active
       user.micropost_id_due_now = nil
       queue_check
     end
@@ -115,9 +123,9 @@ class Micropost < ActiveRecord::Base
   def queue_check
     user = User.find_by(:id => self.user_id)
     if !user.microposts_due_queue.blank?
-      first_in_queue = user.microposts_due_queue.first
-      user.micropost_id_due_now = first_in_queue
-      user.microposts_due_queue.shift
+      first_in_queue = user.microposts_due_queue.first  # takes first in line
+      user.micropost_id_due_now = first_in_queue  # goes up on stage
+      user.microposts_due_queue.shift  # removes self from line
       user.save
     end
   end
@@ -147,6 +155,7 @@ class Micropost < ActiveRecord::Base
     # User already checked in thru SMS before deadline
     if self.check_in_current == true  
       good_check_in_tally
+
       schedule_check_in_deadline  # After 24 hours, restart another delayed_job if there are more days
     else 
     # User has NOT checked in via SMS or website and is NOW DUE
@@ -169,10 +178,7 @@ class Micropost < ActiveRecord::Base
   # Schedule multiple delayed job based on number of days and task
   def schedule_check_in_deadline
     if self.days_remaining > 0
-      # Keep times short
-      job = self.delay(run_at: 3.minutes.from_now).check_in # temp test column
-
-      # job = self.delay(run_at: 24.hours.from_now).check_in # RUN THIS JOB AFTER SCHEDULED TIME
+      job = self.delay(run_at: 24.hours.from_now).check_in # RUN THIS JOB AFTER SCHEDULED TIME
       update_column(:delayed_job_id, job.id)  # Update Delayed_job
 
       Delayed::Job.find_by(:id => job.id).update_columns(owner_type: "Micropost")  # Associates delayed_job with Micropost ID

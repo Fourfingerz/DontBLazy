@@ -64,6 +64,7 @@ class MicropostsController < ApplicationController
         @micropost = Micropost.find(@phone_owner.micropost_id_due_now)
         @micropost.good_check_in_tally
         @micropost.send_day_completed_sms
+        @micropost.check_if_still_active
         @phone_owner.micropost_id_due_now = nil # takes it off stage
         @phone_owner.save 
 
@@ -72,6 +73,7 @@ class MicropostsController < ApplicationController
         @micropost.bad_check_in_tally
         # @micropost.send_bad_news_to_recipients   ### Future implimentation
         @micropost.send_day_incomplete_sms
+        @micropost.check_if_still_active
         @phone_owner.micropost_id_due_now = nil
         @phone_owner.save 
 
@@ -82,7 +84,7 @@ class MicropostsController < ApplicationController
       else
         @phone_owner.send_bad_entry_sms(@from_number)  # move these to user
       end 
-       
+
     end
     render xml: "<Response/>"
   end
