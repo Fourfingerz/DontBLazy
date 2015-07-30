@@ -68,9 +68,20 @@ class Micropost < ActiveRecord::Base
 
   # UNTESTED BY RSPEC and HAND
   def two_hour_check_in
+    user = User.find_by(:id => self.user_id)
+    if self.late_but_current == true
+      good_check_in_tally
+      user.micropost_id_due_now = nil
+      queue_check
+    else
+      bad_check_in_tally
+      user.micropost_id_due_now = nil
+      queue_check
+    end
   end
 
   # UNTESTED BY RSPEC and HAND
+  # Checks queue and hustles next task on stage if exists
   def queue_check
     user = User.find_by(:id => self.user_id)
     if !user.microposts_due_queue.blank?
