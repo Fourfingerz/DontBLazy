@@ -1,6 +1,4 @@
 class User < ActiveRecord::Base
-  serialize :current_tasks_map
-  serialize :microposts_due_queue
   has_many :microposts, dependent: :destroy
   has_many :active_relationships, class_name:  "Relationship",
                                   foreign_key: "follower_id",
@@ -22,7 +20,9 @@ class User < ActiveRecord::Base
   validates :password, presence: true, length: { minimum: 6 }, allow_nil: true
   # DBL
   has_many :recipients, dependent: :destroy
-
+  serialize :current_tasks_map
+  serialize :microposts_due_queue
+  
   # Returns the hash digest of the given string.
   def User.digest(string)
     cost = ActiveModel::SecurePassword.min_cost ? BCrypt::Engine::MIN_COST :
