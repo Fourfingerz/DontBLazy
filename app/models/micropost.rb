@@ -23,6 +23,7 @@ class Micropost < ActiveRecord::Base
     self.days_completed = 0
     self.days_remaining = self.days_to_complete
     self.current_day = 1
+    self.active = true
     self.save
   end
 
@@ -56,9 +57,6 @@ class Micropost < ActiveRecord::Base
     activity = self.title
     check_in_sms = "DontBLazy Bot: Time's up! Did you do your task: " + activity + "? Reply YES or NO. (You have two hours to respond)"
     send_text_message(check_in_sms, user.phone_number)
-    
-    # Sets two hour deadline check in
-    # CODE GOES HERE
   end
 
   # UNTESTED BY RSPEC and HAND
@@ -88,7 +86,7 @@ class Micropost < ActiveRecord::Base
   end
 
   # UNTESTED BY RSPEC and HAND
-  # After 2 hours from deadline
+  # After 2 hours from deadline, awaiting YES/NO or two hour expires
   def two_hour_check_in
     user = User.find_by(:id => self.user_id)
     if self.late_but_current == true
