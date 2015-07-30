@@ -52,11 +52,6 @@ class Micropost < ActiveRecord::Base
   # Tested by hand
   # UNTESTED BY RSPEC
   def send_check_in_sms 
-    # Sets micropost ID that is in question at due date.
-    user = User.find_by(:id => self.user_id)
-    user.micropost_id_due_now = self.id  # Set the current task ON STAGE
-    user.save
-
     # Find id number value that matches key of map
     activity = self.title
     check_in_sms = "DontBLazy Bot: Time's up! Did you do your task: " + activity + "? Reply YES or NO."
@@ -64,6 +59,32 @@ class Micropost < ActiveRecord::Base
     
     # Sets two hour deadline check in
     # CODE GOES HERE
+  end
+
+  # UNTESTED BY RSPEC and HAND
+  # Testing to see if there is anything on stage
+  def any_goals_on_stage?
+    user = User.find_by(:id => self.user_id)
+    user.micropost_id_due_now?
+  end
+
+  # UNTESTED BY RSPEC and HAND
+  # The "stage" is the task chosen pending YES and NO reply in SMS
+  def go_on_stage
+    # Sets micropost ID that is in question at due date.
+    user = User.find_by(:id => self.user_id)
+    user.micropost_id_due_now = self.id  # Set the current task ON STAGE
+    user.save
+  end
+
+  # UNTESTED BY RSPEC and HAND
+  # The "queue" is where tasks go if stage is occupied
+  def go_on_queue
+    user = User.find_by(:id => self.user_id)
+    id_in_string = self.user_id.to_s
+    user.microposts_due_queue ||= []
+    user.microposts_due_queue << id_in_string
+    user.save
   end
 
   # UNTESTED BY RSPEC and HAND
@@ -78,6 +99,12 @@ class Micropost < ActiveRecord::Base
       user.micropost_id_due_now = nil
       queue_check
     end
+  end
+
+  # UNTESTED BY RSPEC and HAND
+  def schedule_two_hour_check_in
+    job = self.delay(run_at: 2.hours.from_now_).two_hour_check_in
+    update_column(:delayed_job_id, job.id)
   end
 
   # UNTESTED BY RSPEC and HAND
@@ -114,13 +141,25 @@ class Micropost < ActiveRecord::Base
   # UNTESTED BY RSPEC
   # After 24 hours, DBL runs this check-in
   def check_in
-    if self.check_in_current == true  # User already checked in thru SMS before deadline
+    # User already checked in thru SMS before deadline
+    if self.check_in_current == true  
       good_check_in_tally
       schedule_check_in_deadline  # After 24 hours, restart another delayed_job if there are more days
     else 
-      # 2 hour delayed_job for checking self.late_but_current
-      send_check_in_sms
-      schedule_check_in_deadline 
+    # User has NOT checked in via SMS or website and is NOW DUE
+      ## 2 hour delayed_job for checking self.late_but_current
+
+      if any_goals_on_stage? # If there is already something on stage
+        go_on_queue
+        schedule_two_hour_check_in
+        schedule_check_in_deadline
+      else  # If stage has nil, go on stage for pending SMS reply
+        go_on_stage
+        schedule_two_hour_check_in
+        send_check_in_sms
+        schedule_check_in_deadline
+      end
+
     end
   end
 

@@ -182,10 +182,6 @@ class User < ActiveRecord::Base
     send_text_message(active_goals_summary, self.phone_number)
   end
 
-  def any_goals_on_stage?
-    self.micropost_id_due_now?
-  end
-
   private
 
     # Converts email to all lower-case.
