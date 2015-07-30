@@ -22,7 +22,7 @@ class User < ActiveRecord::Base
   has_many :recipients, dependent: :destroy
   serialize :current_tasks_map
   serialize :microposts_due_queue
-  
+
   # Returns the hash digest of the given string.
   def User.digest(string)
     cost = ActiveModel::SecurePassword.min_cost ? BCrypt::Engine::MIN_COST :
@@ -153,7 +153,7 @@ class User < ActiveRecord::Base
     # UNTESTED by Rspec
   # Send user's phone a SMS list of active goals menu on create
   def send_status_sms
-    goals = self.microposts
+    goals = self.microposts.where(:active => true)  # filter by active only?
 
     id_arr = [], i = 0
     goals.each do |goal|
