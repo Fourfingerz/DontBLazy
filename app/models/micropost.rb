@@ -15,6 +15,15 @@ class Micropost < ActiveRecord::Base
 
   # DBL Logic
 
+  # To run daemon:
+  # bin/delayed_job start
+
+  # To find status:
+  # bin/delayed_job status
+
+  # To delete all DJs:
+  # rake jobs:clear 
+
   # Tested by hand
   # UNTESTED BY RSPEC
   # Sets a default state for every freshly minted Micropost (goal)
