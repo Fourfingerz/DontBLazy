@@ -70,6 +70,17 @@ class Micropost < ActiveRecord::Base
   def two_hour_check_in
   end
 
+  # UNTESTED BY RSPEC and HAND
+  def queue_check
+    user = User.find_by(:id => self.user_id)
+    if !user.microposts_due_queue.blank?
+      first_in_queue = user.microposts_due_queue.first
+      user.micropost_id_due_now = first_in_queue
+      user.microposts_due_queue.shift
+      user.save
+    end
+  end
+
   # Tested by hand
   # UNTESTED BY RSPEC
   def send_day_completed_sms
