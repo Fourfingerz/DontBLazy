@@ -12,6 +12,7 @@ class Micropost < ActiveRecord::Base
   validates :days_to_complete, presence: true
   after_create :set_initial_state
   after_create :schedule_check_in_deadline
+  after_create :send_user_status_sms
 
   # DBL Logic
 
@@ -120,11 +121,11 @@ class Micropost < ActiveRecord::Base
   end
 
   # UNTESTED BY RSPEC and HAND
-  def schedule_two_hour_check_in
+  def schedule_two_hour_check_in_deadline
     job = self.delay(run_at: 2.hours.from_now).two_hour_check_in
     update_column(:delayed_job_id, job.id)
 
-    Delayed::Job.find_by(:id => job.id).update_columns(owner_type: "Micropost")  # Associates delayed_job with Micropost ID
+    Delayed::Job.find_by(:id => job.id).update_columns(owner_type: "Micropost Two Hour Deadline")  # Associates delayed_job with Micropost ID
     Delayed::Job.find_by(:id => job.id).update_columns(owner_id: self.id)
   end
 
@@ -171,11 +172,11 @@ class Micropost < ActiveRecord::Base
     # User has NOT checked in via SMS or website and is NOW DUE
       if any_goals_on_stage? # If there is already something on stage
         go_on_queue
-        schedule_two_hour_check_in
+        schedule_two_hour_check_in_deadline
         schedule_check_in_deadline
       else  # If stage has nil, go on stage for pending SMS reply
         go_on_stage
-        schedule_two_hour_check_in
+        schedule_two_hour_check_in_deadline
         send_check_in_sms
         schedule_check_in_deadline
       end
@@ -191,9 +192,8 @@ class Micropost < ActiveRecord::Base
       job = self.delay(run_at: 3.minutes.from_now).check_in
       update_column(:delayed_job_id, job.id)  # Update Delayed_job
 
-      Delayed::Job.find_by(:id => job.id).update_columns(owner_type: "Micropost")  # Associates delayed_job with Micropost ID
+      Delayed::Job.find_by(:id => job.id).update_columns(owner_type: "Micropost 24 Hour Deadline")  # Associates delayed_job with Micropost ID
       Delayed::Job.find_by(:id => job.id).update_columns(owner_id: self.id)
-      send_user_status_sms
     end
   end
 
