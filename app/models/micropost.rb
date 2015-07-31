@@ -88,7 +88,7 @@ class Micropost < ActiveRecord::Base
   # The "queue" is where tasks go if stage is occupied
   def go_on_queue
     user = User.find_by(:id => self.user_id)
-    id_in_string = self.user_id.to_s
+    id_in_string = self.id.to_s
     user.microposts_due_queue ||= []
     user.microposts_due_queue << id_in_string
     user.save
@@ -98,6 +98,7 @@ class Micropost < ActiveRecord::Base
   # Set INACTIVE if no more days remaining
   def check_if_still_active
       self.active = false if self.days_remaining < 1
+      self.save
   end
 
   # UNTESTED BY RSPEC and HAND
@@ -160,15 +161,14 @@ class Micropost < ActiveRecord::Base
   # Tested by hand
   # UNTESTED BY RSPEC
   # After 24 hours, DBL runs this check-in
-  def check_in
+  def check_in ### fix this
     # User already checked in thru SMS before deadline
     if self.check_in_current == true  
       good_check_in_tally
-
+      check_if_still_active
       schedule_check_in_deadline  # After 24 hours, restart another delayed_job if there are more days
     else 
     # User has NOT checked in via SMS or website and is NOW DUE
-
       if any_goals_on_stage? # If there is already something on stage
         go_on_queue
         schedule_two_hour_check_in
@@ -179,7 +179,6 @@ class Micropost < ActiveRecord::Base
         send_check_in_sms
         schedule_check_in_deadline
       end
-
     end
   end
 
@@ -187,7 +186,9 @@ class Micropost < ActiveRecord::Base
   # Schedule multiple delayed job based on number of days and task
   def schedule_check_in_deadline
     if self.days_remaining > 0
-      job = self.delay(run_at: 24.hours.from_now).check_in # RUN THIS JOB AFTER SCHEDULED TIME
+      # job = self.delay(run_at: 24.hours.from_now).check_in # RUN THIS JOB AFTER SCHEDULED TIME
+
+      job = self.delay(run_at: 3.minutes.from_now).check_in
       update_column(:delayed_job_id, job.id)  # Update Delayed_job
 
       Delayed::Job.find_by(:id => job.id).update_columns(owner_type: "Micropost")  # Associates delayed_job with Micropost ID
@@ -223,7 +224,7 @@ class Micropost < ActiveRecord::Base
       )
   end
 
-  # Associates Delayed Jobs with "owners" modelsMicro
+  # Associates Delayed Jobs with "owners" models
   def foo
   end
   handle_asynchronously :foo, :owner => Proc.new { |o| o  }

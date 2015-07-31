@@ -152,9 +152,10 @@ class User < ActiveRecord::Base
 
     # UNTESTED by Rspec
   # Send user's phone a SMS list of active goals menu on create
-  def send_status_sms
+  def create_status_sms
     goals = self.microposts.where(:active => true)  # finds user's ACTIVE goals 
 
+    # This one is stored as a map in the DB
     id_arr = [], i = 0
     goals.each do |goal|
       i += 1
@@ -166,6 +167,7 @@ class User < ActiveRecord::Base
     self.current_tasks_map = id_arr.flatten.drop(1)  # Saves ID map to user column
     self.save
 
+    # This one is for the user to check-in via SMS
     sms_arr = [], j = 0
     goals.each do |goal|
       j += 1
@@ -179,7 +181,11 @@ class User < ActiveRecord::Base
     active_goals = sms_arr.join(" ")
     active_goals.slice! "0"  # Temporary solution for annoying ZERO
     active_goals_summary = "To mark goals complete before deadline, REPLY with your goal's corresponding number, separated by a space: " + active_goals
-    send_text_message(active_goals_summary, self.phone_number)
+  end
+
+  def send_status_sms
+    status_sms = create_status_sms
+    send_text_message(status_sms, self.phone_number)
   end
 
   private

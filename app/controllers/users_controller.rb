@@ -86,7 +86,8 @@ class UsersController < ApplicationController
       params.require(:user).permit(:name, :email, :password,
                                    :password_confirmation,
                                    :phone_number, :phone_pin, :phone_verified,
-                                   :current_tasks_map, :micropost_id_due_now)
+                                   :current_tasks_map, :micropost_id_due_now,
+                                   :microposts_due_queue)
     end
     
     # Before filters

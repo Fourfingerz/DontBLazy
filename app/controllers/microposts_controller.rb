@@ -96,7 +96,8 @@ class MicropostsController < ApplicationController
                                         :delayed_job_id, 
                                         :completed, :check_in_current, 
                                         :days_to_complete, :days_completed, 
-                                        :days_remaining, :current_day)
+                                        :days_remaining, :current_day,
+                                        :late_but_current, :active)
     end
     
     def correct_user
