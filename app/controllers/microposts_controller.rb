@@ -77,7 +77,7 @@ class MicropostsController < ApplicationController
         @phone_owner.micropost_id_due_now = nil
         @phone_owner.save 
 
-      elsif @message_body.include? "LIST" or "List" or "list"
+      elsif @message_body.include? "LIST" or "List" or "list" # GLITCHED, sends check_in_complete_sms wrongly
         @micropost = Micropost.find(@phone_owner.microposts.first)
         @phone_owner.send_status_SMS
 

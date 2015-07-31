@@ -114,12 +114,14 @@ class Micropost < ActiveRecord::Base
       check_if_still_active
       user.micropost_id_due_now = nil
       queue_check
+      user.save
     else
       bad_check_in_tally
       # send_bad_news_to_recipients # FUTURE implimentation
       check_if_still_active
       user.micropost_id_due_now = nil
       queue_check
+      user.save
     end
   end
 
@@ -128,7 +130,7 @@ class Micropost < ActiveRecord::Base
     #job = self.delay(run_at: 2.hours.from_now).two_hour_check_in
 
     # TEST CUT TIME
-    job = self.delay(run_at: 5.minutes.from_now).two_hour_check_in
+    job = self.delay(run_at: 2.minutes.from_now).two_hour_check_in
     update_column(:delayed_job_id, job.id)
 
     Delayed::Job.find_by(:id => job.id).update_columns(owner_type: "Micropost Two Hour Deadline")  # Associates delayed_job with Micropost ID
@@ -168,7 +170,7 @@ class Micropost < ActiveRecord::Base
   # Tested by hand
   # UNTESTED BY RSPEC
   # After 24 hours, DBL runs this check-in
-  def check_in ### fix this
+  def check_in 
     # User already checked in thru SMS before deadline
     if self.check_in_current == true  
       good_check_in_tally
@@ -196,7 +198,7 @@ class Micropost < ActiveRecord::Base
       # job = self.delay(run_at: 24.hours.from_now).check_in 
 
       # TEST CUT TIME
-      job = self.delay(run_at: 3.minutes.from_now).check_in
+      job = self.delay(run_at: 2.minutes.from_now).check_in
       update_column(:delayed_job_id, job.id)  # Update Delayed_job
 
       Delayed::Job.find_by(:id => job.id).update_columns(owner_type: "Micropost 24 Hour Deadline")  # Associates delayed_job with Micropost ID
