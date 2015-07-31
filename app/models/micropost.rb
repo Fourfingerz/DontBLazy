@@ -89,9 +89,12 @@ class Micropost < ActiveRecord::Base
   # The "queue" is where tasks go if stage is occupied
   def go_on_queue
     user = User.find_by(:id => self.user_id)
+
+    # Logic here NOT TO REPLICATE ITSELF
     id_in_string = self.id.to_s
     user.microposts_due_queue ||= []
-    user.microposts_due_queue << id_in_string
+    # Checks to see if self's id already exists before joining queue
+    user.microposts_due_queue << id_in_string if !user.microposts_due_queue.any? {|queue| queue.include?(id_in_string)}
     user.save
   end
 
