@@ -59,7 +59,9 @@ class MicropostsController < ApplicationController
           @micropost.send_day_completed_sms
         end
       end
+
     else 
+      
       if @message_body.include? "YES" or "Yes" or "yes"
         @micropost = Micropost.find(@phone_owner.micropost_id_due_now)
         @micropost.good_check_in_tally
