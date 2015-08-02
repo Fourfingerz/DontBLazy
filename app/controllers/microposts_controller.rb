@@ -28,6 +28,7 @@ class MicropostsController < ApplicationController
     @db_friendly_num = @from_number.sub /[+]/, ''  # Plucks plus sign 
     @phone_owner = User.find_by(:phone_number => @db_friendly_num)
 
+    ## THIS MUST BE REFACTORED
     if @message_body =~ /\d/ 
     # CURRENT SUPPORT: SINGLE DIGITS ONLY
     # Checks each character in SMS against goals ID map from User's column
@@ -61,7 +62,7 @@ class MicropostsController < ApplicationController
       end
 
     else 
-      
+
       if @message_body.include? "YES" or "Yes" or "yes"
         @micropost = Micropost.find(@phone_owner.micropost_id_due_now)
         @micropost.good_check_in_tally
