@@ -105,6 +105,7 @@ class Micropost < ActiveRecord::Base
       self.save
   end
 
+
   # UNTESTED BY RSPEC and HAND
   # After 2 hours from deadline, awaiting YES/NO or two hour expires
   def two_hour_check_in
