@@ -18,7 +18,6 @@ gem 'jbuilder',                '2.2.3'
 gem 'sdoc',                    '0.4.0', group: :doc
 
 # For SMS framework
-
 gem 'twilio-ruby' # SMS
 gem 'delayed_job_active_record' # Cron SMS jobs
 gem 'delayed_job_recurring'
