@@ -25,6 +25,10 @@ class Micropost < ActiveRecord::Base
   # To delete all DJs:
   # rake jobs:clear 
 
+  # To turn on listening port in ngrok:
+  # cd Desktop
+  # ./ngrok http 3000
+
   # Tested by hand
   # UNTESTED BY RSPEC
   # Sets a default state for every freshly minted Micropost (goal)
