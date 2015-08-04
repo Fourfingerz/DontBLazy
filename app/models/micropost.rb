@@ -101,8 +101,15 @@ class Micropost < ActiveRecord::Base
   # UNTESTED BY RSPEC and HAND
   # Set INACTIVE if no more days remaining
   def check_if_still_active
-      self.active = false if self.days_remaining < 1
+    if self.days_remaining < 1
+      self.active = false 
       self.save
+
+      # Finds referenced micropost from user's map and deletes itself
+      user = User.find_by(:id => self.user_id)
+      user.current_tasks_map = user.current_tasks_map.delete_if {|h| h["micropost id"] == self.id}
+      user.save
+    end
   end
 
 
