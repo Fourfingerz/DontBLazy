@@ -32,6 +32,21 @@ textarea {
   }
 }
 
+.jumbotron {
+    position: relative;
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("http://freehdw.com/wallpapers/coffee-shop-laptop.jpg") center center;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    overflow: hidden;
+    h1 {
+    color: white;
+    }
+    h2 {
+    color: #D6D6D6;
+    }
+}
+
 
 /* typography */
 
