@@ -28,37 +28,15 @@ class MicropostsController < ApplicationController
     @db_friendly_num = @from_number.sub /[+]/, ''  # Plucks plus sign 
     @phone_owner = User.find_by(:phone_number => @db_friendly_num)
 
-    ## THIS MUST BE REFACTORED
     if @message_body =~ /\d/ 
     # CURRENT SUPPORT: SINGLE DIGITS ONLY
     # Checks each character in SMS against goals ID map from User's column
-      @message_body.each_char do |c| 
-        if c == "1"  # Looks for corresponding ID from SMS body
-          @micropost = Micropost.find(@phone_owner.current_tasks_map.find{|id| id["task"] == 1 }["micropost id"])
-          @micropost.check_in_current = true  # If it detects ID number, marks micropost as Complete
-          @micropost.save
-          @micropost.send_day_completed_sms
-        elsif c == "2"
-          @micropost = Micropost.find(@phone_owner.current_tasks_map.find{|id| id["task"] == 2 }["micropost id"])
-          @micropost.check_in_current = true  
-          @micropost.save
-          @micropost.send_day_completed_sms
-        elsif c == "3"
-          @micropost = Micropost.find(@phone_owner.current_tasks_map.find{|id| id["task"] == 3 }["micropost id"])
-          @micropost.check_in_current = true  
-          @micropost.save
-          @micropost.send_day_completed_sms
-        elsif c == "4"
-          @micropost = Micropost.find(@phone_owner.current_tasks_map.find{|id| id["task"] == 4 }["micropost id"])
-          @micropost.check_in_current = true  
-          @micropost.save
-          @micropost.send_day_completed_sms
-        elsif c == "5" 
-          @micropost = Micropost.find(@phone_owner.current_tasks_map.find{|id| id["task"] == 5 }["micropost id"])
-          @micropost.check_in_current = true  
-          @micropost.save
-          @micropost.send_day_completed_sms
-        end
+      @message_body.each_char do |c|
+        if c =~ /\d/
+          number_as_int = c.to_i
+          @micropost = Micropost.find(@phone_owner.current_tasks_map.find{|id| id["task"] == number_as_int }["micropost id"]) 
+          @micropost.checking_in_number(c)
+        end  
       end
 
     else 

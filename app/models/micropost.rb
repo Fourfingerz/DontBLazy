@@ -29,6 +29,7 @@ class Micropost < ActiveRecord::Base
   # cd Desktop
   # ./ngrok http 3000
 
+
   # Tested by hand
   # UNTESTED BY RSPEC
   # Sets a default state for every freshly minted Micropost (goal)
@@ -142,7 +143,7 @@ class Micropost < ActiveRecord::Base
     #job = self.delay(run_at: 2.hours.from_now).two_hour_check_in
 
     # TEST CUT TIME
-    job = self.delay(run_at: 2.minutes.from_now).two_hour_check_in
+    job = self.delay(run_at: 1.minutes.from_now).two_hour_check_in
     update_column(:delayed_job_id, job.id)
 
     Delayed::Job.find_by(:id => job.id).update_columns(owner_type: "Micropost Two Hour Deadline")  # Associates delayed_job with Micropost ID
@@ -201,6 +202,14 @@ class Micropost < ActiveRecord::Base
         schedule_check_in_deadline
       end
     end
+  end
+
+  # UNTESTED BY RSPEC
+  # Finds Micropost from mapped number and checks it in
+  def checking_in_number
+    self.check_in_current = true  
+    self.save
+    self.send_day_completed_sms
   end
 
   # UNTESTED BY RSPEC
