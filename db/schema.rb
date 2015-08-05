@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150805013252) do
+ActiveRecord::Schema.define(version: 20150805201613) do
 
   create_table "delayed_jobs", force: :cascade do |t|
     t.integer  "priority",       default: 0, null: false
@@ -28,6 +28,7 @@ ActiveRecord::Schema.define(version: 20150805013252) do
     t.string   "owner_type"
     t.integer  "owner_id"
     t.string   "owner_job_type"
+    t.integer  "user_id"
   end
 
   add_index "delayed_jobs", ["owner_type", "owner_id"], name: "index_delayed_jobs_on_owner_type_and_owner_id"

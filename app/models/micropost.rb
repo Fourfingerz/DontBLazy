@@ -149,6 +149,7 @@ class Micropost < ActiveRecord::Base
     Delayed::Job.find_by(:id => job.id).update_columns(owner_type: "Micropost")  # Associates delayed_job with Micropost ID
     Delayed::Job.find_by(:id => job.id).update_columns(owner_job_type: "Micropost Two Hour Deadline")
     Delayed::Job.find_by(:id => job.id).update_columns(owner_id: self.id)
+    Delayed::Job.find_by(:id => job.id).update_columns(user_id: self.user_id)
   end
 
   # UNTESTED BY RSPEC and HAND
@@ -224,8 +225,9 @@ class Micropost < ActiveRecord::Base
       update_column(:delayed_job_id, job.id)  # Update Delayed_job
 
       Delayed::Job.find_by(:id => job.id).update_columns(owner_type: "Micropost")  # Associates delayed_job with Micropost ID
-      Delayed::Job.find_by(:id => job.id).update_columns(owner_job_type: "Micropost Two Hour Deadline")
+      Delayed::Job.find_by(:id => job.id).update_columns(owner_job_type: "Micropost 24 Hour Deadline")
       Delayed::Job.find_by(:id => job.id).update_columns(owner_id: self.id)
+      Delayed::Job.find_by(:id => job.id).update_columns(user_id: self.user_id)
     end
   end
 
