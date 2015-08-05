@@ -11,12 +11,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150730193635) do
+ActiveRecord::Schema.define(version: 20150805013252) do
 
   create_table "delayed_jobs", force: :cascade do |t|
-    t.integer  "priority",   default: 0, null: false
-    t.integer  "attempts",   default: 0, null: false
-    t.text     "handler",                null: false
+    t.integer  "priority",       default: 0, null: false
+    t.integer  "attempts",       default: 0, null: false
+    t.text     "handler",                    null: false
     t.text     "last_error"
     t.datetime "run_at"
     t.datetime "locked_at"
@@ -27,6 +27,7 @@ ActiveRecord::Schema.define(version: 20150730193635) do
     t.datetime "updated_at"
     t.string   "owner_type"
     t.integer  "owner_id"
+    t.string   "owner_job_type"
   end
 
   add_index "delayed_jobs", ["owner_type", "owner_id"], name: "index_delayed_jobs_on_owner_type_and_owner_id"

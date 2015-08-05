@@ -146,7 +146,8 @@ class Micropost < ActiveRecord::Base
     job = self.delay(run_at: 1.minutes.from_now).two_hour_check_in
     update_column(:delayed_job_id, job.id)
 
-    Delayed::Job.find_by(:id => job.id).update_columns(owner_type: "Micropost Two Hour Deadline")  # Associates delayed_job with Micropost ID
+    Delayed::Job.find_by(:id => job.id).update_columns(owner_type: "Micropost")  # Associates delayed_job with Micropost ID
+    Delayed::Job.find_by(:id => job.id).update_columns(owner_job_type: "Micropost Two Hour Deadline")
     Delayed::Job.find_by(:id => job.id).update_columns(owner_id: self.id)
   end
 
@@ -222,7 +223,8 @@ class Micropost < ActiveRecord::Base
       job = self.delay(run_at: 2.minutes.from_now).check_in
       update_column(:delayed_job_id, job.id)  # Update Delayed_job
 
-      Delayed::Job.find_by(:id => job.id).update_columns(owner_type: "Micropost 24 Hour Deadline")  # Associates delayed_job with Micropost ID
+      Delayed::Job.find_by(:id => job.id).update_columns(owner_type: "Micropost")  # Associates delayed_job with Micropost ID
+      Delayed::Job.find_by(:id => job.id).update_columns(owner_job_type: "Micropost Two Hour Deadline")
       Delayed::Job.find_by(:id => job.id).update_columns(owner_id: self.id)
     end
   end
