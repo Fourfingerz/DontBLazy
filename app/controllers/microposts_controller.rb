@@ -33,23 +33,22 @@ class MicropostsController < ApplicationController
     # Checks each character in SMS against goals ID map from User's column
       @message_body.each_char do |c|
         if c =~ /\d/
-          number_as_int = c.to_i
-          @micropost = Micropost.find(@phone_owner.current_tasks_map.find{|id| id["task"] == number_as_int }["micropost id"]) 
+          @micropost = Micropost.find(@phone_owner.current_tasks_map.find{|id| id["task"] == c }["micropost id"]) 
           @micropost.checking_in_number(c)
         end  
       end
 
     else 
 
-      if @message_body.include? "YES" or "Yes" or "yes"
+      case @message_body
+      when @message_body.include? "YES" or "Yes" or "yes"
         @micropost = Micropost.find(@phone_owner.micropost_id_due_now)
         @micropost.good_check_in_tally
         @micropost.send_day_completed_sms
         @micropost.check_if_still_active
         @phone_owner.micropost_id_due_now = nil # takes it off stage
         @phone_owner.save 
-
-      elsif @message_body.include? "NO" or "No" or "no"
+      when @message_body.include? "NO" or "No" or "no"
         @micropost = Micropost.find(@phone_owner.micropost_id_due_now)
         @micropost.bad_check_in_tally
         # @micropost.send_bad_news_to_recipients   ### Future implimentation
@@ -57,15 +56,11 @@ class MicropostsController < ApplicationController
         @micropost.check_if_still_active
         @phone_owner.micropost_id_due_now = nil
         @phone_owner.save 
-
-      elsif @message_body.include? "LIST" or "List" or "list" # GLITCHED, sends check_in_complete_sms wrongly
+      else @message_body.include? "LIST" or "List" or "list" # GLITCHED, sends check_in_complete_sms wrongly
         @micropost = Micropost.find(@phone_owner.microposts.first)
         @phone_owner.send_status_SMS
-
-      else
-        @phone_owner.send_bad_entry_sms(@from_number)  # move these to user
-      end 
-
+      end
+      
     end
     render xml: "<Response/>"
   end
