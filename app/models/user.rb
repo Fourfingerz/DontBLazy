@@ -183,9 +183,16 @@ class User < ActiveRecord::Base
     active_goals_summary = "To mark goals complete before deadline, REPLY with your goal's corresponding number, separated by a space: " + active_goals
   end
 
-  def send_status_sms
-    status_sms = create_status_sms
-    send_text_message(status_sms, self.phone_number)
+  def send_status_sms 
+    status_sms = self.create_status_sms
+
+    # IF/ELSE to determine if there are active projects and send texts accordingly
+    if status_sms =~ /\d/
+      send_text_message(status_sms, self.phone_number)
+    else
+      no_current_tasks_sms = "You don't have any pending tasks! Go play! (Or not)"
+      send_text_message(no_current_tasks_sms, self.phone_number)
+    end
   end
 
   private

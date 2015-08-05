@@ -29,26 +29,26 @@ class MicropostsController < ApplicationController
     @phone_owner = User.find_by(:phone_number => @db_friendly_num)
 
     if @message_body =~ /\d/ 
-    # CURRENT SUPPORT: SINGLE DIGITS ONLY
     # Checks each character in SMS against goals ID map from User's column
-      @message_body.each_char do |c|
+      processed_body = @message_body.split(" ")
+      processed_body.each do |c|
         if c =~ /\d/
           @micropost = Micropost.find(@phone_owner.current_tasks_map.find{|id| id["task"] == c }["micropost id"]) 
-          @micropost.checking_in_number(c)
+          @micropost.checking_in_number
         end  
       end
 
     else 
 
       case @message_body
-      when @message_body.include? "YES" or "Yes" or "yes"
+      when "YES", "Yes", "yes"
         @micropost = Micropost.find(@phone_owner.micropost_id_due_now)
         @micropost.good_check_in_tally
         @micropost.send_day_completed_sms
         @micropost.check_if_still_active
         @phone_owner.micropost_id_due_now = nil # takes it off stage
         @phone_owner.save 
-      when @message_body.include? "NO" or "No" or "no"
+      when "NO", "No", "no"
         @micropost = Micropost.find(@phone_owner.micropost_id_due_now)
         @micropost.bad_check_in_tally
         # @micropost.send_bad_news_to_recipients   ### Future implimentation
@@ -56,11 +56,11 @@ class MicropostsController < ApplicationController
         @micropost.check_if_still_active
         @phone_owner.micropost_id_due_now = nil
         @phone_owner.save 
-      else @message_body.include? "LIST" or "List" or "list" # GLITCHED, sends check_in_complete_sms wrongly
+      when "LIST", "List", "list" 
         @micropost = Micropost.find(@phone_owner.microposts.first)
-        @phone_owner.send_status_SMS
+        @micropost.send_user_status_sms
       end
-      
+
     end
     render xml: "<Response/>"
   end
