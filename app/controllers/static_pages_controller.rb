@@ -4,8 +4,8 @@ class StaticPagesController < ApplicationController
     if logged_in?
       @micropost = current_user.microposts.build
       @feed_items = current_user.feed.paginate(page: params[:page])
-      @deadlines = current_user.microposts.order(days_to_complete: :desc)
-      # @deadlines = current_user.find_all_by_owner_type("Microposts")
+      @active_goals = current_user.microposts.where(:active => true)
+      @deadlines = Delayed::Job.where
       if no_valid_phone?
         @user = current_user
       end

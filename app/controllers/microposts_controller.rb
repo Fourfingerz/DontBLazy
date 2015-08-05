@@ -16,6 +16,10 @@ class MicropostsController < ApplicationController
   end
   
   def destroy
+    # Destroys all associated jobs
+    Delayed::Job.destroy_all(:owner_type => "Micropost", :owner_id => @micropost.id)
+    
+    # And the main object body
     @micropost.destroy
     flash[:success] = "Goal Deleted."
     redirect_to request.referrer || root_url
