@@ -6,9 +6,11 @@
 	  </tr>
 	<% @active_goals.each do |deadline| %>
 	  <tr>
-	  	<% due_time = Delayed::Job.where(:user_id => current_user.id, :owner_type => "Micropost", :owner_id => deadline.id).order("created_at DESC").first.run_at %>
-	    <td><%= distance_of_time_in_words(Time.now, due_time, include_seconds: true) %></td>
-	    <td><%= deadline.title %></td>
+	  	<% if deadline.active %>
+		  	<% due_time = Delayed::Job.where(:user_id => current_user.id, :owner_type => "Micropost", :owner_id => deadline.id).order("created_at DESC").first.run_at %>
+		    <td><%= distance_of_time_in_words(Time.now, due_time, include_seconds: true) %></td>
+		    <td><%= deadline.title %></td>
+		<% end %>
 	  </tr>
 	</table>
 	<% end %>
