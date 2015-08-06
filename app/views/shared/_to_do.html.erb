@@ -1,17 +1,15 @@
 <% if @active_goals %>
-<table class="table table-hover">
-  <tr>
-    <th>Days To Complete</th> <!-- Colors based on current 24 hour cycle proximity to deadline -->
-    <th>Goal</th>
-  </tr>
-
-<% @active_goals.each do |deadline| %>
-
-  <tr>
-    <td><%= distance_of_time_in_words(Time.now, Time.now + deadline.days. , include_seconds: true) %></td>
-    <td><%= deadline.title %></td>
-  </tr>
-
-</table>
-<% end %>
+	<table class="table table-hover">
+	  <tr>
+	    <th>Time Due</th> <!-- Colors based on current 24 hour cycle proximity to deadline -->
+	    <th>Goal</th>
+	  </tr>
+	<% @active_goals.each do |deadline| %>
+	  <tr>
+	  	<% due_time = Delayed::Job.where(:user_id => current_user.id, :owner_type => "Micropost", :owner_id => deadline.id).order("created_at DESC").first.run_at %>
+	    <td><%= distance_of_time_in_words(Time.now, due_time, include_seconds: true) %></td>
+	    <td><%= deadline.title %></td>
+	  </tr>
+	</table>
+	<% end %>
 <% end %>
