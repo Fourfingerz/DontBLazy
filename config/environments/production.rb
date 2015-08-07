@@ -84,4 +84,7 @@ Rails.application.configure do
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
+
+  # DBL JavaScript permissions go here
+  config.assets.precompile += %w( active_tasks.js )
 end
