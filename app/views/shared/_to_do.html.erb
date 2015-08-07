@@ -16,6 +16,8 @@
 		  <tr>
 		  	<% if deadline.active %>
 			  	<% due_time = Delayed::Job.where(:user_id => current_user.id, :owner_type => "Micropost", :owner_id => deadline.id).order("created_at DESC").first.run_at %>
+
+			  	<!-- active_tasks.js parses this -->
 			    <td id="due_time"><%= distance_of_time_in_words(Time.now, due_time, include_seconds: true) %></td>
 			    <td><%= deadline.title %></td>
 			<% end %>
