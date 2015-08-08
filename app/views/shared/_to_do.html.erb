@@ -22,7 +22,7 @@
 			    <td id="due_time"><%= distance_of_time_in_words(Time.now, due_time, include_seconds: true) %></td>
 				
 				<!-- JS embeds some data for due_time td -->
-				<% javascript_jquery_ready (capture do %>
+				<% javascript_jquery_ready(capture do %>
 					<script>
 						$("due_time").data("seconds_remaining", { <% seconds_remaining %> });
 					);

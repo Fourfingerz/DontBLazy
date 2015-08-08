@@ -7,6 +7,9 @@ var rows = tbody.getElementsByTagName('tr');
 for (var i=0, len=rows.length; i<len; i++) {
         var row = rows[i];
         var columns = row.getElementsByTagName('td');
+
+        // var seconds_till_due = columns.getElementById("due_time");
+
         var time = columns[0]
 
         if (parseInt(time.innerHTML, 10) < 1800) {
