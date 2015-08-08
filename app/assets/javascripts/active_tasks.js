@@ -12,11 +12,11 @@ for (var i=0, len=rows.length; i<len; i++) {
 
         var time = columns[0]
 
-        if (parseInt(time.innerHTML, 10) < 1800) {
+        if (parseInt(time.innerHTML, 10) == 1800) {
             time.style.backgroundColor = 'red';
-        } else if (parseInt(time.innerHTML, 10) > 1800 && < 7200) {
+        } else if (parseInt(time.innerHTML, 10) == 7200) {
             time.style.backgroundColor = 'orange';
-        } else if (parseInt(time.innerHTML, 10) > 7200 && < 21600) {
+        } else if (parseInt(time.innerHTML, 10) == 21600) {
             time.style.backgroundColor = 'yellow';
         } else {
             time.style.backgroundColor = 'green';
