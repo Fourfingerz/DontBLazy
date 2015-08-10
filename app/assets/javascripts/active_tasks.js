@@ -13,11 +13,11 @@ window.onload = function() {
         var seconds_due = time.getAttribute('data-due');
         var seconds = parseInt(seconds_due, 10);
 
-        if (seconds < 1800) {
+        if (seconds < 1800) {                            // Less than 30 minutes
             time.style.backgroundColor = 'red';
-        } else if (seconds > 1800 && seconds < 7200) {
-            time.style.backgroundColor = 'orange';
-        } else if (seconds > 7200 && seconds < 21600) {
+        } else if (seconds > 1800 && seconds < 7200) {   // More than 30 and less than 2 hours
+            time.style.backgroundColor = 'orange';   
+        } else if (seconds > 7200 && seconds < 21600) {  // More than 2 hours and less than 6 hours 
             time.style.backgroundColor = 'yellow';
         } else {
             time.style.backgroundColor = 'green';
