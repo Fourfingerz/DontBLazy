@@ -1,7 +1,7 @@
 <% if @active_goals %>
 
 	<%= javascript_include_tag "active_tasks" %>
-	<table id="active_tasks">
+	<table id="active_tasks_table">
 
 		<thead>
 		  <tr>
@@ -16,17 +16,10 @@
 		  <tr>
 		  	<% if deadline.active %>
 			  	<% due_time = Delayed::Job.where(:user_id => current_user.id, :owner_type => "Micropost", :owner_id => deadline.id).order("created_at DESC").first.run_at %>
-			  	<td><% seconds_remaining = due_time - Time.now %></td>
-				
+			  	<% seconds_remaining = due_time. - Time.now %>
 				<!-- active_tasks.js parses this -->
-			    <td id="due_time" data-due="<% seconds_remaining %>"><%= distance_of_time_in_words(Time.now, due_time, include_seconds: true) %></td>
-				
-				<!-- JS embeds some data for due_time td -->
-				<% javascript_jquery_ready(capture do %>
-					<script>
-						$("due_time").data("seconds_remaining", { <% seconds_remaining %> } );
-			  		</script>
-			  	<% end) %>
+			    <td id="due_time" data-due="<%= seconds_remaining %>"><%= distance_of_time_in_words(Time.now, due_time, include_seconds: true) %></td>
+
 			    <td><%= deadline.title %></td>
 			<% end %>
 		  </tr>

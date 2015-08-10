@@ -1,26 +1,27 @@
-var table = document.getElementById('active_tasks');
-var tbody = table.getElementsByTagName('tbody')[0];
-var rows = tbody.getElementsByTagName('tr');
+window.onload = function() {
+    var table = document.getElementById("active_tasks_table");
+    var tbody = table.getElementsByTagName('tbody')[0];
+    var rows = tbody.getElementsByTagName('tr');
 
 
-// For each row (active goal), do this:
-for (var i=0, len=rows.length; i<len; i++) {
+    // For each row (active goal), do this:
+    for (var i=0, len=rows.length; i<len; i++) {
         var row = rows[i];
         var columns = row.getElementsByTagName('td');
 
-        // var seconds_till_due = columns.getElementById("due_time");
-
         var time = columns[0]
+        var seconds_due = time.getAttribute('data-due');
+        var seconds = parseInt(seconds_due, 10);
 
-        if (parseInt(time.innerHTML, 10) == 1800) {
+        if (seconds < 1800) {
             time.style.backgroundColor = 'red';
-        } else if (parseInt(time.innerHTML, 10) == 7200) {
+        } else if (seconds > 1800 && seconds < 7200) {
             time.style.backgroundColor = 'orange';
-        } else if (parseInt(time.innerHTML, 10) == 21600) {
+        } else if (seconds > 7200 && seconds < 21600) {
             time.style.backgroundColor = 'yellow';
         } else {
             time.style.backgroundColor = 'green';
-        }
-           
+        }         
+    }
 };
             
