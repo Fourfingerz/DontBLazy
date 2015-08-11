@@ -26,6 +26,13 @@ class MicropostsController < ApplicationController
   end
 
   # Untested by RSPEC
+  # This is what happens when you press CHECK IN in to_do partial
+  def web_check_in
+    @micropost.check_in_current = true
+    @micropost.save
+  end
+
+  # Untested by RSPEC
   def receive_sms  #receives and parses SMS content from users
     @message_body = params["Body"]
     @from_number = params["From"]

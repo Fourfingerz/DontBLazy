@@ -1,7 +1,7 @@
 window.onload = function() {
     var table = document.getElementById("active_tasks_table");
     var tbody = table.getElementsByTagName('tbody')[0];
-    var rows = tbody.getElementsByTagName('tr');
+    var rows  = tbody.getElementsByTagName('tr');
 
 
     // For each row (active goal), do this:
