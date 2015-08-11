@@ -9,6 +9,7 @@ Rails.application.routes.draw do
   post   'users/verify'  => 'users#verify'
   delete 'logout'  => 'sessions#destroy'
   post 'process_sms' => 'microposts#receive_sms'
+  
   resources :users do
     collection do
       patch 'phone_entry', :action => :add_phone
@@ -19,8 +20,11 @@ Rails.application.routes.draw do
   end
   resources :account_activations, only: [:edit]
   resources :password_resets,     only: [:new, :create, :edit, :update]
-  resources :microposts,          only: [:create, :show, :edit, :update, :destroy]
+  resources :microposts,          only: [:create, :show, :edit, :update, :destroy] do
+    member do
+      get :web_check_in
+    end
+  end
   resources :relationships,       only: [:create, :destroy]
-  # DBL
   resources :recipients,          only: [:new, :create, :edit, :update, :destroy]
 end

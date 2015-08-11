@@ -28,8 +28,18 @@ class MicropostsController < ApplicationController
   # Untested by RSPEC
   # This is what happens when you press CHECK IN in to_do partial
   def web_check_in
-    @micropost.check_in_current = true
-    @micropost.save
+    # Check if task is on user's STAGE or QUEUE
+    micropost_id = @micropost.id
+    micropost_user = User.find_by(:id => micropost_id)
+    user_queue = user.microposts_due_queue
+
+    if micropost_user.micropost_id_due_now == micropost_id or user_queue.include? micropost_id
+      @micropost.update_attributes(:late_but_current => true)
+    else  
+      @micropost.update_attributes(:check_in_current => true)  # otherwise normal check-in
+    end
+    flash[:success] = "Checked in Task!"
+    redirect_to root_url
   end
 
   # Untested by RSPEC
