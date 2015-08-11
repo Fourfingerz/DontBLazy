@@ -20,11 +20,7 @@ Rails.application.routes.draw do
   end
   resources :account_activations, only: [:edit]
   resources :password_resets,     only: [:new, :create, :edit, :update]
-  resources :microposts,          only: [:create, :show, :edit, :update, :destroy] do
-    member do
-      get :web_check_in
-    end
-  end
+  resources :microposts,          only: [:create, :show, :edit, :update, :destroy]
   resources :relationships,       only: [:create, :destroy]
   resources :recipients,          only: [:new, :create, :edit, :update, :destroy]
 end

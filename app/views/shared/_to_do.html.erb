@@ -15,11 +15,19 @@
 					<!-- active_tasks.js parses this -->
 				    <td id="due_time" data-due="<%= seconds_remaining %>"><%= distance_of_time_in_words(Time.now, due_time, include_seconds: true) %></td>
 				    <td><%= deadline.title %></td>
-					<% if %> 
-				    	<td><%= button_to "Check In", web_check_in_micropost_path(deadline.id), :method => "put" %></td>
-				    <% else %>
-				    	<td>Task Up To Date!</td>
-				    <% end %>
+					<% if deadline %>
+						<td>
+							<%= form_for %>
+						</td>
+					<% elsif deadline %>
+						<td>
+							<%= form_for %>
+						</td>
+					<% else %>
+						<td>
+							Next check in is:
+						</td>
+					<% end %>
 			    </tr>
 			<% end %>
 	  	</tbody>
