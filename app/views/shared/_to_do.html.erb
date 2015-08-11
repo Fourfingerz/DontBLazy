@@ -17,11 +17,17 @@
 				    <td><%= deadline.title %></td>
 					<% if deadline %>
 						<td>
-							<%= form_for %>
+							<%= form_for deadline do |f| %>
+								<%= f.hidden_field :check_in_current, value: true %>
+								<%= f.submit 'Check In' %>
+							<% end %>
 						</td>
 					<% elsif deadline %>
 						<td>
-							<%= form_for %>
+							<%= form_for deadline do |f| %>
+								<%= f.hidden_field :late_but_current, value: true %>
+								<%= f.submit 'Check In' %>
+							<% end %>
 						</td>
 					<% else %>
 						<td>
