@@ -9,14 +9,15 @@
 		<tbody>
 			<% @active_goals.each do |deadline| %>
 			    <tr>
+			    	<!-- Rails Variables here -->
 				  	<% due_time = Delayed::Job.where(:user_id => current_user.id, :owner_type => "Micropost", :owner_id => deadline.id).order("created_at DESC").first.run_at %>
 				  	<% seconds_remaining = due_time - Time.now %>
 				  	<% deadline_owner = User.find_by(:id => deadline.user_id) %>
 
-					<!-- active_tasks.js parses this -->
-
+					<!-- Table Row begins -->
 				    <td id="due_time"><%= distance_of_time_in_words(Time.now, due_time, include_seconds: true) %></td>
 
+					<!-- active_tasks.js parses this -->
 				    <td data-due="<%= seconds_remaining %>"><%= deadline.title %></td>
 
 					<% if deadline.fresh_and_not_checked_in? %>
