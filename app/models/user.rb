@@ -196,9 +196,9 @@ class User < ActiveRecord::Base
   end
 
   # UNTESTED BY RSPEC
-  def stage_and_queue_occupied?
+  def stage_or_queue_occupied_by(micropost_id)
     # Is the stage not empty? Is the queue not empty?
-    !self.micropost_id_due_now.blank? or !self.microposts_due_queue.blank?
+    self.micropost_id_due_now.include?(micropost_id) or self.microposts_due_queue.include?(micropost_id)
   end
 
   private

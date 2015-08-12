@@ -18,7 +18,7 @@
 
 					<% if deadline.fresh_and_not_checked_in? %>
 
-						<% if deadline_owner.stage_and_queue_occupied? %>
+						<% if deadline_owner.stage_or_queue_occupied_by(deadline.id) %>
 							<td>
 								<%= form_for(deadline) do |f| %>
 									<%= f.hidden_field :late_but_current, value: true %>
