@@ -15,6 +15,16 @@ class MicropostsController < ApplicationController
     end
   end
   
+  def update
+    @micropost = Micropost.find(params[:id])
+    if @micropost.update_attributes(micropost_params)
+      flash[:success] = "Checked In!"
+      redirect_to root_url
+    else
+      redirect_to root_url
+    end
+  end
+
   def destroy
     # Destroys all associated jobs
     Delayed::Job.destroy_all(:owner_type => "Micropost", :owner_id => @micropost.id)

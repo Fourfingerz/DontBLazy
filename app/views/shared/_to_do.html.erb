@@ -4,7 +4,6 @@
 		<thead>
 		    <tr>
 		    	<th>Due in</th>
-		    	<th>Goal</th>
 		    </tr>
 		</thead>
 		<tbody>
@@ -12,19 +11,21 @@
 			    <tr>
 				  	<% due_time = Delayed::Job.where(:user_id => current_user.id, :owner_type => "Micropost", :owner_id => deadline.id).order("created_at DESC").first.run_at %>
 				  	<% seconds_remaining = due_time - Time.now %>
+				  	<% owner = User.find_by(:id => deadline.user_id) %>
 					<!-- active_tasks.js parses this -->
 				    <td id="due_time" data-due="<%= seconds_remaining %>"><%= distance_of_time_in_words(Time.now, due_time, include_seconds: true) %></td>
 				    <td><%= deadline.title %></td>
+
 					<% if deadline %>
 						<td>
-							<%= form_for deadline do |f| %>
+							<%= form_for(deadline) do |f| %>
 								<%= f.hidden_field :check_in_current, value: true %>
 								<%= f.submit 'Check In' %>
 							<% end %>
 						</td>
 					<% elsif deadline %>
 						<td>
-							<%= form_for deadline do |f| %>
+							<%= form_for(deadline) do |f| %>
 								<%= f.hidden_field :late_but_current, value: true %>
 								<%= f.submit 'Check In' %>
 							<% end %>
@@ -34,6 +35,7 @@
 							Next check in is:
 						</td>
 					<% end %>
+
 			    </tr>
 			<% end %>
 	  	</tbody>
