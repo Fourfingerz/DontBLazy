@@ -140,10 +140,10 @@ class Micropost < ActiveRecord::Base
 
   # UNTESTED BY RSPEC and HAND
   def schedule_two_hour_check_in_deadline
-    #job = self.delay(run_at: 2.hours.from_now).two_hour_check_in
-
     # TEST CUT TIME
-    job = self.delay(run_at: 1.minutes.from_now).two_hour_check_in
+    # job = self.delay(run_at: 1.minutes.from_now).two_hour_check_in
+    
+    job = self.delay(run_at: 2.hours.from_now).two_hour_check_in
     update_column(:delayed_job_id, job.id)
 
     Delayed::Job.find_by(:id => job.id).update_columns(owner_type: "Micropost")  # Associates delayed_job with Micropost ID
@@ -225,10 +225,11 @@ class Micropost < ActiveRecord::Base
   # Schedule multiple delayed job based on number of days and task
   def schedule_check_in_deadline
     if self.days_remaining > 0
-      # job = self.delay(run_at: 24.hours.from_now).check_in 
 
       # TEST CUT TIME
-      job = self.delay(run_at: 2.minutes.from_now).check_in
+      # job = self.delay(run_at: 2.minutes.from_now).check_in
+
+      job = self.delay(run_at: 24.hours.from_now).check_in 
       update_column(:delayed_job_id, job.id)  # Update Delayed_job
 
       Delayed::Job.find_by(:id => job.id).update_columns(owner_type: "Micropost")  # Associates delayed_job with Micropost ID
