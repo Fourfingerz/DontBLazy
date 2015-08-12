@@ -195,6 +195,12 @@ class User < ActiveRecord::Base
     end
   end
 
+  # UNTESTED BY RSPEC
+  def stage_and_queue_occupied?
+    # Is the stage not empty? Is the queue not empty?
+    !self.micropost_id_due_now.blank? or !self.microposts_due_queue.blank?
+  end
+
   private
 
     # Converts email to all lower-case.
