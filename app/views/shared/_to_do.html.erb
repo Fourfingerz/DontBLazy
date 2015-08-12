@@ -14,12 +14,26 @@
 				  	<% seconds_remaining = due_time - Time.now %>
 				  	<% deadline_owner = User.find_by(:id => deadline.user_id) %>
 
-					<!-- Table Row begins -->
-				    <td id="due_time"><%= distance_of_time_in_words(Time.now, due_time, include_seconds: true) %></td>
+					<!-- ** Table Row begins ** -->
 
-					<!-- active_tasks.js parses this -->
+					<!-- Display this if CHECKED-IN on time, waiting for next 24 hour cycle. -->
+					<% if deadline.check_in_current = true %>
+						<% next_due_date = due_time + 24.hours %>
+						<td id="due_time"><%= distance_of_time_in_words(Time.now, next_due_date, include_seconds: true) %></td>
+
+					<!-- Display this if NOT CHECKED-IN, is past due, and awaiting two hour last call response. -->
+					<% elsif deadline.check_in_current = false && deadline_owner.stage_or_queue_occupied_by(deadline.id) %>
+						<td id="due_time">PAST DUE</td>
+
+					<% else %>
+						<!-- default clock. NOT CHECKED-IN or CHECKED-IN LATE -->
+					    <td id="due_time"><%= distance_of_time_in_words(Time.now, due_time, include_seconds: true) %></td>
+					<% end %>
+
+					<!-- active_tasks.js parses this embedded data -->
 				    <td data-due="<%= seconds_remaining %>"><%= deadline.title %></td>
-
+					
+					<!-- CHECK IN BUTTON LOGIC -->
 					<% if deadline.fresh_and_not_checked_in? %>
 
 						<% if deadline_owner.stage_or_queue_occupied_by(deadline.id) %>
