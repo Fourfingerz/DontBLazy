@@ -207,6 +207,13 @@ class Micropost < ActiveRecord::Base
   end
 
   # UNTESTED BY RSPEC
+  # Checks to see if selected Micropost is NOT already checked in
+  def fresh_and_not_checked_in?
+    !false ^ self.check_in_current && !false ^ self.late_but_current
+    # returns TRUE if it's CLEAN and hasn't been checked into
+  end
+
+  # UNTESTED BY RSPEC
   # Finds Micropost from mapped number and checks it in
   def checking_in_number
     self.check_in_current = true  
