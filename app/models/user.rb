@@ -185,7 +185,7 @@ class User < ActiveRecord::Base
 
   def send_status_sms 
     status_sms = self.create_status_sms
-
+3
     # IF/ELSE to determine if there are active projects and send texts accordingly
     if status_sms =~ /\d/
       send_text_message(status_sms, self.phone_number)
@@ -197,8 +197,9 @@ class User < ActiveRecord::Base
 
   # UNTESTED BY RSPEC
   def stage_or_queue_occupied_by(micropost_id)
-    # Is the stage not empty? Is the queue not empty?
-    self.micropost_id_due_now.include?(micropost_id) or self.microposts_due_queue.include?(micropost_id)
+    id = micropost_id.to_s
+    # Does the stage contain the micropost? The queue?
+    self.micropost_id_due_now.to_s.include?(id) or self.microposts_due_queue.to_s.include?(id)
   end
 
   private
