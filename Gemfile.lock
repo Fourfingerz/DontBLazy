@@ -100,6 +100,9 @@ GEM
     dotenv-rails (2.0.2)
       dotenv (= 2.0.2)
       railties (~> 4.0)
+    dotiw (3.0.1)
+      actionpack (>= 3)
+      i18n
     erubis (2.7.0)
     excon (0.45.4)
     execjs (2.5.2)
@@ -424,6 +427,7 @@ DEPENDENCIES
   delayed_job_active_record
   delayed_job_recurring
   dotenv-rails
+  dotiw
   factory_girl_rails (~> 4.4.1)
   faker (= 1.4.2)
   figaro
