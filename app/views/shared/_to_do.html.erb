@@ -1,9 +1,9 @@
-<% if @active_goals %>
+<% if @active_goals.any? %>
 	<%= javascript_include_tag "active_tasks" %>
 	<table id="active_tasks_table">
 		<thead>
 		    <tr>
-		    	<th>Due in</th>
+		    	<th>Upcoming Deadlines</th>
 		    </tr>
 		</thead>
 		<tbody>
@@ -33,8 +33,6 @@
 					    <td data-due="<%= seconds_remaining %>"><%= deadline.title %></td>
 					<% end %>
 
-
-					
 					<!-- CHECK IN BUTTON LOGIC -->
 					<% if deadline.fresh_and_not_checked_in? %>
 
@@ -64,4 +62,6 @@
 			<% end %>
 	  	</tbody>
 	</table>
+<% else %>
+	<h3> Nothing due! Yay!</h3>
 <% end %>
