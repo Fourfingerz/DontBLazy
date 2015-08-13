@@ -19,7 +19,7 @@
 
 					<!-- Display this if CHECKED-IN on time, waiting for next 24 hour cycle. -->
 					<% if deadline.check_in_current == true %>
-						<td id="due_time"><%= distance_of_time(next_due_date) %></td>
+						<td id="due_time"><%= distance_of_time(next_due_date, :except => :seconds) %></td>
 						<td data-due="<%= next_due_date %>"><%= deadline.title %></td>
 
 					<!-- Display this if NOT CHECKED-IN, is past due, and awaiting two hour last call response. -->
@@ -29,7 +29,7 @@
 
 					<% else %>
 						<!-- default clock. NOT CHECKED-IN or CHECKED-IN LATE -->
-					    <td id="due_time"><%= distance_of_time(seconds_remaining) %></td>
+					    <td id="due_time"><%= distance_of_time(seconds_remaining, :except => :seconds) %></td>
 					    <td data-due="<%= seconds_remaining %>"><%= deadline.title %></td>
 					<% end %>
 
