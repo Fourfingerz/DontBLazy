@@ -18,12 +18,12 @@
 					<!-- ** Table Row begins ** -->
 
 					<!-- Display this if CHECKED-IN on time, waiting for next 24 hour cycle. -->
-					<% if deadline.check_in_current = true %>
+					<% if deadline.check_in_current == true %>
 						<td id="due_time"><%= distance_of_time(next_due_date) %></td>
 						<td data-due="<%= next_due_date %>"><%= deadline.title %></td>
 
 					<!-- Display this if NOT CHECKED-IN, is past due, and awaiting two hour last call response. -->
-					<% elsif deadline.check_in_current = false && deadline_owner.stage_or_queue_occupied_by(deadline.id) %>
+					<% elsif deadline.check_in_current == false && deadline_owner.stage_or_queue_occupied_by(deadline.id) %>
 						<td id="due_time">PAST DUE</td>
 						<td data-due="<%= seconds_remaining %>"><%= deadline.title %></td>
 
