@@ -4,8 +4,17 @@
   </br>
   <span class="title"><%= micropost.title %></span> <!-- Append link here -->
   <span class="content">
-    <span class="glyphicon glyphicon-comment" aria-hidden="true"></span>   
+    <span class="glyphicon glyphicon-comment" aria-hidden="true"></span>
     <%= micropost.content %>
+    </br>
+
+    <span class="glyphicon glyphicon-time" aria-hidden="true"></span>
+    <% if micropost.active == false %>
+      <% day = micropost.current_day %>
+      <% real_day = day - 1 %>
+    <% end %>
+    You are on day <%= real_day %> of <%= micropost.days_to_complete %>.
+
     <%= image_tag micropost.picture.url if micropost.picture? %>
     </br>
 
