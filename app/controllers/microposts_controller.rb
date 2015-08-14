@@ -42,14 +42,13 @@ class MicropostsController < ApplicationController
     @db_friendly_num = @from_number.sub /[+]/, ''  # Plucks plus sign 
     @phone_owner = User.find_by(:phone_number => @db_friendly_num)
 
-    if @message_body =~ /\d/ 
+    if @message_body[/\d/] 
     # Checks each character in SMS against goals ID map from User's column
       processed_body = @message_body.split(",")
       processed_body.each do |c|
-        if c =~ /\d/
-          @micropost = Micropost.find(@phone_owner.current_tasks_map.find{|id| id["task"] == c }["micropost id"]) 
-          @micropost.checking_in_number
-        end  
+          id_int = c.to_i  # datatype stupidity
+          @micropost = Micropost.find_by(:id => @phone_owner.current_tasks_map.find{|id| id["task"] == id_int }["micropost id"]) 
+          @micropost.checking_in_number 
       end
 
     else 
