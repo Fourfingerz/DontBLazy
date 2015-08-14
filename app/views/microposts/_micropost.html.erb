@@ -14,15 +14,12 @@
       <span class="glyphicon glyphicon-time" aria-hidden="true"></span>
       You are on day <%= micropost.current_day %> of <%= micropost.days_to_complete %>.
     <% end %>
-    
-
     <%= image_tag micropost.picture.url if micropost.picture? %>
-    </br>
 
     <!-- Deadline Backend Logic -->
       <!-- Vars --> 
     <% if micropost.active == false %>
-      Status: Completed
+      Status: Completed. Score: <%= micropost.days_completed %>/<%= micropost.days_to_complete %>. 
     <% else %> 
       <!-- Ruby Vars -->
       <% due_time = Delayed::Job.where(:user_id => current_user.id, :owner_type => "Micropost", :owner_id => micropost.id).order("created_at DESC").first.run_at %>
@@ -31,11 +28,11 @@
       <% user = micropost.user %>
 
       <% if micropost.check_in_current == true %>
-        Next Deadline:<%= distance_of_time(next_due_date, :except => :seconds) %>
+        Next Deadline: <%= distance_of_time(next_due_date, :except => :seconds) %>
       <% elsif micropost.check_in_current == false && user.stage_or_queue_occupied_by(micropost.id) %>
         Next Deadline: PAST DUE
       <% else %>
-        Next Deadline:<%= distance_of_time(seconds_remaining, :except => :seconds) %>
+        Next Deadline: <%= distance_of_time(seconds_remaining, :except => :seconds) %>
       <% end %> 
     <% end %>
 
