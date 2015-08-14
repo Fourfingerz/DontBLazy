@@ -8,12 +8,10 @@
     <%= micropost.content %>
     </br>
 
-    <span class="glyphicon glyphicon-time" aria-hidden="true"></span>
+    
     <% if micropost.active == false %>
-      <% day = micropost.current_day %>
-      <% real_day = day - 1 %>
-      You are on day <%= real_day %> of <%= micropost.days_to_complete %>.
     <% else %>
+      <span class="glyphicon glyphicon-time" aria-hidden="true"></span>
       You are on day <%= micropost.current_day %> of <%= micropost.days_to_complete %>.
     <% end %>
     
@@ -22,11 +20,9 @@
     </br>
 
     <!-- Deadline Backend Logic -->
-      <!-- Vars -->
-
-    Deadline: 
+      <!-- Vars --> 
     <% if micropost.active == false %>
-      Completed
+      Status: Completed
     <% else %> 
       <!-- Ruby Vars -->
       <% due_time = Delayed::Job.where(:user_id => current_user.id, :owner_type => "Micropost", :owner_id => micropost.id).order("created_at DESC").first.run_at %>
@@ -35,11 +31,11 @@
       <% user = micropost.user %>
 
       <% if micropost.check_in_current == true %>
-        <%= distance_of_time(next_due_date, :except => :seconds) %>
+        Next Deadline:<%= distance_of_time(next_due_date, :except => :seconds) %>
       <% elsif micropost.check_in_current == false && user.stage_or_queue_occupied_by(micropost.id) %>
-        PAST DUE
+        Next Deadline: PAST DUE
       <% else %>
-        <%= distance_of_time(seconds_remaining, :except => :seconds) %>
+        Next Deadline:<%= distance_of_time(seconds_remaining, :except => :seconds) %>
       <% end %> 
     <% end %>
 

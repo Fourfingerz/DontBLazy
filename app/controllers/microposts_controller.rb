@@ -18,6 +18,10 @@ class MicropostsController < ApplicationController
   def update
     @micropost = Micropost.find(params[:id])
     if @micropost.update_attributes(micropost_params)
+      if @micropost.current_day == @micropost.days_to_complete
+        @micropost.active = false
+        @micropost.save
+      end
       flash[:success] = "Checked In!"
       redirect_to root_url
     else
