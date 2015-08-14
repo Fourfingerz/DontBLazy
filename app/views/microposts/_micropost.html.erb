@@ -19,7 +19,7 @@
     <!-- Deadline Backend Logic -->
       <!-- Vars --> 
     <% if micropost.active == false %>
-      Status: Completed. Score: <%= micropost.days_completed %>/<%= micropost.days_to_complete %>. 
+      Status: Completed. Score: <%= micropost.days_completed %>/<%= micropost.days_to_complete %>.
     <% else %> 
       <!-- Ruby Vars -->
       <% due_time = Delayed::Job.where(:user_id => current_user.id, :owner_type => "Micropost", :owner_id => micropost.id).order("created_at DESC").first.run_at %>
