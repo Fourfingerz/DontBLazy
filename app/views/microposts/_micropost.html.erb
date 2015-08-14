@@ -11,19 +11,25 @@
 
     <!-- Deadline Backend Logic -->
       <!-- Vars -->
+
+    Deadline: 
+    <% if micropost.active == false %>
+      Completed
+    <% else %> 
+      <!-- Ruby Vars -->
       <% due_time = Delayed::Job.where(:user_id => current_user.id, :owner_type => "Micropost", :owner_id => micropost.id).order("created_at DESC").first.run_at %>
       <% seconds_remaining = due_time - Time.now %>
       <% next_due_date = seconds_remaining + 24.hours %>
       <% user = micropost.user %>
 
-    Deadline: 
-    <% if micropost.check_in_current == true %>
-      <%= distance_of_time(next_due_date, :except => :seconds) %>
-    <% elsif micropost.check_in_current == false && user.stage_or_queue_occupied_by(micropost.id) %>
-      PAST DUE
-    <% else %>
-      <%= distance_of_time(seconds_remaining, :except => :seconds) %>
-    <% end %> 
+      <% if micropost.check_in_current == true %>
+        <%= distance_of_time(next_due_date, :except => :seconds) %>
+      <% elsif micropost.check_in_current == false && user.stage_or_queue_occupied_by(micropost.id) %>
+        PAST DUE
+      <% else %>
+        <%= distance_of_time(seconds_remaining, :except => :seconds) %>
+      <% end %> 
+    <% end %>
 
   </span>
   <span class="timestamp">

@@ -122,15 +122,6 @@ class User < ActiveRecord::Base
       )
   end
 
-  # UNTESTED BY RSPEC
-  # When user sends SMS gibberish and is not understood, this will go out.
-  def send_bad_entry_sms(from_number)
-    if from_number == self.phone_number
-      try_again_sms = "Oh Dear, I'm just a bot. I don't understand (yet)! Try again with your task number or YES and NO if a task is currently due. Pretty please!"
-      send_text_message(try_again_sms, self.phone_number)
-    end
-  end
-
   # Pin for phone verification.
   def generate_pin
     self.phone_pin = rand(0000..9999).to_s.rjust(4, "0")
@@ -185,7 +176,6 @@ class User < ActiveRecord::Base
 
   def send_status_sms 
     status_sms = self.create_status_sms
-3
     # IF/ELSE to determine if there are active projects and send texts accordingly
     if status_sms =~ /\d/
       send_text_message(status_sms, self.phone_number)

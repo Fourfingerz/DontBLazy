@@ -65,15 +65,6 @@ class Micropost < ActiveRecord::Base
     end
   end
 
-  # Tested by hand
-  # UNTESTED BY RSPEC
-  def send_check_in_sms 
-    # Find id number value that matches key of map
-    activity = self.title
-    check_in_sms = "DontBLazy Bot: Time's up! Did you do your task: " + activity + "? Reply YES or NO. (You have two hours to respond)"
-    send_text_message(check_in_sms, user.phone_number)
-  end
-
   # UNTESTED BY RSPEC and HAND
   # Testing to see if there is anything on stage
   def any_goals_on_stage?
@@ -164,6 +155,12 @@ class Micropost < ActiveRecord::Base
     end
   end
 
+  # Provides mapping of goals with active deadlines
+  def send_user_status_sms
+    user = User.find_by(:id => self.user_id)
+    user.send_status_sms
+  end
+
   # Tested by hand
   # UNTESTED BY RSPEC
   def send_day_completed_sms
@@ -181,6 +178,15 @@ class Micropost < ActiveRecord::Base
     day_incomplete_message = "Sorry to hear that you missed your task: " + activity + ". Recipients of your choosing have been notified. Tell them to be nice! You're trying!"
     send_text_message(day_incomplete_message, user.phone_number)
   end
+
+  # Tested by hand
+  # UNTESTED BY RSPEC
+  def send_check_in_sms 
+    # Find id number value that matches key of map
+    activity = self.title
+    check_in_sms = "DontBLazy Bot: Time's up! Did you do your task: " + activity + "? Reply YES or NO. (You have two hours to respond)"
+    send_text_message(check_in_sms, user.phone_number)
+  end  
 
   # Tested by hand
   # UNTESTED BY RSPEC
@@ -238,13 +244,6 @@ class Micropost < ActiveRecord::Base
       Delayed::Job.find_by(:id => job.id).update_columns(user_id: self.user_id)
     end
   end
-
-  # Provides mapping of goals with active deadlines
-  def send_user_status_sms
-    user = User.find_by(:id => self.user_id)
-    user.send_status_sms
-  end
-
   # 
   def delayed_job
     Delayed::Job.find(delayed_job_id)
