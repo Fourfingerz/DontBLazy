@@ -44,7 +44,7 @@ class MicropostsController < ApplicationController
 
     if @message_body =~ /\d/ 
     # Checks each character in SMS against goals ID map from User's column
-      processed_body = @message_body.split(" ")
+      processed_body = @message_body.split(",")
       processed_body.each do |c|
         if c =~ /\d/
           @micropost = Micropost.find(@phone_owner.current_tasks_map.find{|id| id["task"] == c }["micropost id"]) 

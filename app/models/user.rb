@@ -171,7 +171,7 @@ class User < ActiveRecord::Base
     end
     active_goals = sms_arr.join(" ")
     active_goals.slice! "0"  # Temporary solution for annoying ZERO
-    active_goals_summary = "To mark goals complete before deadline, REPLY with your goal's corresponding number, separated by a space: " + active_goals
+    active_goals_summary = "TEXT 1 to check-in first goal. TEXT 2 to check-in second. To check-in multiple, seperate numbers by a comma. ex: 1,2,3:" + active_goals
   end
 
   def send_status_sms 

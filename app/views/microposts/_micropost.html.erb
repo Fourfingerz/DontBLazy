@@ -12,8 +12,11 @@
     <% if micropost.active == false %>
       <% day = micropost.current_day %>
       <% real_day = day - 1 %>
+      You are on day <%= real_day %> of <%= micropost.days_to_complete %>.
+    <% else %>
+      You are on day <%= micropost.current_day %> of <%= micropost.days_to_complete %>.
     <% end %>
-    You are on day <%= real_day %> of <%= micropost.days_to_complete %>.
+    
 
     <%= image_tag micropost.picture.url if micropost.picture? %>
     </br>
