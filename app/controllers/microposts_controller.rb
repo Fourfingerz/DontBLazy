@@ -20,9 +20,7 @@ class MicropostsController < ApplicationController
     if @micropost.update_attributes(micropost_params)
       @micropost.days_completed += 1
       @micropost.day_already_completed = true
-      if @micropost.current_day == @micropost.days_to_complete
-        @micropost.active = false
-      end
+      @micropost.active = false if @micropost.current_day == @micropost.days_to_complete
       @micropost.save
       flash[:success] = "Checked In!"
       redirect_to root_url
