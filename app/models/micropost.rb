@@ -132,7 +132,7 @@ class Micropost < ActiveRecord::Base
   # UNTESTED BY RSPEC and HAND
   def schedule_two_hour_check_in_deadline
     # TEST CUT TIME
-    job = self.delay(run_at: 2.minutes.from_now).two_hour_check_in
+    job = self.delay(run_at: 1.minutes.from_now).two_hour_check_in
 
     # job = self.delay(run_at: 2.hours.from_now).two_hour_check_in
     update_column(:delayed_job_id, job.id)
