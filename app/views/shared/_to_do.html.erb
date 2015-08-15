@@ -11,6 +11,8 @@
 			    <tr>
 			    	<!-- Rails Variables here -->
 			    	<% deadline_owner = User.find_by(:id => deadline.user_id) %>
+
+			    	<!-- Area of investigation 8/15/15 -->
 				  	<% due_time = Delayed::Job.where(:user_id => current_user.id, :owner_type => "Micropost", :owner_id => deadline.id).order("created_at DESC").first.run_at %>
 				  	<!-- set two states, one for 24 cycle and one for late cycle -->
 				  	<% seconds_remaining = due_time - Time.now %>
