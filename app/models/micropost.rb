@@ -117,6 +117,8 @@ class Micropost < ActiveRecord::Base
       garbage_jobs.each do |job|
         job.delete
       end
+    else
+      schedule_check_in_deadline  # After 24 hours, restart another delayed_job if there are more days
     end
   end
 
@@ -209,7 +211,6 @@ class Micropost < ActiveRecord::Base
     if self.check_in_current == true  
       good_check_in_tally
       check_if_still_active
-      schedule_check_in_deadline  # After 24 hours, restart another delayed_job if there are more days
     else 
     # User has NOT checked in via SMS or website and is NOW DUE
       if any_goals_on_stage? # If there is already something on stage
