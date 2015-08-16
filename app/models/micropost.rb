@@ -111,6 +111,12 @@ class Micropost < ActiveRecord::Base
       user = User.find_by(:id => self.user_id)
       user.current_tasks_map = user.current_tasks_map.delete_if {|h| h["micropost id"] == self.id}
       user.save
+
+      # Finds and removes all associated Delayed Jobs still lurking in the system
+      garbage_jobs = Delayed::Job.where(:owner_type => "Micropost", :owner_id => self.id)
+      garbage_jobs.each do |job|
+        job.delete
+      end
     end
   end
 
@@ -191,7 +197,7 @@ class Micropost < ActiveRecord::Base
     # Find id number value that matches key of map
     activity = self.title
     current_day = self.current_day.to_s
-    check_in_sms = "DontBLazy Bot: Time's up! Did you do day" + current_day + "your task: " + activity + "? Reply YES or NO. (You have two hours to respond)"
+    check_in_sms = "DontBLazy Bot: Time's up! Did you do day " + current_day + " of your task: " + activity + "? Reply YES or NO. (You have two hours to respond)"
     send_text_message(check_in_sms, user.phone_number)
   end  
 
@@ -238,7 +244,6 @@ class Micropost < ActiveRecord::Base
   # Schedule multiple delayed job based on number of days and task
   def schedule_check_in_deadline
     if self.days_remaining > 0
-
       # TEST CUT TIME
       job = self.delay(run_at: 5.minutes.from_now).check_in
 
