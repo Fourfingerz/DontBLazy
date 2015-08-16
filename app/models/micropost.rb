@@ -185,7 +185,8 @@ class Micropost < ActiveRecord::Base
   def send_check_in_sms 
     # Find id number value that matches key of map
     activity = self.title
-    check_in_sms = "DontBLazy Bot: Time's up! Did you do your task: " + activity + "? Reply YES or NO. (You have two hours to respond)"
+    current_day = self.current_day.to_s
+    check_in_sms = "DontBLazy Bot: Time's up! Did you do day" + current_day + "your task: " + activity + "? Reply YES or NO. (You have two hours to respond)"
     send_text_message(check_in_sms, user.phone_number)
   end  
 
