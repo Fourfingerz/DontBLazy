@@ -46,8 +46,13 @@ class Micropost < ActiveRecord::Base
   # UNTESTED BY RSPEC
   def good_check_in_tally
     if self.days_remaining > 0
-      self.days_completed += 1 if self.day_already_completed == false  # DB Column
-      self.day_already_completed = false if self.day_already_completed == true # DB Column
+
+      if self.day_already_completed == false
+        self.days_completed += 1   # DB Column
+      else self.day_already_completed == true
+        self.day_already_completed = false  # DB Column
+      end
+
       self.days_remaining -= 1  # DB Column
       self.current_day += 1     # DB Column
       self.check_in_current = false  # Sets this column for next day
