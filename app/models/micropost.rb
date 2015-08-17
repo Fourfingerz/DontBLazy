@@ -182,7 +182,7 @@ class Micropost < ActiveRecord::Base
   def send_day_completed_sms
     user = User.find_by(:id => self.user_id)
     activity = self.title
-    day_completed_message = "Thank you for checking in to your task: " + activity + "!"
+    day_completed_message = "Thank you for checking in to your task: " + activity + "! Such a hard worker :p"
     send_text_message(day_completed_message, user.phone_number)
   end
 
@@ -191,7 +191,7 @@ class Micropost < ActiveRecord::Base
   def send_day_incomplete_sms
     user = User.find_by(:id => self.user_id)
     activity = self.title
-    day_incomplete_message = "Sorry to hear that you missed your task: " + activity + ". Recipients of your choosing have been notified. Tell them to be nice! You're trying!"
+    day_incomplete_message = "Sorry to hear that you missed your task: " + activity + ". Time to giddy up!"
     send_text_message(day_incomplete_message, user.phone_number)
   end
 
