@@ -15,10 +15,13 @@ class MicropostsController < ApplicationController
     end
   end
   
+  # Web "check in" link  ### TARGET 8/17/15
   def update
     @micropost = Micropost.find(params[:id])
     if @micropost.update_attributes(micropost_params)
-      @micropost.days_completed += 1
+      # If / Else for Current and LateCurrent checks here?
+      @micropost.days_completed += 1   # TALLY
+
       @micropost.day_already_completed = true
       @micropost.active = false if @micropost.current_day == @micropost.days_to_complete
       @micropost.save
@@ -28,6 +31,24 @@ class MicropostsController < ApplicationController
       redirect_to root_url
     end
   end
+
+
+    # @micropost = Micropost.find(params[:id])
+    # @micropost.good_check_in_tally
+    # @micropost.send_day_completed_sms
+    # @micropost.check_if_still_active
+    # @user.micropost_id_due_now = nil if @user.micropost_id_due_now == @micropost.id # takes it off stage
+    
+    # # Find Micropost ID in it's queue and if found, deletes it
+    # @user.microposts_due_queue #something.delete
+    # @user.save
+
+    # # Deletes any lateness delayed job associated with this micropost
+    # garbage_jobs = Delayed::Job.where(:owner_type => "Micropost", :ower_job_type => "Micropost Two Hour Deadline", :owner_id => @micropost.id)
+    # garbage_jobs.each do |job|
+    #   job.delete
+    # end
+
 
   def destroy
     # Destroys all associated jobs

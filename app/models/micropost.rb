@@ -171,6 +171,8 @@ class Micropost < ActiveRecord::Base
     end
   end
 
+  # Queue pluck method here
+
   # Provides mapping of goals with active deadlines
   def send_user_status_sms
     user = User.find_by(:id => self.user_id)
