@@ -71,7 +71,7 @@ class MicropostsController < ApplicationController
         # @micropost.send_bad_news_to_recipients   ### Future implimentation
         @micropost.send_day_incomplete_sms
         @micropost.check_if_still_active
-        @phone_owner.micropost_id_due_now = nil
+        @phone_owner.micropost_id_due_now = nil # takes it off stage
         @phone_owner.save 
       when "LIST", "List", "list" 
         @micropost = Micropost.find(@phone_owner.microposts.first)

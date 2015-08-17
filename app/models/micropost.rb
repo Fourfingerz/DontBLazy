@@ -56,6 +56,7 @@ class Micropost < ActiveRecord::Base
       self.days_remaining -= 1  # DB Column
       self.current_day += 1     # DB Column
       self.check_in_current = false  # Sets this column for next day
+      self.late_but_current = false
       self.save
     end
   end
@@ -67,6 +68,7 @@ class Micropost < ActiveRecord::Base
       self.days_remaining -= 1  # DB Column
       self.current_day += 1     # DB Column
       self.check_in_current = false  # Sets this column for next day
+      self.late_but_current = false
       self.save
     end
   end
