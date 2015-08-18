@@ -171,7 +171,7 @@ class User < ActiveRecord::Base
     end
     active_goals = sms_arr.join(" ")
     active_goals.slice! "0"  # Temporary solution for annoying ZERO
-    active_goals_summary = "DontBLazy Bot: Reply 1 to check-in first goal. 2 to check in second. Check in multiple goals with comma seperated numbers, no spaces. ex 1,2,3. Upcoming Goals:" + active_goals
+    active_goals_summary = "DontBLazy Bot: Reply with corresponding number to check in your goals. For multiple check-ins, separate by comma. ex 1,2,3. Your Goals:" + active_goals
   end
 
   def send_status_sms 

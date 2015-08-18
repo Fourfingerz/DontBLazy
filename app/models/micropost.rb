@@ -74,35 +74,6 @@ class Micropost < ActiveRecord::Base
   end
 
   # UNTESTED BY RSPEC and HAND
-  # Testing to see if there is anything on stage
-  def any_goals_on_stage?
-    user = User.find_by(:id => self.user_id)
-    user.micropost_id_due_now?
-  end
-
-  # UNTESTED BY RSPEC and HAND
-  # The "stage" is the task chosen pending YES and NO reply in SMS
-  def go_on_stage
-    # Sets micropost ID that is in question at due date.
-    user = User.find_by(:id => self.user_id)
-    user.micropost_id_due_now = self.id  # Set the current task ON STAGE
-    user.save
-  end
-
-  # UNTESTED BY RSPEC and HAND
-  # The "queue" is where tasks go if stage is occupied
-  def go_on_queue
-    user = User.find_by(:id => self.user_id)
-
-    # Logic here NOT TO REPLICATE ITSELF
-    id_in_string = self.id.to_s
-    user.microposts_due_queue ||= []
-    # Checks to see if self's id already exists before joining queue
-    user.microposts_due_queue << id_in_string if !user.microposts_due_queue.any? {|queue| queue.include?(id_in_string)}
-    user.save
-  end
-
-  # UNTESTED BY RSPEC and HAND
   # Set INACTIVE if no more days remaining
   def check_if_still_active
     if self.days_remaining < 1
@@ -157,18 +128,6 @@ class Micropost < ActiveRecord::Base
     Delayed::Job.find_by(:id => job.id).update_columns(owner_job_type: "Micropost Two Hour Deadline")
     Delayed::Job.find_by(:id => job.id).update_columns(owner_id: self.id)
     Delayed::Job.find_by(:id => job.id).update_columns(user_id: self.user_id)
-  end
-
-  # UNTESTED BY RSPEC and HAND
-  # Checks queue and hustles next task on stage if exists
-  def queue_check
-    user = User.find_by(:id => self.user_id)
-    if !user.microposts_due_queue.blank?
-      first_in_queue = user.microposts_due_queue.first  # takes first in line
-      user.micropost_id_due_now = first_in_queue  # goes up on stage
-      user.microposts_due_queue.shift  # removes self from line
-      user.save
-    end
   end
 
   # Queue pluck method here
@@ -231,13 +190,6 @@ class Micropost < ActiveRecord::Base
   end
 
   # UNTESTED BY RSPEC
-  # Checks to see if selected Micropost is NOT already checked in
-  def fresh_and_not_checked_in?
-    !false ^ self.check_in_current && !false ^ self.late_but_current
-    # returns TRUE if it's CLEAN and hasn't been checked into
-  end
-
-  # UNTESTED BY RSPEC
   # Finds Micropost from mapped number and checks it in
   def checking_in_number
     self.check_in_current = true  
@@ -251,17 +203,15 @@ class Micropost < ActiveRecord::Base
     if self.days_remaining > 0
       # TEST CUT TIME
       job = self.delay(run_at: 5.minutes.from_now).check_in
-
       # job = self.delay(run_at: 24.hours.from_now).check_in 
       update_column(:delayed_job_id, job.id)  # Update Delayed_job
-
       Delayed::Job.find_by(:id => job.id).update_columns(owner_type: "Micropost")  # Associates delayed_job with Micropost ID
-      Delayed::Job.find_by(:id => job.id).update_columns(owner_job_type: "Micropost 24 Hour Deadline")
+      Delayed::Job.find_by(:id => job.id).update_columns(owner_job_type: "24 Hour Deadline")
       Delayed::Job.find_by(:id => job.id).update_columns(owner_id: self.id)
       Delayed::Job.find_by(:id => job.id).update_columns(user_id: self.user_id)
     end
   end
-  # 
+  
   def delayed_job
     Delayed::Job.find(delayed_job_id)
   end
