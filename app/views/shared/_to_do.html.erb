@@ -11,10 +11,7 @@
 			    <tr>
 			    	<!-- Rails Variables here -->
 			    	<% deadline_owner = User.find_by(:id => deadline.user_id) %>
-
-			    	<!-- Area of investigation 8/15/15 -->
-
-				  	<% due_time = Delayed::Job.where(:user_id => current_user.id, :owner_type => "Micropost", :owner_id => deadline.id).order("created_at DESC").first.run_at %>
+				  	<% due_time = Delayed::Job.where(:user_id => current_user.id, :owner_type => "Micropost", :owner_id => deadline.id, :owner_job_type => "24 Hour Deadline").order("created_at DESC").first.run_at %>
 				  	<!-- set two states, one for 24 cycle and one for late cycle -->
 				  	<% seconds_remaining = due_time - Time.now %>
 				  	<% next_due_date = seconds_remaining + 24.hours %>
@@ -22,15 +19,9 @@
 					<!-- ** Table Row begins ** -->
 
 					<!-- Display this if CHECKED-IN on time, waiting for next 24 hour cycle. -->
-					<% if deadline.check_in_current == true && deadline.days_remaining > 0 %>
+					<% if deadline.day_already_completed == true %>
 						<td id="due_time"><%= distance_of_time(next_due_date, :except => :seconds) %></td>
 						<td data-due="<%= next_due_date %>"><%= deadline.title %></td>
-
-					<!-- Display this if NOT CHECKED-IN, is past due, and awaiting two hour last call response. -->
-					<% elsif deadline.check_in_current == false && deadline_owner.stage_or_queue_occupied_by(deadline.id) %>
-						<td id="due_time">PAST DUE</td>
-						<td data-due="<%= seconds_remaining %>"><%= deadline.title %></td>
-
 					<% else %>
 						<!-- default clock. NOT CHECKED-IN or CHECKED-IN LATE -->
 					    <td id="due_time"><%= distance_of_time(seconds_remaining, :except => :seconds) %></td>
@@ -39,23 +30,12 @@
 
 					<!-- CHECK IN BUTTON LOGIC -->
 					<% if deadline.fresh_and_not_checked_in? %>
-
-						<% if deadline_owner.stage_or_queue_occupied_by(deadline.id) %>
-							<td><!-- check this in instantly -->
-								<%= form_for(deadline) do |f| %>
-									<%= f.hidden_field :late_but_current, value: true %>
-									<%= f.submit 'Check In' %>
-								<% end %>
-							</td>
-						<% else %>
-							<td>
-								<%= form_for(deadline) do |f| %>
-									<%= f.hidden_field :check_in_current, value: true %>
-									<%= f.submit 'Check In' %>
-								<% end %>
-							</td>
-						<% end %> 
-
+						<td>
+							<%= form_for(deadline) do |f| %>
+								<%= f.hidden_field :check_in_current, value: true %>
+								<%= f.submit 'Check In' %>
+							<% end %>
+						</td>
 					<% else %>
 						<td>
 							Awaiting Next Check-In Period

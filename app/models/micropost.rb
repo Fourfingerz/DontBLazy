@@ -11,7 +11,7 @@ class Micropost < ActiveRecord::Base
   has_many :recipients, through: :micropost_recipients
   validates :days_to_complete, presence: true
   after_create :set_initial_state
-  after_create :schedule_check_in_deadline
+  after_create :schedule_new_day
   after_create :send_user_status_sms
 
   # DBL Logic
@@ -37,6 +37,7 @@ class Micropost < ActiveRecord::Base
     self.check_in_current = false
     self.days_completed = 0
     self.days_remaining = self.days_to_complete
+    self.day_already_completed = false
     self.current_day = 1
     self.active = true
     self.save
@@ -45,38 +46,25 @@ class Micropost < ActiveRecord::Base
   # Tested by hand
   # UNTESTED BY RSPEC
   def good_check_in_tally
-    if self.days_remaining > 0
-
-      if self.day_already_completed == false || self.day_already_completed == nil
-        self.days_completed += 1   # DB Column
-      else self.day_already_completed == true
-        self.day_already_completed = false  # DB Column
-      end
-
       self.days_remaining -= 1  # DB Column
       self.current_day += 1     # DB Column
-      self.check_in_current = false  # Sets this column for next day
-      self.late_but_current = false
+      self.days_completed += 1 if self.day_already_completed = false  
+      self.day_already_completed = false
       self.save
-    end
   end
 
   # Tested by hand
   # UNTESTED BY RSPEC
   def bad_check_in_tally
-    if self.days_remaining > 0
       self.days_remaining -= 1  # DB Column
       self.current_day += 1     # DB Column
-      self.check_in_current = false  # Sets this column for next day
-      self.late_but_current = false
+      self.day_already_completed = false
       self.save
-    end
   end
 
   # UNTESTED BY RSPEC and HAND
   # Set INACTIVE if no more days remaining
-  def check_if_still_active
-    if self.days_remaining < 1
+  def inactive_cleanup
       self.active = false 
       self.save
 
@@ -90,47 +78,7 @@ class Micropost < ActiveRecord::Base
       garbage_jobs.each do |job|
         job.delete
       end
-    else
-      schedule_check_in_deadline  # After 24 hours, restart another delayed_job if there are more days
-    end
   end
-
-
-  # UNTESTED BY RSPEC and HAND
-  # After 2 hours from deadline, awaiting YES/NO or two hour expires
-  def two_hour_check_in
-    user = User.find_by(:id => self.user_id)
-    if self.late_but_current == true
-      good_check_in_tally
-      check_if_still_active
-      user.micropost_id_due_now = nil
-      queue_check
-      user.save
-    else
-      bad_check_in_tally
-      # send_bad_news_to_recipients # FUTURE implimentation
-      check_if_still_active
-      user.micropost_id_due_now = nil
-      queue_check
-      user.save
-    end
-  end
-
-  # UNTESTED BY RSPEC and HAND
-  def schedule_two_hour_check_in_deadline
-    # TEST CUT TIME
-    job = self.delay(run_at: 3.minutes.from_now).two_hour_check_in
-
-    # job = self.delay(run_at: 2.hours.from_now).two_hour_check_in
-    update_column(:delayed_job_id, job.id)
-
-    Delayed::Job.find_by(:id => job.id).update_columns(owner_type: "Micropost")  # Associates delayed_job with Micropost ID
-    Delayed::Job.find_by(:id => job.id).update_columns(owner_job_type: "Micropost Two Hour Deadline")
-    Delayed::Job.find_by(:id => job.id).update_columns(owner_id: self.id)
-    Delayed::Job.find_by(:id => job.id).update_columns(user_id: self.user_id)
-  end
-
-  # Queue pluck method here
 
   # Provides mapping of goals with active deadlines
   def send_user_status_sms
@@ -152,64 +100,97 @@ class Micropost < ActiveRecord::Base
   def send_day_incomplete_sms
     user = User.find_by(:id => self.user_id)
     activity = self.title
-    day_incomplete_message = "Sorry to hear that you missed your task: " + activity + ". Time to giddy up!"
+    current_day = self.current_day.to_s
+    
+    day_incomplete_message = "You missed your day " + current_day + " of your task: " + activity + ". Time to giddy up!"
     send_text_message(day_incomplete_message, user.phone_number)
   end
 
-  # Tested by hand
   # UNTESTED BY RSPEC
-  def send_check_in_sms 
-    # Find id number value that matches key of map
+  def send_four_hour_reminder
+    user = User.find_by(:id => self.user_id)
     activity = self.title
-    current_day = self.current_day.to_s
-    check_in_sms = "DontBLazy Bot: Time's up! Did you do day " + current_day + " of your task: " + activity + "? Reply YES or NO. (You have two hours to respond)"
-    send_text_message(check_in_sms, user.phone_number)
-  end  
+    num = user.current_tasks_map.find{|id| id["micropost id"] == self.id}["task"]
+    num_string = num.to_s
+    day = self.current_day
+    day_string = day.to_s
+    four_hour_message = "DontBLazy Bot: This is a reminder to complete day " + day_string + " of your task: " + activity + ". Check in via dontblazy.herokuapp.com or reply to this text with the number: " + num_string + ". You have four hours remaining."
+    send_text_message(four_hour_message, user.phone_number)
+  end
 
   # Tested by hand
   # UNTESTED BY RSPEC
   # After 24 hours, DBL runs this check-in
   def check_in 
     # User already checked in thru SMS before deadline
-    if self.check_in_current == true  
+    if self.check_in_current == true
       good_check_in_tally
-      check_if_still_active
+      schedule_new_day if self.days_remaining > 0
+      inactive_cleanup if self.days_remaining == 0 # Checks if days_remaining > 0 and schedules a new day (24 hour + 4 hour reminder)
+      self.check_in_current = false  # Sets this column for next day
+      self.save
     else 
     # User has NOT checked in via SMS or website and is NOW DUE
-      if any_goals_on_stage? # If there is already something on stage
-        go_on_queue
-        schedule_two_hour_check_in_deadline
-        schedule_check_in_deadline
-      else  # If stage has nil, go on stage for pending SMS reply
-        go_on_stage
-        schedule_two_hour_check_in_deadline
-        send_check_in_sms
-        schedule_check_in_deadline
+      bad_check_in_tally
+      send_day_incomplete_sms
+      schedule_new_day if self.days_remaining > 0
+      if self.days_remaining == 0
+        inactive_cleanup 
+        self.active = false
       end
+      self.check_in_current = false  # Sets this column for next day
+      self.save
     end
   end
 
   # UNTESTED BY RSPEC
   # Finds Micropost from mapped number and checks it in
   def checking_in_number
-    self.check_in_current = true  
+    self.days_completed += 1
+    self.day_already_completed = true
+    self.active = false if self.current_day > self.days_to_complete # For real time feedback
     self.save
-    self.send_day_completed_sms
+
+    # Since you already checked in, delete reminder to check in again
+    sms_reminder_jobs = Delayed::Job.where(:owner_type => "Micropost", :owner_id => self.id, :owner_job_type => "4 Hour Reminder")
+    sms_reminder_jobs.each do |job|
+      job.delete
+    end
   end
 
   # UNTESTED BY RSPEC
   # Schedule multiple delayed job based on number of days and task
   def schedule_check_in_deadline
-    if self.days_remaining > 0
-      # TEST CUT TIME
-      job = self.delay(run_at: 5.minutes.from_now).check_in
-      # job = self.delay(run_at: 24.hours.from_now).check_in 
-      update_column(:delayed_job_id, job.id)  # Update Delayed_job
-      Delayed::Job.find_by(:id => job.id).update_columns(owner_type: "Micropost")  # Associates delayed_job with Micropost ID
-      Delayed::Job.find_by(:id => job.id).update_columns(owner_job_type: "24 Hour Deadline")
-      Delayed::Job.find_by(:id => job.id).update_columns(owner_id: self.id)
-      Delayed::Job.find_by(:id => job.id).update_columns(user_id: self.user_id)
-    end
+    # TEST CUT TIME
+    job = self.delay(run_at: 5.minutes.from_now).check_in # CUT TIME
+    # job = self.delay(run_at: 24.hours.from_now).check_in 
+    update_column(:delayed_job_id, job.id)  # Update Delayed_job
+    Delayed::Job.find_by(:id => job.id).update_columns(owner_type: "Micropost")  # Associates delayed_job with Micropost ID
+    Delayed::Job.find_by(:id => job.id).update_columns(owner_job_type: "24 Hour Deadline")
+    Delayed::Job.find_by(:id => job.id).update_columns(owner_id: self.id)
+    Delayed::Job.find_by(:id => job.id).update_columns(user_id: self.user_id)
+  end
+
+  def schedule_four_hour_reminder
+    job = self.delay(run_at: 3.minutes.from_now).send_four_hour_reminder # CUT TIME 
+    #job = self.delay(run_at: 20.hours.from_now).send_four_hour_reminder
+    update_column(:delayed_job_id, job.id)  # Update Delayed_job
+    Delayed::Job.find_by(:id => job.id).update_columns(owner_type: "Micropost")  # Associates delayed_job with Micropost ID
+    Delayed::Job.find_by(:id => job.id).update_columns(owner_job_type: "4 Hour Reminder")
+    Delayed::Job.find_by(:id => job.id).update_columns(owner_id: self.id)
+    Delayed::Job.find_by(:id => job.id).update_columns(user_id: self.user_id)
+  end
+
+  def schedule_new_day
+    schedule_check_in_deadline
+    schedule_four_hour_reminder
+  end
+
+  # UNTESTED BY RSPEC
+  # Checks to see if selected Micropost is NOT already checked in
+  def fresh_and_not_checked_in?
+    !false ^ self.check_in_current && !false ^ self.day_already_completed
+    # returns TRUE if it's CLEAN and hasn't been checked into
   end
   
   def delayed_job
@@ -246,3 +227,4 @@ class Micropost < ActiveRecord::Base
       end
     end
 end
+ 

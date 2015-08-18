@@ -19,12 +19,8 @@ class MicropostsController < ApplicationController
   def update
     @micropost = Micropost.find(params[:id])
     if @micropost.update_attributes(micropost_params)
-      # If / Else for Current and LateCurrent checks here?
-      @micropost.days_completed += 1   # TALLY
-
-      @micropost.day_already_completed = true
-      @micropost.active = false if @micropost.current_day == @micropost.days_to_complete
-      @micropost.save
+      # Update button makes micropost's check_in_current == true
+      @micropost.checking_in_number
       flash[:success] = "Checked In!"
       redirect_to root_url
     else
@@ -73,7 +69,8 @@ class MicropostsController < ApplicationController
       processed_body.each do |c|
           id_int = c.to_i  # datatype stupidity
           @micropost = Micropost.find_by(:id => @phone_owner.current_tasks_map.find{|id| id["task"] == id_int }["micropost id"]) 
-          @micropost.checking_in_number 
+          @micropost.checking_in_number
+          @micropost.send_day_completed_sms 
       end
 
     else 
