@@ -63,21 +63,18 @@ class Micropost < ActiveRecord::Base
   end
 
   # UNTESTED BY RSPEC and HAND
-  # Set INACTIVE if no more days remaining
+  # Clean up INACTIVE tasks
   def inactive_cleanup
-      self.active = false 
-      self.save
+    # Finds referenced micropost from user's map and deletes itself
+    user = User.find_by(:id => self.user_id)
+    user.current_tasks_map = user.current_tasks_map.delete_if {|h| h["micropost id"] == self.id}
+    user.save
 
-      # Finds referenced micropost from user's map and deletes itself
-      user = User.find_by(:id => self.user_id)
-      user.current_tasks_map = user.current_tasks_map.delete_if {|h| h["micropost id"] == self.id}
-      user.save
-
-      # Finds and removes all associated Delayed Jobs still lurking in the system
-      garbage_jobs = Delayed::Job.where(:owner_type => "Micropost", :owner_id => self.id)
-      garbage_jobs.each do |job|
-        job.delete
-      end
+    # Finds and removes all associated Delayed Jobs still lurking in the system
+    garbage_jobs = Delayed::Job.where(:owner_type => "Micropost", :owner_id => self.id)
+    garbage_jobs.each do |job|
+      job.delete
+    end
   end
 
   # Provides mapping of goals with active deadlines
@@ -101,7 +98,7 @@ class Micropost < ActiveRecord::Base
     user = User.find_by(:id => self.user_id)
     activity = self.title
     current_day = self.current_day.to_s
-    
+
     day_incomplete_message = "You missed your day " + current_day + " of your task: " + activity + ". Time to giddy up!"
     send_text_message(day_incomplete_message, user.phone_number)
   end
@@ -132,7 +129,6 @@ class Micropost < ActiveRecord::Base
     else 
     # User has NOT checked in via SMS or website and is NOW DUE
       bad_check_in_tally
-      send_day_incomplete_sms
       schedule_new_day if self.days_remaining > 0
       if self.days_remaining == 0
         inactive_cleanup 
@@ -148,7 +144,11 @@ class Micropost < ActiveRecord::Base
   def checking_in_number
     self.days_completed += 1
     self.day_already_completed = true
-    self.active = false if self.current_day > self.days_to_complete # For real time feedback
+    next_day = self.current_day + 1
+    if next_day > self.days_to_complete # For real time feedback
+      self.active = false 
+      self.inactive_cleanup
+    end
     self.save
 
     # Since you already checked in, delete reminder to check in again
