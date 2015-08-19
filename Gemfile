@@ -27,6 +27,7 @@ gem "interactor-rails", "~> 2.0"  # Get out of bloated models!
 gem 'protected_attributes'  # Allows use of attr_accessible in Rails 4
 gem 'figaro' # Secrets
 gem 'dotiw' # More precise distance_of_time_in_words
+gem 'best_in_place', '~> 3.0.1' # Inline editing
 
 group :development, :test do
   gem 'sqlite3',     '1.3.9'
