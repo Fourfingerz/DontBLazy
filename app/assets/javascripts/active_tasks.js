@@ -1,4 +1,4 @@
-window.onload = function() {
+$(document).ready(function() {
     var table = document.getElementById("active_tasks_table");
     var tbody = table.getElementsByTagName('tbody')[0];
     var rows  = tbody.getElementsByTagName('tr');
@@ -24,5 +24,5 @@ window.onload = function() {
             clock_that_shift_colors.style.backgroundColor = 'green';
         }         
     }
-};
+});
             
