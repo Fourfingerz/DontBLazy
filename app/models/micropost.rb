@@ -48,7 +48,7 @@ class Micropost < ActiveRecord::Base
   def good_check_in_tally
       self.days_remaining -= 1  # DB Column
       self.current_day += 1     # DB Column
-      self.days_completed += 1 if self.day_already_completed = false  
+      self.days_completed += 1 if self.day_already_completed == false  
       self.day_already_completed = false
       self.save
   end
