@@ -1,4 +1,5 @@
 class MicropostsController < ApplicationController
+  respond_to :html, :json
   #skip_before_filter :force_ssl # check later if needed
   protect_from_forgery :except => ["receive_sms"]
   before_action :logged_in_user, only: [:create, :destroy]
@@ -14,42 +15,34 @@ class MicropostsController < ApplicationController
       render 'static_pages/home'
     end
   end
-  
-  # Web "check in" link  ### TARGET 8/17/15
-  def update
-    @micropost = Micropost.find(params[:id])
-    if @micropost.update_attributes(micropost_params)
-      # Update button makes micropost's check_in_current == true
-      @micropost.checking_in_number
-      flash[:success] = "Checked In!"
-      redirect_to root_url
-    else
-      redirect_to root_url
-    end
+
+  def show
+    @micropost = User.find(params[:id])
   end
 
-
-    # @micropost = Micropost.find(params[:id])
-    # @micropost.good_check_in_tally
-    # @micropost.send_day_completed_sms
-    # @micropost.check_if_still_active
-    # @user.micropost_id_due_now = nil if @user.micropost_id_due_now == @micropost.id # takes it off stage
-    
-    # # Find Micropost ID in it's queue and if found, deletes it
-    # @user.microposts_due_queue #something.delete
-    # @user.save
-
-    # # Deletes any lateness delayed job associated with this micropost
-    # garbage_jobs = Delayed::Job.where(:owner_type => "Micropost", :ower_job_type => "Micropost Two Hour Deadline", :owner_id => @micropost.id)
-    # garbage_jobs.each do |job|
-    #   job.delete
-    # end
-
+  # Web "check in" link 
+  def update
+    respond_to do |format|
+      @micropost = Micropost.find(params[:id])
+      if @micropost.update_attributes(micropost_params) 
+        if @micropost.check_in_current == true # Clicked Check-IN button 
+          @micropost.checking_in_number
+          flash[:success] = "Checked In."
+          redirect_to root_url
+        else
+          format.json { render json: @micropost } # Used Best In Place to edit micropost
+          flash[:success] = "Edit saved."
+          redirect_to root_url
+        end
+      else
+        redirect_to root_url
+      end
+    end
+  end
 
   def destroy
     # Destroys all associated jobs
     Delayed::Job.destroy_all(:owner_type => "Micropost", :owner_id => @micropost.id)
-    
     # And the main object body
     @micropost.destroy
     flash[:success] = "Goal Deleted."
@@ -72,30 +65,6 @@ class MicropostsController < ApplicationController
           @micropost.checking_in_number
           @micropost.send_day_completed_sms 
       end
-
-    else 
-
-      case @message_body
-      when "YES", "Yes", "yes"
-        @micropost = Micropost.find(@phone_owner.micropost_id_due_now)
-        @micropost.good_check_in_tally
-        @micropost.send_day_completed_sms
-        @micropost.check_if_still_active
-        @phone_owner.micropost_id_due_now = nil # takes it off stage
-        @phone_owner.save 
-      when "NO", "No", "no"
-        @micropost = Micropost.find(@phone_owner.micropost_id_due_now)
-        @micropost.bad_check_in_tally
-        # @micropost.send_bad_news_to_recipients   ### Future implimentation
-        @micropost.send_day_incomplete_sms
-        @micropost.check_if_still_active
-        @phone_owner.micropost_id_due_now = nil # takes it off stage
-        @phone_owner.save 
-      when "LIST", "List", "list" 
-        @micropost = Micropost.find(@phone_owner.microposts.first)
-        @micropost.send_user_status_sms
-      end
-
     end
     render xml: "<Response/>"
   end

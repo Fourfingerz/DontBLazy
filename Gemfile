@@ -13,9 +13,11 @@ gem 'sass-rails',              '5.0.2'
 gem 'uglifier',                '2.5.3'
 gem 'coffee-rails',            '4.1.0'
 gem 'jquery-rails',            '4.0.3'
+gem 'jquery-ui-rails'
 gem 'turbolinks',              '2.3.0'
 gem 'jbuilder',                '2.2.3'
 gem 'sdoc',                    '0.4.0', group: :doc
+gem 'responders',              '2.0.0' 
 
 # For SMS framework
 gem 'twilio-ruby' # SMS
@@ -27,7 +29,7 @@ gem "interactor-rails", "~> 2.0"  # Get out of bloated models!
 gem 'protected_attributes'  # Allows use of attr_accessible in Rails 4
 gem 'figaro' # Secrets
 gem 'dotiw' # More precise distance_of_time_in_words
-gem 'best_in_place', '~> 3.0.1' # Inline editing
+gem 'best_in_place', github: 'bernat/best_in_place'
 
 group :development, :test do
   gem 'sqlite3',     '1.3.9'

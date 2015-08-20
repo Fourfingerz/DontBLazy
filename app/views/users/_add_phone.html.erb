@@ -5,7 +5,7 @@
   <p>Let's Verify Your Phone Via SMS:</p>
   <%= form_for @user, remote: true, :url => phone_entry_users_path do |f| %>
     <div class="form-group">
-      <%= f.text_field :phone_number, :placeholder => "ex: 1718567890" %>
+      <%= f.text_field :phone_number, :placeholder => "Start with '1'. ex: 1718567890. " %>
     </div>
       <%= f.submit "Send Verification PIN", class: "btn btn-primary", id: 'send-pin-link' %>
   <% end %>
