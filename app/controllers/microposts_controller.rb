@@ -17,29 +17,25 @@ class MicropostsController < ApplicationController
   end
 
   def show
-    @micropost = User.find(params[:id])
   end
 
   # Web "check in" link 
   def update
-    respond_to do |format|
-      @micropost = Micropost.find(params[:id])
-      check_in_status = @micropost.check_in_current  # Old state
-
-      if @micropost.update_attributes(micropost_params) 
-        if !@micropost.check_in_current == check_in_status # if doesn't match old state, user clicked Check-IN button 
-          @micropost.checking_in_number
-          flash[:success] = "Checked In."
-          redirect_to root_url
-        else
-          #format.json { render json: @micropost } # Used Best In Place to edit micropost
+    @micropost = Micropost.find(params[:id])
+    check_in_status = @micropost.check_in_current  # Old state
+    if @micropost.update_attributes(micropost_params) 
+      if !@micropost.check_in_current == check_in_status # if doesn't match old state, user clicked Check-IN button 
+        @micropost.checking_in_number
+        flash[:success] = "Checked In."
+        redirect_to root_url
+      else
+        respond_to do |format|
           format.json { respond_with_bip(@micropost) }
-          flash[:success] = "Edit saved."
           redirect_to root_url
         end
-      else
-        redirect_to root_url
       end
+    else
+      redirect_to root_url
     end
   end
 
