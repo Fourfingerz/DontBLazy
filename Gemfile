@@ -29,7 +29,7 @@ gem "interactor-rails", "~> 2.0"  # Get out of bloated models!
 gem 'protected_attributes'  # Allows use of attr_accessible in Rails 4
 gem 'figaro' # Secrets
 gem 'dotiw' # More precise distance_of_time_in_words
-gem 'best_in_place', github: 'bernat/best_in_place'
+gem 'best_in_place', github: 'bernat/best_in_place' # Inline edits of DB items
 
 group :development, :test do
   gem 'sqlite3',     '1.3.9'
@@ -63,4 +63,5 @@ group :production do
   gem 'pg',             '0.17.1'
   gem 'rails_12factor', '0.0.2'
   gem 'puma',           '2.11.1'
+  gem 'dynopoker' # pokes dyno every 30 minutes to prevent slow Heroku hosting
 end

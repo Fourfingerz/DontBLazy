@@ -87,4 +87,10 @@ Rails.application.configure do
 
   # DBL JavaScript permissions go here
   config.assets.precompile += %w( active_tasks.js )
+
+  Dynopoker.configure do |config|
+    config.address = 'http://dontblazy.herokuapp.com'
+  # config.enable = false # default is true
+  # config.poke_frequency = 123 # default is 1800s (30min)
+  end
 end
