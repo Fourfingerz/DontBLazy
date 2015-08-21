@@ -7,16 +7,25 @@
   <div class="field">
     <%= f.label "You want to:" %>
     <%= f.text_area :content, placeholder: "ex. study at least 3 hours today..." %>
-    <small>^ This message will be sent via SMS to notify selected accountability buddies.</small>
+    <small>^ This message will be sent via SMS to notify accountability buddy.</small>
   </div>
   <div class="select">
-    <%= f.label "For" %>
+    <%= f.label "For:" %>
     <%= f.select(:days_to_complete, options_for_select([
                                       ['Today (one check-in)', 1], ['2 days (two check-ins)', 2],
                                       ['3 days (three check-ins)', 3], ['4 days (four check-ins)', 4],
                                       ['5 days (five check-ins)', 5]
                                     ])) %>
   </div>
+  <div class="recipients">
+    <% if current_user.recipients %>
+      <%= f.label "With your accountability buddy as:" %>
+      <%= f.collection_select(:recipient_ids, current_user.recipients, :id, :name) %>
+    <% else %>
+      <p>Add a buddy here!</p>
+    <% end %>
+  </div>
+
   <span class="picture">
     <%= f.label "Attached picture" %>
     <%= f.file_field :picture, accept: 'image/jpeg,image/gif,image/png' %>

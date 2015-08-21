@@ -1,0 +1,15 @@
+<!-- Form for adding recipients belonging to a user -->
+
+<div id="add-recipient">
+  <h3>Add an accountability buddy</h3>
+  <%= form_for @recipient, remote: true, :url => some_path do |f| %>
+	<div class="form-group">
+	  <%= f.text_field :name, :placeholder => "Enter name" %>
+	  <%= f.text_field :phone, :placeholder => "Enter phone starting with '1' if US number" %>
+	</div>
+	  <%= f.submit "Add", class: "btn btn-primary" %>
+  <% end %>
+</div>
+
+<!-- Show all recipients and add recipients from a search list of all of website's users -->
+
