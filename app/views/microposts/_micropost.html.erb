@@ -5,10 +5,10 @@
 
   <!-- Only current_user is allowed to edit post -->
   <% if current_user?(micropost.user) %>
-    <span class="title"><%= best_in_place micropost, :title %> <span class="glyphicon glyphicon-pencil" id="title-pencil" aria-hidden="true"></span></span>
+    <span class="title"><%= best_in_place micropost, :title %> <span class="glyphicon glyphicon-pencil" id="title-pencil-big" aria-hidden="true"></span></span>
     <span class="content">
       <span class="glyphicon glyphicon-comment" aria-hidden="true"></span>
-      <%= best_in_place micropost, :content %> <span class="glyphicon glyphicon-pencil" id="title-pencil" aria-hidden="true"></span>
+      <%= best_in_place micropost, :content %> <span class="glyphicon glyphicon-pencil" id="title-pencil-small" aria-hidden="true"></span>
       </br>
   <% else %>
     <span class="title"><%= micropost.title %></span>

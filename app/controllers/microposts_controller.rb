@@ -59,10 +59,10 @@ class MicropostsController < ApplicationController
     # Checks each character in SMS against goals ID map from User's column
       processed_body = @message_body.split(",")
       processed_body.each do |c|
-          id_int = c.to_i  # datatype stupidity
-          @micropost = Micropost.find_by(:id => @phone_owner.current_tasks_map.find{|id| id["task"] == id_int }["micropost id"]) 
-          @micropost.checking_in_number
-          @micropost.send_day_completed_sms 
+        id_int = c.to_i  # datatype stupidity
+        @micropost = Micropost.find_by(:id => @phone_owner.current_tasks_map.find{|id| id["task"] == id_int }["micropost id"]) 
+        @micropost.checking_in_number
+        @micropost.send_day_completed_sms 
       end
     end
     render xml: "<Response/>"
