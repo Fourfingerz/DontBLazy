@@ -7,7 +7,7 @@
   <div class="field">
     <%= f.label "You want to:" %>
     <%= f.text_area :content, placeholder: "ex. study at least 3 hours today..." %>
-    <small>^ This message will be sent via SMS to notify accountability buddy.</small>
+    <small>^ This message will be sent via SMS to notify accountability buddy if you miss your daily tasks.</small>
   </div>
   <div class="select">
     <%= f.label "For:" %>
@@ -20,9 +20,9 @@
   <div class="recipients">
     <% if current_user.recipients %>
       <%= f.label "With your accountability buddy as:" %>
-      <%= f.collection_select(:recipient_ids, current_user.recipients, :id, :name) %>
+      <%= f.collection_select(:recipient_ids, current_user.recipients, :id, :name, {:prompt => '...'}) %>
     <% else %>
-      <p>Add a buddy here!</p>
+      <p>No accountability buddies? Add one!</p>
     <% end %>
   </div>
 

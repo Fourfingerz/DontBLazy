@@ -1,9 +1,17 @@
-<!-- Form for adding recipients belonging to a user -->
+<!-- Gateway buttons. Existing DBL user or not? -->
+<div id="gateway">
+  <h3>Is the buddy currently an user of DBL?</h3>
+  <div class="btn-group">
+  <%= link_to "Yes", "?type=1", :class => "btn" %>
+  <%= link_to "No", "?type=2", :class => "btn" %>
+  </div>
+</div>
 
+<!-- Form for adding recipients from STRATCH (Non DBL user) -->
 <div id="add-recipient">
   <h3>Add an accountability buddy</h3>
   <%= form_for @recipient, remote: true, :url => some_path do |f| %>
-	<div class="form-group">
+	<div class="custom-form-group">
 	  <%= f.text_field :name, :placeholder => "Enter name" %>
 	  <%= f.text_field :phone, :placeholder => "Enter phone starting with '1' if US number" %>
 	</div>
@@ -11,5 +19,10 @@
   <% end %>
 </div>
 
-<!-- Show all recipients and add recipients from a search list of all of website's users -->
+<!-- Show all recipients from a search list of all of website's users -->
+<div id="add-recipient-from-users">
+
+</div>
+
+
 
