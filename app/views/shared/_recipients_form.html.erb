@@ -1,16 +1,27 @@
-<!-- Gateway buttons. Existing DBL user or not? -->
-<div id="gateway">
-  <h3>Is the buddy currently an user of DBL?</h3>
-  <div class="btn-group">
-  <%= link_to "Yes", "?type=1", :class => "btn" %>
-  <%= link_to "No", "?type=2", :class => "btn" %>
-  </div>
-</div>
+<%# Conditionally set remote: true. Also, passing model name as data attribute %>
+<% modal ||= false %>
+<% remote = modal ? true : false %>
 
 <!-- Form for adding recipients from STRATCH (Non DBL user) -->
 <div id="add-recipient">
   <h3>Add an accountability buddy</h3>
-  <%= form_for @recipient, remote: true, :url => some_path do |f| %>
+  <%= form_for(@recipient, remote: remote, html: {role: :form, 'data-model' => 'recipient'} do |f| %>
+
+    <% if @recipient.errors.any? %>
+      <div id="error_explanation">
+        <h2><%= pluralize(@recipient.errors.count, "error") %> prohibited this recipient from being saved:</h2>
+
+        <ul>
+        <% @recipient.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+        </ul>
+      </div>
+     <% end %>
+
+
+
+
 	<div class="custom-form-group">
 	  <%= f.text_field :name, :placeholder => "Enter name" %>
 	  <%= f.text_field :phone, :placeholder => "Enter phone starting with '1' if US number" %>
@@ -18,11 +29,4 @@
 	  <%= f.submit "Add", class: "btn btn-primary" %>
   <% end %>
 </div>
-
-<!-- Show all recipients from a search list of all of website's users -->
-<div id="add-recipient-from-users">
-
-</div>
-
-
 
