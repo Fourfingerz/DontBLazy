@@ -1,17 +1,20 @@
 class RecipientsController < ApplicationController
   def new
-  	@recipient = Recipient.new
+    @recipient = Recipient.new
   end
-
+  
   def create
   	@recipient = current_user.recipients.build(recipient_params)
-  	if @recipient.save
-  	  flash[:success] = "Recipient successfully created"
-  	  redirect_to root_url
-  	else
-  	  flash.now[:danger] = "Invalid Recipient"
-  	  render 'static_pages/home'
-  	 end
+  	respond_to do |format|
+      if @recipient.save
+        format.html { redirect_to root_url, notice: 'Accountability buddy was successfully created.' }
+      else
+        format.html { render action: 'new' }
+        format.json { render json: @recipient.errors, status: :unprocessable_entity }
+        # added:
+        format.js   { render json: @recipient.errors, status: :unprocessable_entity }
+      end
+    end
   end
 
   def show

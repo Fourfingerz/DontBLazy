@@ -18,12 +18,8 @@
                                     ])) %>
   </div>
   <div class="recipients">
-    <% if current_user.recipients %>
-      <%= f.label "With your accountability buddy as:" %>
-      <%= f.collection_select(:recipient_ids, current_user.recipients, :id, :name, {:prompt => '...'}) %>
-    <% else %>
-      <p>No accountability buddies? Add one!</p>
-    <% end %>
+    <%= f.label "With your accountability buddy as:" %>
+    <%= f.collection_select(:recipient_ids, current_user.recipients, :id, :name, {:prompt => '...'}) %>
   </div>
 
   <span class="picture">

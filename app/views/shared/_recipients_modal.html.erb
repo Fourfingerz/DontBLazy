@@ -1,0 +1,21 @@
+  <%# Added Bootstrap data modal attribute %>
+  <%= link_to 'Add Partners', '#new_person_modal', 'data-toggle' => 'modal' %>
+
+  <%# Bootstrap modal markup. @see: http://getbootstrap.com/javascript/#modals %>
+  <div class="modal fade" id="new_person_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4 class="modal-title" id="myModalLabel">Add new accountability buddy</h4>
+        </div>
+        <div class="modal-body">
+          <%# Render the new recipient form (passing modal => true to enable remote => true) %>
+          <%= render 'shared/recipients_form', modal: true %>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
