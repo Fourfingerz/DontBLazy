@@ -8,10 +8,11 @@ class RecipientsController < ApplicationController
   	respond_to do |format|
       if @recipient.save
         format.html { redirect_to root_url, notice: 'Accountability buddy was successfully created.' }
+        format.json { render action: 'show', status: :created, location: @recipient }
+        format.js   { render action: 'show', status: :created, location: @recipient }
       else
         format.html { render action: 'new' }
         format.json { render json: @recipient.errors, status: :unprocessable_entity }
-        # added:
         format.js   { render json: @recipient.errors, status: :unprocessable_entity }
       end
     end
