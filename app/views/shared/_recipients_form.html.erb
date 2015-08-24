@@ -4,7 +4,6 @@
 
 <!-- Form for adding recipients from STRATCH (Non DBL user) -->
 <div id="add-recipient">
-  <h3>Add an accountability buddy</h3>
   <%= form_for(@recipient, remote: remote, html: {role: :form, 'data-model' => 'recipient'}) do |f| %>
 
     <% if @recipient.errors.any? %>
@@ -21,8 +20,9 @@
 
 	<div class="custom-form-group">
 	  <%= f.text_field :name, :placeholder => "Enter name" %>
-	  <%= f.text_field :phone, :placeholder => "Enter phone starting with '1' if US number" %>
+	  <%= f.text_field :phone, :placeholder => "Enter phone starting with '1'" %>
 	</div>
+
 	  <%= f.submit "Add", class: "btn btn-primary" %>
   <% end %>
 </div>
