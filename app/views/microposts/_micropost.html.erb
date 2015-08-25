@@ -27,7 +27,9 @@
 
     <!-- Displays assigned accountability buddy -->
     <% if current_user?(micropost.user) %>
-      <%= micropost.recipients.first.name %>
+      <% if buddy = micropost.recipients.first %>
+        <%= buddy.name %>
+      <% end %>
     <% end %>
 
     <!-- Deadline Backend Logic -->

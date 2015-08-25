@@ -17,10 +17,11 @@
                                       ['5 days (five check-ins)', 5]
                                     ])) %>
   </div>
-  <%= f.fields_for @recipients do |ff| %>
+
+  <%= f.fields_for :micropost_recipient do |ff| %>
     <div class="recipients">
       <%= ff.label "With your accountability buddy as:" %>
-      <%= ff.collection_select(:recipient_ids, current_user.recipients, :id, :name, {:prompt => '...'}) %>
+      <%= ff.collection_select(:recipient_ids, current_user.recipients, :id, :name, {:prompt => 'None Selected'}) %>
     </div>
   <% end %>
 

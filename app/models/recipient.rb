@@ -6,4 +6,5 @@ class Recipient < ActiveRecord::Base
   validates :phone, presence: true, length: { minimum: 8, maximum: 25 },
                     uniqueness: { case_sensitive: false }
   validates :user_id, presence: true
+  accepts_nested_attributes_for :micropost_recipients
 end

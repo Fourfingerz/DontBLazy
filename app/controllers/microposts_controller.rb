@@ -76,7 +76,8 @@ class MicropostsController < ApplicationController
                                         :completed, :check_in_current, 
                                         :days_to_complete, :days_completed, 
                                         :days_remaining, :current_day,
-                                        :late_but_current, :active)
+                                        :late_but_current, :active,
+                                        micropost_recipient_attributes: [:recipient_id] )
     end
     
     def correct_user
