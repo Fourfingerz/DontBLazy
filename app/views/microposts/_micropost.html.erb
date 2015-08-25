@@ -25,6 +25,11 @@
 
     <%= image_tag micropost.picture.url if micropost.picture? %>
 
+    <!-- Displays assigned accountability buddy -->
+    <% if current_user?(micropost.user) %>
+      <%= micropost.recipients.first.name %>
+    <% end %>
+
     <!-- Deadline Backend Logic -->
       <!-- Vars --> 
     <% if micropost.active == false %>

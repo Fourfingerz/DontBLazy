@@ -17,10 +17,12 @@
                                       ['5 days (five check-ins)', 5]
                                     ])) %>
   </div>
-  <div class="recipients">
-    <%= f.label "With your accountability buddy as:" %>
-    <%= f.collection_select(:recipient_ids, current_user.recipients, :id, :name, {:prompt => '...'}) %>
-  </div>
+  <%= f.fields_for @recipients do |ff| %>
+    <div class="recipients">
+      <%= ff.label "With your accountability buddy as:" %>
+      <%= ff.collection_select(:recipient_ids, current_user.recipients, :id, :name, {:prompt => '...'}) %>
+    </div>
+  <% end %>
 
   <span class="picture">
     <%= f.label "Attached picture" %>
