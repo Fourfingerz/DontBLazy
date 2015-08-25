@@ -18,6 +18,7 @@ gem 'turbolinks',              '2.3.0'
 gem 'jbuilder',                '2.2.3'
 gem 'sdoc',                    '0.4.0', group: :doc
 gem 'responders',              '2.0.0' 
+gem 'cocoon'
 
 # For SMS framework
 gem 'twilio-ruby' # SMS
