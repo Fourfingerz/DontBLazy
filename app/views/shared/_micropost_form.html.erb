@@ -7,7 +7,7 @@
   <div class="field">
     <%= f.label "You want to:" %>
     <%= f.text_area :content, placeholder: "ex. study at least 3 hours today..." %>
-    <small>^ This message will be sent via SMS to notify accountability buddy if you miss your daily tasks.</small>
+    <small>^ This message will be sent via SMS to notify accountability buddy ONLY if you miss your goal for the day.</small>
   </div>
   <div class="select">
     <%= f.label "For:" %>
@@ -20,7 +20,7 @@
 
   <%= f.fields_for :micropost_recipient do |ff| %>
     <div class="recipients">
-      <%= ff.label "With your accountability buddy as:" %>
+      <%= ff.label "With optional accountability buddy as:" %>
       <%= ff.collection_select(:recipient_ids, current_user.recipients, :id, :name, {:prompt => 'None Selected'}) %>
     </div>
   <% end %>

@@ -20,7 +20,7 @@
 
     <% if micropost.active %>
       <span class="glyphicon glyphicon-time" aria-hidden="true"></span>
-      Currently on day <%= micropost.current_day %> of <%= micropost.days_to_complete %>.
+      Currently on day <%= micropost.current_day %> of <%= micropost.days_to_complete %>.</br>
     <% end %>
 
     <%= image_tag micropost.picture.url if micropost.picture? %>
@@ -28,7 +28,7 @@
     <!-- Displays assigned accountability buddy -->
     <% if current_user?(micropost.user) %>
       <% if buddy = micropost.recipients.first %>
-        <%= buddy.name %>
+        <span class="glyphicon glyphicon-eye-open" id="buddy-eye-small" aria-hidden="true"></span> <%= buddy.name %></br>
       <% end %>
     <% end %>
 

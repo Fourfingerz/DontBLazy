@@ -218,7 +218,7 @@ class Micropost < ActiveRecord::Base
   def foo
   end
   handle_asynchronously :foo, :owner => Proc.new { |o| o  }
-  
+
   private
   
     # Validates the size of an uploaded picture.

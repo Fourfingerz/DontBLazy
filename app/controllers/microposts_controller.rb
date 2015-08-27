@@ -7,6 +7,15 @@ class MicropostsController < ApplicationController
   
   def create
     @micropost = current_user.microposts.build(micropost_params)
+    @micropost.save
+
+    # Did the user add accountability buddies?
+    buddies = params[:micropost][:micropost_recipient][:recipient_ids]
+      if !buddies.empty?
+        @micropost_recipients = @micropost.micropost_recipients.build(:recipient_id => buddies)
+        @micropost_recipients.save
+      end
+
     if @micropost.save
       flash[:success] = "Goal Added! A text message has been sent to your phone!"
       redirect_to root_url
@@ -77,7 +86,7 @@ class MicropostsController < ApplicationController
                                         :days_to_complete, :days_completed, 
                                         :days_remaining, :current_day,
                                         :late_but_current, :active,
-                                        micropost_recipient_attributes: [:recipient_id] )
+                                        micropost_recipients_attributes: [:recipient_id] )
     end
     
     def correct_user
