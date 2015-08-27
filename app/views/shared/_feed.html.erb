@@ -3,4 +3,6 @@
     <%= render @feed_items %>
   </ol>
   <%= will_paginate @feed_items %>
+<% else %>
+  <!-- Link and prompt to FOLLOW other users -->
 <% end %>
