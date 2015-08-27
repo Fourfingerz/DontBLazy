@@ -171,7 +171,7 @@ class User < ActiveRecord::Base
     end
     active_goals = sms_arr.join(" ")
     active_goals.slice! "0"  # Temporary solution for annoying ZERO
-    active_goals_summary = "DontBLazy Bot: Reply with corresponding number to check in your goals. For multiple check-ins, separate by comma. ex 1,2,3. Your Goals:" + active_goals
+    active_goals_summary = "DontBLazy App: Reply with corresponding number to check in your goals. For multiple check-ins, separate by comma. ex 1,2,3. Your Goals:" + active_goals
   end
 
   def send_status_sms 
@@ -180,7 +180,7 @@ class User < ActiveRecord::Base
     if status_sms =~ /\d/
       send_text_message(status_sms, self.phone_number)
     else
-      no_current_tasks_sms = "You don't have any pending tasks! Go play! (Or not)"
+      no_current_tasks_sms = "You don't have any pending tasks!"
       send_text_message(no_current_tasks_sms, self.phone_number)
     end
   end

@@ -13,7 +13,7 @@ class Micropost < ActiveRecord::Base
   accepts_nested_attributes_for :micropost_recipients
   after_create :set_initial_state
   after_create :schedule_new_day
-  #after_create :send_user_status_sms
+  after_create :send_user_status_sms
 
   # DBL Logic
 
@@ -105,6 +105,19 @@ class Micropost < ActiveRecord::Base
   end
 
   # UNTESTED BY RSPEC
+  def send_bad_news_to_buddies
+    user = User.find_by(:id => self.user_id)
+    name = user.name
+    recipients = self.recipients
+    activity = self.title
+
+    shaming_message = "DontBLazy App: Your friend " + name + " has promised to " + activity + ". " + "They missed their goal today, tsk tsk!"
+    recipients.each do |recipient|
+      send_text_message(shaming_message, recipient.phone)
+    end  
+  end
+
+  # UNTESTED BY RSPEC
   def send_four_hour_reminder
     user = User.find_by(:id => self.user_id)
     activity = self.title
@@ -112,7 +125,7 @@ class Micropost < ActiveRecord::Base
     num_string = num.to_s
     day = self.current_day
     day_string = day.to_s
-    four_hour_message = "DontBLazy Bot: This is a reminder to complete day " + day_string + " of your task: " + activity + ". Check in via dontblazy.herokuapp.com or reply to this text with the number: " + num_string + ". You have four hours remaining."
+    four_hour_message = "DontBLazy App: This is a reminder to complete day " + day_string + " of your task: " + activity + ". Check in via dontblazy.herokuapp.com or reply to this text with the number: " + num_string + ". You have four hours remaining."
     send_text_message(four_hour_message, user.phone_number)
   end
 
@@ -130,6 +143,7 @@ class Micropost < ActiveRecord::Base
     else 
     # User has NOT checked in via SMS or website and is NOW DUE
       bad_check_in_tally
+      send_bad_news_to_buddies if !self.recipients.empty?
       schedule_new_day if self.days_remaining > 0
       if self.days_remaining == 0
         inactive_cleanup 
