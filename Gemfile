@@ -25,12 +25,12 @@ gem 'twilio-ruby' # SMS
 gem 'delayed_job_active_record' # Cron SMS jobs
 gem 'delayed_job_recurring'
 gem 'daemons' # Required for Cron jobs
-gem 'phony_rails' # Phone validations
+gem 'phony_rails' # Phone normalization
 gem "interactor-rails", "~> 2.0"  # Get out of bloated models!
 gem 'protected_attributes'  # Allows use of attr_accessible in Rails 4
 gem 'figaro' # Secrets
 gem 'dotiw' # More precise distance_of_time_in_words
-gem 'best_in_place', github: 'bernat/best_in_place' # Inline edits of DB items
+gem 'best_in_place', github: 'bernat/best_in_place' # Inline edits of DB item
 
 group :development, :test do
   gem 'sqlite3',     '1.3.9'
