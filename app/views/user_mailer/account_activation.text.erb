@@ -1,4 +1,5 @@
-Hi <%= @user.name %>,
+<% full_name = @user.name + " " + @user.last_name %>
+Hi <%= full_name %>,
 
 Welcome to the Sample App! Click on the link below to activate your account:
 

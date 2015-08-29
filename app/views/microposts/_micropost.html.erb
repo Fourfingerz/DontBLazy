@@ -1,6 +1,7 @@
 <li id="micropost-<%= micropost.id %>">
   <%= link_to gravatar_for(micropost.user, size: 50), micropost.user %>
-  <span class="user"><%= link_to micropost.user.name, micropost.user %></span>
+  <% full_name = micropost.user.name + " " + micropost.user.last_name %>
+  <span class="user"><%= link_to full_name, micropost.user %></span>
   </br>
 
   <!-- Only current_user is allowed to edit post -->

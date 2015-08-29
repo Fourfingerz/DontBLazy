@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150814224341) do
+ActiveRecord::Schema.define(version: 20150829043800) do
 
   create_table "delayed_jobs", force: :cascade do |t|
     t.integer  "priority",       default: 0, null: false
@@ -54,7 +54,6 @@ ActiveRecord::Schema.define(version: 20150814224341) do
     t.integer  "days_completed"
     t.integer  "days_remaining"
     t.integer  "current_day"
-    t.boolean  "late_but_current"
     t.boolean  "active"
     t.boolean  "day_already_completed"
   end
@@ -84,13 +83,13 @@ ActiveRecord::Schema.define(version: 20150814224341) do
   create_table "users", force: :cascade do |t|
     t.string   "name"
     t.string   "email"
-    t.datetime "created_at",                           null: false
-    t.datetime "updated_at",                           null: false
+    t.datetime "created_at",                        null: false
+    t.datetime "updated_at",                        null: false
     t.string   "password_digest"
     t.string   "remember_digest"
-    t.boolean  "admin",                default: false
+    t.boolean  "admin",             default: false
     t.string   "activation_digest"
-    t.boolean  "activated",            default: false
+    t.boolean  "activated",         default: false
     t.datetime "activated_at"
     t.string   "reset_digest"
     t.datetime "reset_sent_at"
@@ -98,8 +97,7 @@ ActiveRecord::Schema.define(version: 20150814224341) do
     t.string   "phone_pin"
     t.boolean  "phone_verified"
     t.text     "current_tasks_map"
-    t.integer  "micropost_id_due_now"
-    t.string   "microposts_due_queue"
+    t.string   "last_name"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true

@@ -1,6 +1,7 @@
 FactoryGirl.define do
   factory :user do
     name { Faker::Name.name }
+    last_name { Faker::Name.last_name }
     email { Faker::Internet.email }
     phone { Faker::PhoneNumber.phone_number }
     password "foobar"
@@ -19,6 +20,7 @@ FactoryGirl.define do
 
   factory :recipient do
     name { Faker::Name.name }
+    last_name { Faker::Name.last_name }
     phone { Faker::PhoneNumber.phone_number }
     user_id { 1 }
   end
@@ -40,6 +42,7 @@ FactoryGirl.define do
 
   # factory :user do
   #   name { Faker::Name.name }
+  #   last_name { Faker::Name.last_name }
   #   email { Faker::Internet.email }
   #   password "foobar"
   #   password_confirmation "foobar"
@@ -65,6 +68,7 @@ FactoryGirl.define do
 
   # factory :recipient do
   #   name { Faker::Name.name }
+  #   last_name { Faker::Name.last_name }
   #   phone { Faker::PhoneNumber.phone_number }
   #   user_id { that user here }
 

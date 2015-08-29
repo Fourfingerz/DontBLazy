@@ -3,7 +3,8 @@
   <aside class="col-md-4">
     <section class="user_info">
       <%= gravatar_for @user %>
-      <h1><%= @user.name %></h1>
+        <% full_name = @user.name + " " + @user.last_name %>
+      <h1><%= full_name %></h1>
       <span><%= link_to "view my profile", @user %></span>
       <span><b>Goals:</b> <%= @user.microposts.count %></span>
     </section>

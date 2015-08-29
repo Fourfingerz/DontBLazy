@@ -107,11 +107,12 @@ class Micropost < ActiveRecord::Base
   # UNTESTED BY RSPEC
   def send_bad_news_to_buddies
     user = User.find_by(:id => self.user_id)
-    name = user.name
+    first_name = user.name
+    last_name = user.last_name
     recipients = self.recipients
     activity = self.title
 
-    shaming_message = "DontBLazy App: Your friend " + name + " has promised to " + activity + ". " + "They missed their goal today, tsk tsk!"
+    shaming_message = "DontBLazy App: Your friend " + name + " " + last_name + " has promised to " + activity + ". " + "They missed their goal today, tsk tsk!"
     recipients.each do |recipient|
       send_text_message(shaming_message, recipient.phone)
     end  
