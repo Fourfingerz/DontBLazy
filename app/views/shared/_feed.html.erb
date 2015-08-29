@@ -4,5 +4,5 @@
   </ol>
   <%= will_paginate @feed_items %>
 <% else %>
-  <!-- Link and prompt to FOLLOW other users -->
+  <h4>Feed a little lonely? Let's <%= link_to "Discover", users_path %> some users!</h4>
 <% end %>
