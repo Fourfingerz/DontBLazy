@@ -29,16 +29,11 @@
     <h3><%= @title %></h3>
 
     <% if @recipients.any? %>
-
-      <% @recipients.each do |recipient| %>
-        <ul class="users follow">
-          <%#= render @users %>
-          <%= recipient.name %> | 
-          <%= recipient.phone %>
-        </ul>
-      <% end %>  
-
+      <ul class="users follow">
+        <%= render @recipients %>
+      </ul>
       <%= will_paginate @recipients %>
     <% end %>
+    
   </div>
 </div>

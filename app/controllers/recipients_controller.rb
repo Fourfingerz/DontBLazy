@@ -39,9 +39,11 @@ class RecipientsController < ApplicationController
   end
 
   def destroy
-  	Recipient.find(params[:id]).destroy
+  	@recipient = Recipient.find(params[:id])
+    @owner_id = @recipient.user_id
+    @recipient.destroy
   	flash[:success] = "Recipient deleted"
-  	redirect_to recipients_url
+  	redirect_to recipients_user_path(@owner_id)
   end
 
   private

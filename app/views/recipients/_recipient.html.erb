@@ -1,0 +1,18 @@
+<div class="row">
+  <div class="col-md-12">
+  	<li>
+
+	<div class="col-md-10">
+	  <%= recipient.name %> | <%= recipient.phone %>
+	</div>
+
+	<div class="col-md-2">
+	  <% if current_user.id == recipient.user_id %>
+	  | <%= link_to "delete", recipient, method: :delete,
+	                                  data: { confirm: "You sure?" } %>
+	  <% end %>
+	</div>
+
+	</li>
+  </div>
+</div>
