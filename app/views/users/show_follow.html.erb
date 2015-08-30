@@ -4,8 +4,7 @@
     <section class="user_info">
       <%= gravatar_for @user %>
         <% full_name = @user.name + " " + @user.last_name %>
-      <h1><%= full_name %></h1>
-      <span><%= link_to "view my profile", @user %></span>
+      <span><h1><%= link_to full_name, current_user %></h1></span>
       <span><b>Goals:</b> <%= @user.microposts.count %></span>
     </section>
     <section class="stats">
