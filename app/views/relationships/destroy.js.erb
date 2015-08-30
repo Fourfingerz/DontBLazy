@@ -1,2 +1,9 @@
-$("#follow_form").html("<%= escape_javascript(render('users/follow')) %>");
-$("#followers").html('<%= @user.followers.count %>');
+var indexed_form = "follow_form_<%=@user.id%>"
+if ( document.getElementById(indexed_form) ){
+	var jquery_indexed_form = "#" + indexed_form
+	$(jquery_indexed_form).html("<%= escape_javascript(render('users/follow')) %>");
+}
+else {
+	$("#follow_form").html("<%= escape_javascript(render('users/follow')) %>");
+	$("#followers").html('<%= @user.followers.count %>');
+}
