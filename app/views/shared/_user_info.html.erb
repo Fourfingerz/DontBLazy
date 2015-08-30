@@ -2,4 +2,4 @@
   <% full_name = current_user.name + " " + current_user.last_name %>
 <h1><%= full_name %></h1>
 <span><%= link_to "view my profile", current_user %></span>
-<span><%= pluralize(current_user.microposts.count, "goal") %></span>
+<span><%= pluralize(current_user.microposts.where(:active => true).count, "active goal") %></span>
