@@ -13,7 +13,7 @@ class Micropost < ActiveRecord::Base
   accepts_nested_attributes_for :micropost_recipients
   after_create :set_initial_state
   after_create :schedule_new_day
-  after_create :send_user_status_sms
+  #after_create :send_user_status_sms
 
   # DBL Logic
 

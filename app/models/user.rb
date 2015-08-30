@@ -21,8 +21,6 @@ class User < ActiveRecord::Base
   validates :password, presence: true, length: { minimum: 6 }, allow_nil: true
   # DBL
   has_many :recipients, dependent: :destroy
-  phony_normalize :phone_number, :default_country_code => 'US'
-  validates_plausible_phone :phone_number
   serialize :current_tasks_map
   serialize :microposts_due_queue
 
