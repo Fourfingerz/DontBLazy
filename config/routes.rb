@@ -15,7 +15,7 @@ Rails.application.routes.draw do
       patch 'phone_entry', :action => :add_phone
     end
     member do
-      get :following, :followers
+      get :following, :followers, :recipients
     end
   end
   resources :account_activations, only: [:edit]

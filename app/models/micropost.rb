@@ -4,7 +4,7 @@ class Micropost < ActiveRecord::Base
   mount_uploader :picture, PictureUploader
   validates :user_id, presence: true
   validates :title, presence: true, length: { minimum: 5, maximum: 50 }
-  validates :content, presence: true, length: { maximum: 140 }
+  validates :content, length: { maximum: 140 }
   validate  :picture_size
   # DBL
   has_many :micropost_recipients, dependent: :destroy

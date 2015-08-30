@@ -12,8 +12,10 @@
     </strong>
     followers
   </a>
+  <a href="<%= recipients_user_path(@user) %>">
     <strong id="recipients" class="stat">
       <%= @user.recipients.count %>
     </strong>
     buddies
+  </a>
 </div>

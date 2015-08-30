@@ -60,6 +60,13 @@ class UsersController < ApplicationController
     render 'show_follow'
   end
 
+  def recipients
+    @title = "Recipients"
+    @user  = User.find(params[:id])
+    @recipients = @user.recipients.paginate(page: params[:page])
+    render 'show_recipient'
+  end
+
   # DBL Phone Verification
 
   def add_phone
