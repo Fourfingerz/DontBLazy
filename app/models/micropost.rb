@@ -112,7 +112,7 @@ class Micropost < ActiveRecord::Base
     recipients = self.recipients
     activity = self.title
 
-    shaming_message = "DontBLazy App: Your friend " + name + " " + last_name + " has promised to " + activity + ". " + "They missed their goal today, tsk tsk!"
+    shaming_message = "DontBLazy App: Your friend " + first_name + " " + last_name + " has promised to " + activity + ". " + "They missed their goal today, tsk tsk!"
     recipients.each do |recipient|
       send_text_message(shaming_message, recipient.phone)
     end  
