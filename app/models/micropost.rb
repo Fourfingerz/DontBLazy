@@ -13,7 +13,7 @@ class Micropost < ActiveRecord::Base
   accepts_nested_attributes_for :micropost_recipients
   after_create :set_initial_state
   after_create :schedule_new_day
-  after_create :send_user_status_sms
+  #after_create :send_user_status_sms
 
   # DBL Logic
 
@@ -178,8 +178,8 @@ class Micropost < ActiveRecord::Base
   # Schedule multiple delayed job based on number of days and task
   def schedule_check_in_deadline
     # TEST CUT TIME
-    #job = self.delay(run_at: 5.minutes.from_now).check_in # CUT TIME
-    job = self.delay(run_at: 24.hours.from_now).check_in 
+    job = self.delay(run_at: 5.minutes.from_now).check_in # CUT TIME
+    #job = self.delay(run_at: 24.hours.from_now).check_in 
     update_column(:delayed_job_id, job.id)  # Update Delayed_job
     Delayed::Job.find_by(:id => job.id).update_columns(owner_type: "Micropost")  # Associates delayed_job with Micropost ID
     Delayed::Job.find_by(:id => job.id).update_columns(owner_job_type: "24 Hour Deadline")
@@ -188,8 +188,8 @@ class Micropost < ActiveRecord::Base
   end
 
   def schedule_four_hour_reminder
-    #job = self.delay(run_at: 3.minutes.from_now).send_four_hour_reminder # CUT TIME 
-    job = self.delay(run_at: 20.hours.from_now).send_four_hour_reminder
+    job = self.delay(run_at: 3.minutes.from_now).send_four_hour_reminder # CUT TIME 
+    #job = self.delay(run_at: 20.hours.from_now).send_four_hour_reminder
     update_column(:delayed_job_id, job.id)  # Update Delayed_job
     Delayed::Job.find_by(:id => job.id).update_columns(owner_type: "Micropost")  # Associates delayed_job with Micropost ID
     Delayed::Job.find_by(:id => job.id).update_columns(owner_job_type: "4 Hour Reminder")
