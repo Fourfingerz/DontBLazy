@@ -126,7 +126,7 @@ class Micropost < ActiveRecord::Base
     num_string = num.to_s
     day = self.current_day
     day_string = day.to_s
-    four_hour_message = "DontBLazy App: This is a reminder to complete day " + day_string + " of your task: " + activity + ". Check in via dontblazy.herokuapp.com or reply to this text with the number: " + num_string + ". You have four hours remaining."
+    four_hour_message = "DontBLazy App: This is a reminder to complete day " + day_string + " of your task: " + activity + ". Check in via www.dontbelazy.today or reply to this text with the number: " + num_string + ". You have four hours remaining."
     send_text_message(four_hour_message, user.phone_number)
   end
 
