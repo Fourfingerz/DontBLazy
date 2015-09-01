@@ -100,7 +100,7 @@ class Micropost < ActiveRecord::Base
     activity = self.title
     current_day = self.current_day.to_s
 
-    day_incomplete_message = "You missed your day " + current_day + " of your task: " + activity + ". Time to giddy up!"
+    day_incomplete_message = "You missed day " + current_day + " of your task: " + activity + ". Time to get serious!"
     send_text_message(day_incomplete_message, user.phone_number)
   end
 
@@ -126,7 +126,7 @@ class Micropost < ActiveRecord::Base
     num_string = num.to_s
     day = self.current_day
     day_string = day.to_s
-    four_hour_message = "DontBLazy App: This is a reminder to complete day " + day_string + " of your task: " + activity + ". Check in via dontblazy.herokuapp.com or reply to this text with the number: " + num_string + ". You have four hours remaining."
+    four_hour_message = "DontBLazy App: This is a reminder to complete day " + day_string + " of your task: " + activity + ". Check in via dontbelazy.today or reply to this text with the number: " + num_string + ". You have four hours remaining."
     send_text_message(four_hour_message, user.phone_number)
   end
 
@@ -144,6 +144,7 @@ class Micropost < ActiveRecord::Base
     else 
     # User has NOT checked in via SMS or website and is NOW DUE
       bad_check_in_tally
+      send_day_incomplete_sms
       send_bad_news_to_buddies if !self.recipients.empty?
       schedule_new_day if self.days_remaining > 0
       if self.days_remaining == 0
