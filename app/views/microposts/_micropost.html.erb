@@ -45,7 +45,7 @@
       <% user = micropost.user %>
 
       <% if micropost.day_already_completed == true %>
-        Next Deadline: <%= distance_of_time(next_due_date, :except => :seconds) %>
+        Checked in today. Next Deadline: <%= distance_of_time(next_due_date, :except => :seconds) %>
       <% else %>
         Next Deadline: <%= distance_of_time(seconds_remaining, :except => :seconds) %>
       <% end %> 
