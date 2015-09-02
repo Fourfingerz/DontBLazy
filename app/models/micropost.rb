@@ -112,7 +112,7 @@ class Micropost < ActiveRecord::Base
     recipients = self.recipients
     activity = self.title
 
-    shaming_message = "DontBLazy App: Your friend " + first_name + " " + last_name + " has promised to " + activity + ". " + "They missed their goal today, tsk tsk!"
+    shaming_message = "DontBLazy App: Your friend " + first_name + " " + last_name + " has promised to do task:" + activity + ". " + "They missed their goal today, tsk tsk!"
     recipients.each do |recipient|
       send_text_message(shaming_message, recipient.phone)
     end  
@@ -179,8 +179,8 @@ class Micropost < ActiveRecord::Base
   # Schedule multiple delayed job based on number of days and task
   def schedule_check_in_deadline
     # TEST CUT TIME
-    #job = self.delay(run_at: 5.minutes.from_now).check_in # CUT TIME
-    job = self.delay(run_at: 24.hours.from_now).check_in 
+    job = self.delay(run_at: 5.minutes.from_now).check_in # CUT TIME
+    #job = self.delay(run_at: 24.hours.from_now).check_in 
     update_column(:delayed_job_id, job.id)  # Update Delayed_job
     Delayed::Job.find_by(:id => job.id).update_columns(owner_type: "Micropost")  # Associates delayed_job with Micropost ID
     Delayed::Job.find_by(:id => job.id).update_columns(owner_job_type: "24 Hour Deadline")
@@ -189,8 +189,8 @@ class Micropost < ActiveRecord::Base
   end
 
   def schedule_four_hour_reminder
-    #job = self.delay(run_at: 3.minutes.from_now).send_four_hour_reminder # CUT TIME 
-    job = self.delay(run_at: 20.hours.from_now).send_four_hour_reminder
+    job = self.delay(run_at: 3.minutes.from_now).send_four_hour_reminder # CUT TIME 
+    #job = self.delay(run_at: 20.hours.from_now).send_four_hour_reminder
     update_column(:delayed_job_id, job.id)  # Update Delayed_job
     Delayed::Job.find_by(:id => job.id).update_columns(owner_type: "Micropost")  # Associates delayed_job with Micropost ID
     Delayed::Job.find_by(:id => job.id).update_columns(owner_job_type: "4 Hour Reminder")
