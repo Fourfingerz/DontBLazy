@@ -171,7 +171,7 @@ class User < ActiveRecord::Base
                           #    "3 Rowing Session", "4 Yoga Session"]
     end
     active_goals = sms_arr.join(" ")
-    active_goals.slice! " 0."  # Temporary solution for annoying ZERO
+    active_goals.slice! " 0"  # Temporary solution for annoying ZERO
     active_goals_summary = "DontBLazy App: Complete your task, then reply with corresponding number to check in. For multiple check-ins, separate by comma. ex 1,2,3. Your Goals:" + active_goals
   end
 
