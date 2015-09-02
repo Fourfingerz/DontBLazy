@@ -16,6 +16,7 @@
 //= require best_in_place
 //= require bootstrap
 //= require turbolinks
+//= require disqus_rails
 //= require_tree .
 
 
