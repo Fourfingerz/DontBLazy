@@ -1,6 +1,6 @@
   <%# Added Bootstrap data modal attribute %>
   <%= javascript_include_tag "recipient" %>
-  <%= link_to 'Create New Accountability Buddy', '#new_person_modal', 'data-toggle' => 'modal', class: 'btn btn-warning' %>
+  <div class="text center"><%= link_to 'Add New Accountability Buddy', '#new_person_modal', 'data-toggle' => 'modal', class: 'btn btn-warning' %></div>
 
   <%# Bootstrap modal markup. @see: http://getbootstrap.com/javascript/#modals %>
   <div class="modal fade" id="new_person_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

@@ -12,20 +12,20 @@
         <%= render 'users/add_phone' %>
       </section>
       <% else %>
-      <section class="recipients_modal" id="modal_section">
-        <%= render 'shared/recipients_modal' %>
-      </section>
       <section class="micropost_form" id="new_micropost_section">
         <%= render 'shared/micropost_form' %>
       </section>
       <% end %>
     </aside>
     <div class="col-md-6">
-      <h3 class="text-center">Public Feed</h3>
       <%= render 'shared/feed' %>
     </div>
     <div class="col-md-3">
-      <h2>Active Goals</h2>
+    <% if !no_valid_phone? %>
+      <section class="recipients_modal" id="modal_section">
+        <%= render 'shared/recipients_modal' %>
+      </section>
+    <% end %>
       </br>
       <%= render 'shared/to_do' %>
     </div>
