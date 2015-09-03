@@ -39,7 +39,6 @@ class Micropost < ActiveRecord::Base
     self.check_in_current = false
     self.days_completed = 0
     self.days_remaining = self.days_to_complete
-    self.day_already_completed = false
     self.current_day = 1
     self.active = true
     self.save
@@ -50,8 +49,8 @@ class Micropost < ActiveRecord::Base
   def good_check_in_tally
       self.days_remaining -= 1  # DB Column
       self.current_day += 1     # DB Column
-      self.days_completed += 1 if self.day_already_completed == false  
-      self.day_already_completed = false
+      self.days_completed += 1
+      self.check_in_current = false  
       self.save
   end
 
@@ -60,7 +59,7 @@ class Micropost < ActiveRecord::Base
   def bad_check_in_tally
       self.days_remaining -= 1  # DB Column
       self.current_day += 1     # DB Column
-      self.day_already_completed = false
+      self.check_in_current = false
       self.save
   end
 
@@ -161,7 +160,7 @@ class Micropost < ActiveRecord::Base
   # Finds Micropost from mapped number and checks it in
   def checking_in_number
     self.days_completed += 1
-    self.day_already_completed = true
+    self.check_in_current = true
     next_day = self.current_day + 1
     if next_day > self.days_to_complete # For real time feedback
       self.active = false 
@@ -207,7 +206,7 @@ class Micropost < ActiveRecord::Base
   # UNTESTED BY RSPEC
   # Checks to see if selected Micropost is NOT already checked in
   def fresh_and_not_checked_in?
-    !false ^ self.check_in_current && !false ^ self.day_already_completed
+    !false ^ self.check_in_current
     # returns TRUE if it's CLEAN and hasn't been checked into
   end
   

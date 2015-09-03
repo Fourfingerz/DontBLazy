@@ -44,7 +44,7 @@
       <% next_due_date = seconds_remaining + 24.hours %>
       <% user = micropost.user %>
 
-      <% if micropost.day_already_completed == true %>
+      <% if micropost.check_in_current == true %>
         Checked in today. Next Deadline: <%= distance_of_time(next_due_date, :except => :seconds) %>
       <% else %>
         Next Deadline: <%= distance_of_time(seconds_remaining, :except => :seconds) %>
