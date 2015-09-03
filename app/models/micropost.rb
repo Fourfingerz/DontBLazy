@@ -143,8 +143,8 @@ class Micropost < ActiveRecord::Base
       self.save
     else 
     # User has NOT checked in via SMS or website and is NOW DUE
-      bad_check_in_tally
-      send_day_incomplete_sms
+      send_day_incomplete_sms # THIS ALWAYS GOES FIRST b/c CURRENT_DAY 
+      bad_check_in_tally # THEN YOU UPDATE THE DB TALLIES
       send_bad_news_to_buddies if !self.recipients.empty?
       schedule_new_day if self.days_remaining > 0
       if self.days_remaining == 0
