@@ -40,7 +40,8 @@
             url = $(this).attr('data-url');
 
         if (window.DISQUS) {
-
+            // if Disqus is already loaded on the page
+            
             DISQUS.reset({ // Remove the old call
               reload: false,
               config: function () {
@@ -69,7 +70,7 @@
             });
 
         } else {
-
+            // Disqus NOT loaded yet
             var disqus_identifier = parseFloat(identifier),
                 disqus_title = title,
                 disqus_url = url;
