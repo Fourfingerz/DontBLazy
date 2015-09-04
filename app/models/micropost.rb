@@ -11,7 +11,6 @@ class Micropost < ActiveRecord::Base
   has_many :recipients, through: :micropost_recipients
   validates :days_to_complete, presence: true
   accepts_nested_attributes_for :micropost_recipients
-  acts_as_disqusable
   after_create :set_initial_state
   after_create :schedule_new_day
   after_create :send_user_status_sms

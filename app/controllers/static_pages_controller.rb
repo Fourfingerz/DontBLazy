@@ -13,13 +13,6 @@ class StaticPagesController < ApplicationController
     end
   end
 
-  def comments
-    @micropost = Micropost.find(params[:id])
-    respond_to do |format|
-      format.js
-    end
-  end
-
   def help
   end
 

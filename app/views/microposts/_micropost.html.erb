@@ -59,10 +59,7 @@
                                        data: { confirm: "You sure?" } %>
     <% end %>
   </span>
-  
-  <span class="disqus">
-    <%= link_to "Comments", comments_path(:id => micropost.id), :remote => true %>
-
-    <div id="comments_box"></div> <!-- Disqus partial -->
+  <span class="comments">
+    <div class="showDisqus" data-title="<%= micropost.title %>" data-id="<%= micropost.id %>" data-url="dontbelazy.today/microposts/<%= micropost.id %>">Comments</div>
   </span>
 </li>

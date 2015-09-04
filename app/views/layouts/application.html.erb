@@ -20,19 +20,86 @@
       <% flash.each do |message_type, message| %>
         <div class="alert alert-<%= message_type %>"><%= message %></div>
       <% end %>
-      <%= disqus_init :reset => true %>
       <%= yield %>
       <%= render 'layouts/footer' %>
       <%= debug(params) if Rails.env.development? %>
     </div>
+
     <script>
     $(document).ready(function(){
       <%= yield(:javascript_jquery_ready) %>
     });
 
-    // Disqus
-    <%= disqus_init :reset => true %>
+    // *** Disqus *** 
 
+      $('.showDisqus').on('click', function(){   // click event of the show comments button
+        var this_ = $(this);
+            disqus_shortname = 'DontBLazy',
+            title = $(this).attr('data-title'),
+            identifier = parseFloat($(this).attr('data-id')),
+            url = $(this).attr('data-url');
+
+        if (window.DISQUS) {
+
+            DISQUS.reset({ // Remove the old call
+              reload: false,
+              config: function () {
+                this.page.identifier = window.old_identifier;
+                this.page.url = window.old_url;
+                this.page.title = window.old_title;
+              }
+            });
+            $('.showDisqus').show();
+            $('#disqus_thread').remove();
+
+            $('<div id="disqus_thread"></div>').insertAfter(this_);
+
+            setTimeout( function() { // Creates a new call DISQUS, with the new ID
+                DISQUS.reset({
+                  reload: true,
+                  config: function () {
+                    this.page.identifier = identifier;
+                    this.page.url = url;
+                    this.page.title = title;
+                  }
+                });
+                window.old_identifier = identifier;
+                window.old_url = url;
+                window.old_title = title;
+            });
+
+        } else {
+
+            var disqus_identifier = parseFloat(identifier),
+                disqus_title = title,
+                disqus_url = url;
+
+            $('<div id="disqus_thread"></div>').insertAfter(this_);
+
+            (function() {
+                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+
+            setTimeout( function() { // Sorry, there must be a better way to force the ID called correctly
+                DISQUS.reset({
+                  reload: true,
+                  config: function () {
+                    this.page.identifier = identifier;
+                    this.page.url = url;
+                    this.page.title = title;
+                  }
+                });
+            },500);
+
+            window.old_identifier = identifier;
+            window.old_url = url;
+            window.old_title = title;
+
+        }
+        $(this).fadeOut();  // remove the show comments button
+    });
     </script>
   </body>
 </html>
