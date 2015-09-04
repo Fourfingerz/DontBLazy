@@ -9,6 +9,7 @@ Rails.application.routes.draw do
   post   'users/verify'  => 'users#verify'
   delete 'logout'  => 'sessions#destroy'
   post 'process_sms' => 'microposts#receive_sms'
+  get 'comments' => 'static_pages#comments'
   
   resources :users do
     collection do

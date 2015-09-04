@@ -59,7 +59,10 @@
                                        data: { confirm: "You sure?" } %>
     <% end %>
   </span>
+  
   <span class="disqus">
-  <%- disqus_thread micropost.id %>
+    <%= link_to "Comments", comments_path(:id => micropost.id), :remote => true %>
+
+    <div id="comments_box"></div> <!-- Disqus partial -->
   </span>
 </li>

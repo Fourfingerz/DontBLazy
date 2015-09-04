@@ -1,4 +1,4 @@
 <%= link_to gravatar_for(current_user, size: 50), current_user %>
   <% full_name = current_user.name + " " + current_user.last_name %>
 <span><h1><%= link_to full_name, current_user %></h1></span>
-<span><%= pluralize(current_user.microposts.where(:active => true).count, "goal") %></span>
+<span><%= pluralize(current_user.microposts.where(:active => true).count, "active goal") %></span>
