@@ -59,7 +59,9 @@
                                        data: { confirm: "You sure?" } %>
     <% end %>
   </span>
+  </br>
   <span class="comments">
-    <div class="showDisqus" data-title="<%= micropost.title %>" data-id="<%= micropost.id %>" data-url="https://dontbelazy.today/microposts/<%= micropost.id %>">Comments</div>
+    <!-- title cannot > 200 varchar && title must be absolute, ie: "https://blah.com" -->
+    <button class="showDisqus btn btn-default btn-block" data-title="<%= micropost.title %>" data-id="<%= micropost.id %>" data-url="https://dontbelazy.today/microposts/<%= micropost.id %>">Comments</button>
   </span>
 </li>

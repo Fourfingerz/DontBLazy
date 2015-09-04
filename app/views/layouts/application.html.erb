@@ -28,6 +28,24 @@
     <script>
     $(document).ready(function(){
       <%= yield(:javascript_jquery_ready) %>
+      var disqusPublicKey = "<%= ENV['DISQUS_PUBLIC_KEY'] %>";
+      var disqusShortname = "dontblazy";
+      var threadUrl = 'link:' + $('.showDisqus').attr('data-url');
+
+      $.ajax({
+          type: 'GET',
+          url: 'https://disqus.com/api/3.0/threads/set.jsonp',
+          data: { api_key: disqusPublicKey, forum: disqusShortname, thread: threadUrl },
+          cache: false,
+          dataType: 'jsonp',
+          success: function(result) {
+              if (result.response.length === 1) {
+                  btnText = 'Show Comments (' + result.response[0].posts + ')';
+                  $('.showDisqus').html(btnText);
+              }
+          }
+      });
+
     });
 
     // *** Disqus *** 
@@ -83,7 +101,7 @@
                 (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
             })();
 
-            setTimeout( function() { // Sorry, there must be a better way to force the ID called correctly
+            setTimeout( function() { 
                 DISQUS.reset({
                   reload: true,
                   config: function () {
