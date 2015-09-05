@@ -58,6 +58,37 @@
         //   s.src = '//' + disqus_shortname + '.disqus.com/count.js';
         //   (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
 
+        var disqusPublicKey = "<%= ENV["DISQUS_PUBLIC_KEY"] %>";
+        var disqusShortname = "dontblazy"; // Replace with your own shortname
+
+        var urlArray = [];
+          $('.count-comments').each(function () {
+            var url = $(this).attr('data-disqus-url');
+            urlArray.push('link:' + url);
+        });
+
+        $.ajax({
+          type: 'GET',
+          url: "https://disqus.com/api/3.0/threads/set.jsonp",
+          data: { api_key: disqusPublicKey, forum : disqusShortname, thread : urlArray },
+          cache: false,
+          dataType: 'jsonp',
+          success: function (result) {
+
+            for (var i in result.response) {
+
+              var countText = " comments";
+              var count = result.response[i].posts;
+
+              if (count == 1)
+                countText = " comment";
+
+              $('div[data-disqus-url="' + result.response[i].link + '"]').html('<h6>' + count + countText + '</h6>');
+
+            }
+          }
+        });
+
     });
 
     // *** Disqus *** 
