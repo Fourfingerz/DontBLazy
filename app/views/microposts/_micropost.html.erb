@@ -36,13 +36,14 @@
     <!-- Deadline Backend Logic -->
       <!-- Vars --> 
     <% if micropost.active == false %>
+
       <% if micropost.days_completed > micropost.days_to_complete %>
         <% corrected_day = micropost.days_completed - 1 %>
         Status: Completed. Score: <%= corrected_day %>/<%= micropost.days_to_complete %>.
       <% else %>
-        Status: Completed. Score: <%= micropost.days_completed %>/<%= micropost.days_to_complete %>.
-      <% else %>
       Status: Completed. Score: <%= micropost.days_completed %>/<%= micropost.days_to_complete %>.
+      <% end %>
+      
     <% else %> 
       <!-- Ruby Vars -->
       <% due_time = Delayed::Job.where(:user_id => micropost.user.id, :owner_type => "Micropost", :owner_id => micropost.id, :owner_job_type => "24 Hour Deadline").order("created_at DESC").first.run_at %>
