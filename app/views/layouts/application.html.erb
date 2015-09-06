@@ -32,7 +32,7 @@
       // *** Disqus Comment Count ***
 
         var disqusPublicKey = "<%= ENV["DISQUS_PUBLIC_KEY"] %>";
-        var disqusShortname = "dontblazy"; // Replace with your own shortname
+        var disqusShortname = "dontbelazy"; // Replace with your own shortname
 
         var urlArray = [];
           $('.count-comments').each(function () {
@@ -68,7 +68,7 @@
 
       $('.showDisqus').on('click', function(){   // click event of the show comments button
         var this_ = $(this);
-            disqus_shortname = 'dontblazy',
+            disqus_shortname = 'dontbelazy',
             title = $(this).attr('data-title'),
             identifier = parseFloat($(this).attr('data-id')),
             url = $(this).attr('data-url');
