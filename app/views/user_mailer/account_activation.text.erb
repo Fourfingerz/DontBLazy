@@ -1,6 +1,6 @@
 <% full_name = @user.name + " " + @user.last_name %>
 Hi <%= full_name %>,
 
-Welcome to the Sample App! Click on the link below to activate your account:
+Welcome to the Dont B Lazy! Click on the link below to activate your account:
 
 <%= edit_account_activation_url(@user.activation_token, email: @user.email) %>
