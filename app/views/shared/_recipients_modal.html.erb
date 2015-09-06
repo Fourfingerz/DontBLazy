@@ -1,6 +1,6 @@
   <%# Added Bootstrap data modal attribute %>
   <%= javascript_include_tag "recipient" %>
-  <div class="text center"><%= link_to 'Add New Accountability Buddy', '#new_person_modal', 'data-toggle' => 'modal', class: 'btn btn-warning' %></div>
+  <div class="text center"><%= link_to 'Add An Accountability Buddy', '#new_person_modal', 'data-toggle' => 'modal', class: 'btn btn-warning' %></div>
 
   <%# Bootstrap modal markup. @see: http://getbootstrap.com/javascript/#modals %>
   <div class="modal fade" id="new_person_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -8,7 +8,7 @@
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-          <h4 class="modal-title" id="myModalLabel">Add new accountability buddy</h4>
+          <h4 class="modal-title" id="myModalLabel">Add an accountability buddy</h4>
         </div>
         <div class="modal-body">
           <%# Render the new recipient form (passing modal => true to enable remote => true) %>

@@ -10,9 +10,9 @@
     <%= f.text_area :content, placeholder: "(optional) ex. working towards an epic novel, inventing a cure-all vaccine..." %>
   </div>
   <div class="select">
-    <%= f.label "For:" %>
+    <%= f.label "How many days should we remind you?" %>
     <%= f.select(:days_to_complete, options_for_select([
-                                      ['Today (one check-in)', 1], ['2 days (two check-ins)', 2],
+                                      ['Only today (one check-in)', 1], ['2 days (two check-ins)', 2],
                                       ['3 days (three check-ins)', 3], ['4 days (four check-ins)', 4],
                                       ['5 days (five check-ins)', 5]
                                     ])) %>
@@ -20,7 +20,7 @@
 
   <%= f.fields_for :micropost_recipient do |ff| %>
     <div class="recipients">
-      <%= ff.label "With optional accountability buddy as:" %>
+      <%= ff.label "Who should we text if you miss a day?" %>
       <%= ff.collection_select(:recipient_ids, current_user.recipients, :id, :name, {:prompt => 'None Selected'}) %>
     </div>
   <% end %>
