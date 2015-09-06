@@ -370,3 +370,14 @@ end
   <h3> Nothing due! Yay!</h3>
 <% end %>
 
+# User.rb
+
+# September 6, 2015
+
+  # UNTESTED BY RSPEC
+  def stage_or_queue_occupied_by(micropost_id)
+    id = micropost_id.to_s
+    # Does the stage contain the micropost? The queue?
+    self.micropost_id_due_now.to_s.include?(id) or self.microposts_due_queue.to_s.include?(id)
+  end
+
