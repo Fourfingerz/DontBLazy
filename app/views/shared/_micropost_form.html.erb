@@ -21,7 +21,7 @@
   <%= f.fields_for :micropost_recipient do |ff| %>
     <div class="recipients">
       <%= ff.label "Who should we text if you miss a day?" %>
-      <%= ff.collection_select(:recipient_ids, current_user.recipients, :id, :name, {:prompt => 'None Selected'}) %>
+      <%= ff.collection_select(:recipient_ids, current_user.recipients, :id, :name, {:prompt => 'Nobody - Just Remind Me'}) %>
     </div>
   <% end %>
 
