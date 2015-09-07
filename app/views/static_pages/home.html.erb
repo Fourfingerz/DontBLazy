@@ -1,6 +1,19 @@
 <% if logged_in? %>
   <div class="row">
-    <aside class="col-md-3">
+
+    <div class="col-sm-3 col-md-push-9">
+      </br>
+      <%= render 'shared/to_do' %>
+      </br>
+      <% if !no_valid_phone? %>
+        <section class="recipients_modal" id="modal_section">
+          <%= render 'shared/recipients_modal' %>
+        </section>
+      <% end %>
+      </br>
+    </div>
+
+    <aside class="col-sm-3 col-md-pull-3">
       <section class="user_info">
         <%= render 'shared/user_info' %>
       </section>
@@ -17,18 +30,13 @@
       </section>
       <% end %>
     </aside>
-    <div class="col-md-6">
+
+    <div class="col-sm-6 col-md-pull-3">
       <%= render 'shared/feed' %>
     </div>
-    <div class="col-md-3">
-    <% if !no_valid_phone? %>
-      <section class="recipients_modal" id="modal_section">
-        <%= render 'shared/recipients_modal' %>
-      </section>
-    <% end %>
-      </br>
-      <%= render 'shared/to_do' %>
-    </div>
+
+
+
   </div>
 <% else %>
   <div class="center jumbotron">
