@@ -42,20 +42,10 @@ class Micropost < ActiveRecord::Base
     self.active = true
     self.save
   end
-
+  
   # Tested by hand
   # UNTESTED BY RSPEC
-  def good_check_in_tally
-      self.days_remaining -= 1  # DB Column
-      self.current_day += 1     # DB Column
-      self.days_completed += 1
-      self.check_in_current = false  
-      self.save
-  end
-
-  # Tested by hand
-  # UNTESTED BY RSPEC
-  def bad_check_in_tally
+  def next_day_tally
       self.days_remaining -= 1  # DB Column
       self.current_day += 1     # DB Column
       self.check_in_current = false
@@ -135,7 +125,7 @@ class Micropost < ActiveRecord::Base
   def check_in 
     # User already checked in thru SMS before deadline
     if self.check_in_current == true
-      good_check_in_tally
+      next_day_tally
       schedule_new_day if self.days_remaining > 0
       inactive_cleanup if self.days_remaining == 0 # Checks if days_remaining > 0 and schedules a new day (24 hour + 4 hour reminder)
       self.check_in_current = false  # Sets this column for next day
@@ -143,7 +133,7 @@ class Micropost < ActiveRecord::Base
     else 
     # User has NOT checked in via SMS or website and is NOW DUE
       send_day_incomplete_sms # THIS ALWAYS GOES FIRST b/c CURRENT_DAY 
-      bad_check_in_tally # THEN YOU UPDATE THE DB TALLIES
+      next_day_tally # THEN YOU UPDATE THE DB TALLIES
       send_bad_news_to_buddies if !self.recipients.empty?
       schedule_new_day if self.days_remaining > 0
       if self.days_remaining == 0
