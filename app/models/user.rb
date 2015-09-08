@@ -164,15 +164,15 @@ class User < ActiveRecord::Base
     goals.each do |goal|
       j += 1
       count = j.to_s
-      sms = count + ". " + goal.title
+      sms = count + " <= " + goal.title + ". "
       sms_arr << sms   # Generates goals map for user SMS
-                          #   ["1 Medical Volunteering", 
-                          #    "2 Himalayan Altitude Acclimatization", 
-                          #    "3 Rowing Session", "4 Yoga Session"]
+                          #   ["1 <= Medical Volunteering", 
+                          #    "2 <= Himalayan Altitude Acclimatization", 
+                          #    "3 <= Rowing Session", "4 <= Yoga Session"]
     end
     active_goals = sms_arr.join(" ")
     active_goals.slice! " 0"  # Temporary solution for annoying ZERO
-    active_goals_summary = "DontBLazy App: Complete your task, then reply with corresponding number to check in. For multiple check-ins, separate by comma. ex 1,2,3. Your Goals:" + active_goals
+    active_goals_summary = "DontBLazy App: Reply to this message with the corresponding number to mark a task complete. " + active_goals
   end
 
   def send_status_sms 
