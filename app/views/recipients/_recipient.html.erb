@@ -3,7 +3,7 @@
   	<li>
 
 	<div class="col-md-10">
-	  <%= recipient.name %> | <%= recipient.phone %>
+	  <%= recipient.name %> | <%= recipient.phone if current_user.id == recipient.user_id %>
 	</div>
 
 	<div class="col-md-2">
