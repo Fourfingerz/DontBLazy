@@ -11,8 +11,8 @@ class User < ActiveRecord::Base
   attr_accessor :remember_token, :activation_token, :reset_token
   before_save   :downcase_email
   before_create :create_activation_digest
-  validates :name,  presence: true, length: { maximum: 50 }
-  validates :last_name, presence: true, length: { maximum: 50 }
+  validates :name,  presence: true, length: { maximum: 50 }, format: { without: /\d/, :message => " : numbers are not allowed in names" }
+  validates :last_name, presence: true, length: { maximum: 50 }, format: { without: /\d/, :message => " : numbers are not allowed in names" }
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\-.]+\.[a-z]+\z/i
   validates :email, presence: true, length: { maximum: 255 },
                     format: { with: VALID_EMAIL_REGEX },
