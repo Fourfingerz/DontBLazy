@@ -22,7 +22,6 @@ class User < ActiveRecord::Base
   # DBL
   has_many :recipients, dependent: :destroy
   serialize :current_tasks_map
-  serialize :microposts_due_queue
 
   # Returns the hash digest of the given string.
   def User.digest(string)
