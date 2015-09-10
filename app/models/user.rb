@@ -129,12 +129,7 @@ class User < ActiveRecord::Base
   end
 
   def send_pin
-    @twilio_client = Twilio::REST::Client.new(ENV["TWILIO_ACCOUNT_SID"], ENV["TWILIO_AUTH_TOKEN"])
-    @twilio_client.messages.create(
-      to: phone_number,
-      from: ENV["TWILIO_PHONE_NUMBER"],
-      body: "Your verification PIN is #{phone_pin}"
-    )
+    send_text_message("Your verification PIN is #{phone_pin}", phone_number)
   end
 
   def verify(entered_pin)

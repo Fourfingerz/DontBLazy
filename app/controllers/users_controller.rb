@@ -73,10 +73,13 @@ class UsersController < ApplicationController
     @user = current_user
     @user.update_attributes(user_params)
     @user.generate_pin
-    @user.send_pin
-    respond_to do |format|
-      format.js # render app/views/users/_add_phone.html.erb
-    end
+    @user.send_pin  
+      respond_to do |format|
+        format.js # render app/views/users/_add_phone.html.erb
+      end
+    # rescue Twilio::REST::RequestError => ex
+    #   flash.now[:danger] = '#{ex} , Please enter a 10 digit number starting with 1.'
+    #   render 'users/add_phone'
   end
 
   def verify

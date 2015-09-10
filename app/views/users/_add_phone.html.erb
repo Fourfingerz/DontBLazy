@@ -4,6 +4,7 @@
   <h3>First Post?</h3>
   <p>Let's Verify Your Phone Via SMS:</p>
   <%= form_for @user, remote: true, :url => phone_entry_users_path do |f| %>
+  <%= render 'shared/error_messages', object: f.object %>
     <div class="form-group">
       <%= f.text_field :phone_number, :placeholder => "Start with '1'. ex: 1718567890. " %>
     </div>

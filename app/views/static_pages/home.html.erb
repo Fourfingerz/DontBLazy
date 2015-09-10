@@ -39,16 +39,15 @@
 
   </div>
 <% else %>
+  <% time = Time.now %>
+  <% day_of_week = time.strftime("%A") %>
+
   <div class="center jumbotron">
     <h1>Study for five hours. Write 200 words a night. Go for a morning run.</h1>
     
     <h2>
-      Set your goals. Complete them. Check in before the end of the day. Miss a goal and your friends receive a text. It's that simple. Get stuff done.
+      Today's <%= day_of_week %>. Set your goals. Complete them. Check in before the end of the day. Miss a goal and your friends receive a text. It's that simple. Get stuff done.
     </h2>
-
-    <!--
-    <h2>To become an alpha tester, drop me an email: <a href="mailto:hello@sze.codes">hello@sze.codes</a></h2>
-    -->
 
     <%= link_to "Sign up now!", signup_path, class: "btn btn-lg btn-primary" %>  
   </div>
