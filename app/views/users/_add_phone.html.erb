@@ -7,6 +7,7 @@
   <%= render 'shared/error_messages', object: f.object %>
     <div class="form-group">
       <%= f.text_field :phone_number, :placeholder => "Start with '1'. ex: 1718567890. " %>
+      <small>Note: You may only associate one account per phone number.</small>
     </div>
       <%= f.submit "Send Verification PIN", class: "btn btn-primary", id: 'send-pin-link' %>
   <% end %>
