@@ -1,6 +1,5 @@
 <% if logged_in? %>
   <div class="row">
-
     <div class="col-sm-3 col-md-push-9">
       </br>
       <%= render 'shared/to_do' %>
@@ -12,7 +11,6 @@
       <% end %>
       </br>
     </div>
-
     <aside class="col-sm-3 col-md-pull-3">
       <section class="user_info">
         <%= render 'shared/user_info' %>
@@ -34,19 +32,15 @@
     <div class="col-sm-6 col-md-pull-3">
       <%= render 'shared/feed' %>
     </div>
-
-
-
   </div>
+
 <% else %>
-  <% time = Time.now %>
-  <% day_of_week = time.strftime("%A") %>
 
   <div class="center jumbotron">
     <h1>Study for five hours. Write 200 words a night. Go for a morning run.</h1>
     
     <h2>
-      Today's <%= day_of_week %>. Set your goals. Complete them. Check in before the end of the day. Miss a goal and your friends receive a text. It's that simple. Get stuff done.
+      Set your goals. Complete them. Check in before the end of the day. Miss a goal and your friends receive a text. It's that simple. Get stuff done.
     </h2>
 
     <%= link_to "Sign up now!", signup_path, class: "btn btn-lg btn-primary" %>  

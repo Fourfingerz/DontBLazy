@@ -1,8 +1,3 @@
-<% time = Time.now %>
-<% day_of_week = time.strftime("%A") %>
-<% todays_date = time.strftime("%d").to_i.ordinalize %>
-
-<h2> It's <%= day_of_week %>, the <%= todays_date %>.</h2>
 <% if @active_goals.any? %>
 	<%= javascript_include_tag "active_tasks" %>
 	<table id="active_tasks_table">

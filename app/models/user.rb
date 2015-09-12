@@ -17,7 +17,7 @@ class User < ActiveRecord::Base
   validates :email, presence: true, length: { maximum: 255 },
                     format: { with: VALID_EMAIL_REGEX },
                     uniqueness: { case_sensitive: false }
-  validates :phone_number, :uniqueness => true, :allow_blank => true
+  validates :phone_number, :uniqueness => true, length: { minimum: 10 }, :allow_blank => true
   has_secure_password
   validates :password, presence: true, length: { minimum: 6 }, allow_nil: true
   # DBL
@@ -130,7 +130,7 @@ class User < ActiveRecord::Base
   end
 
   def send_pin
-    send_text_message("Your verification PIN is #{phone_pin}", phone_number)
+    send_text_message("Your verification PIN is #{phone_pin}", phone_number) if !self.phone_number.blank? && self.phone_number.length > 10
   end
 
   def verify(entered_pin)
