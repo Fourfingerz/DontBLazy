@@ -108,7 +108,7 @@ class Micropost < ActiveRecord::Base
   end
 
   # UNTESTED BY RSPEC
-  def send_four_hour_reminder
+  def send_four_hour_reminder  
     user = User.find_by(:id => self.user_id)
     activity = self.title
     num = user.current_tasks_map.find{|id| id["micropost id"] == self.id}["task"]
@@ -177,7 +177,7 @@ class Micropost < ActiveRecord::Base
     Delayed::Job.find_by(:id => job.id).update_columns(user_id: self.user_id)
   end
 
-  def schedule_four_hour_reminder
+  def schedule_four_hour_reminder  # eventually 4 hours will be a variable
     #job = self.delay(run_at: 3.minutes.from_now).send_four_hour_reminder # CUT TIME 
     job = self.delay(run_at: 20.hours.from_now).send_four_hour_reminder
     update_column(:delayed_job_id, job.id)  # Update Delayed_job
@@ -188,8 +188,8 @@ class Micropost < ActiveRecord::Base
   end
 
   def schedule_new_day
-    schedule_check_in_deadline
-    schedule_four_hour_reminder
+    schedule_check_in_deadline  # Full day job
+    schedule_four_hour_reminder  # Reminder
   end
 
   # UNTESTED BY RSPEC

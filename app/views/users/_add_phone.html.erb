@@ -6,8 +6,8 @@
   <%= form_for @user, remote: true, :url => phone_entry_users_path do |f| %>
   <%= render 'shared/error_messages', object: f.object %>
     <div class="form-group">
-      <%= f.text_field :phone_number, :placeholder => "Start with '1'. ex: 1718567890. " %>
-      <small>Note: You may only associate one account per phone number.</small>
+      <%= f.text_field :phone_number, :placeholder => "MAKE SURE TO INCLUDE '1'. ex: 1718567890. " %>
+      <small>You may only associate one account per phone number.</small>
     </div>
       <%= f.submit "Send Verification PIN", class: "btn btn-primary", id: 'send-pin-link' %>
   <% end %>
