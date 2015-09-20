@@ -37,7 +37,7 @@ class Micropost < ActiveRecord::Base
   def set_initial_state
     self.check_in_current = false
     self.days_completed = 0
-    self.days_remaining = self.days_to_complete
+    self.days_remaining = self.days_to_complete 
     self.current_day = 1
     self.active = true
     self.save
