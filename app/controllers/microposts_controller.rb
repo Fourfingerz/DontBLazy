@@ -1,6 +1,5 @@
 class MicropostsController < ApplicationController
   respond_to :html, :json
-  #skip_before_filter :force_ssl # check later if needed
   protect_from_forgery :except => ["receive_sms"]
   before_action :logged_in_user, only: [:create, :destroy]
   before_action :correct_user,   only: :destroy
