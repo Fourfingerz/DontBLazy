@@ -61,7 +61,9 @@ class Micropost < ActiveRecord::Base
     user.save
 
     # Finds and removes all associated Delayed Jobs still lurking in the system
-    garbage_jobs = Delayed::Job.where(:owner_type => "Micropost", :owner_id => self.id)
+    garbage_jobs = Delayed::Job.where(:owner_type => "Micropost", 
+                                      :owner_id => self.id
+                                    )
     garbage_jobs.each do |job|
       job.delete
     end
@@ -158,7 +160,10 @@ class Micropost < ActiveRecord::Base
     self.save
 
     # Since you already checked in, delete reminder to check in again
-    sms_reminder_jobs = Delayed::Job.where(:owner_type => "Micropost", :owner_id => self.id, :owner_job_type => "4 Hour Reminder")
+    sms_reminder_jobs = Delayed::Job.where(:owner_type => "Micropost", 
+                                           :owner_id => self.id, 
+                                           :owner_job_type => "4 Hour Reminder"
+                                          )
     sms_reminder_jobs.each do |job|
       job.delete
     end
@@ -167,24 +172,27 @@ class Micropost < ActiveRecord::Base
   # UNTESTED BY RSPEC
   # Schedule multiple delayed job based on number of days and task
   def schedule_check_in_deadline
-    # TEST CUT TIME
-    #job = self.delay(run_at: 5.minutes.from_now).check_in # CUT TIME
     job = self.delay(run_at: 24.hours.from_now).check_in 
     update_column(:delayed_job_id, job.id)  # Update Delayed_job
-    Delayed::Job.find_by(:id => job.id).update_columns(owner_type: "Micropost")  # Associates delayed_job with Micropost ID
-    Delayed::Job.find_by(:id => job.id).update_columns(owner_job_type: "24 Hour Deadline")
-    Delayed::Job.find_by(:id => job.id).update_columns(owner_id: self.id)
-    Delayed::Job.find_by(:id => job.id).update_columns(user_id: self.user_id)
+    Delayed::Job.find_by(:id => job.id).
+      update_columns(
+        owner_type: "Micropost",
+        owner_job_type: "24 Hour Deadline",
+        owner_id: self.id,
+        user_id: self.user_id,
+      )
   end
 
-  def schedule_four_hour_reminder  # eventually 4 hours will be a variable
-    #job = self.delay(run_at: 3.minutes.from_now).send_four_hour_reminder # CUT TIME 
+  def schedule_four_hour_reminder  # eventually 4 hours will be a variable 
     job = self.delay(run_at: 20.hours.from_now).send_four_hour_reminder
     update_column(:delayed_job_id, job.id)  # Update Delayed_job
-    Delayed::Job.find_by(:id => job.id).update_columns(owner_type: "Micropost")  # Associates delayed_job with Micropost ID
-    Delayed::Job.find_by(:id => job.id).update_columns(owner_job_type: "4 Hour Reminder")
-    Delayed::Job.find_by(:id => job.id).update_columns(owner_id: self.id)
-    Delayed::Job.find_by(:id => job.id).update_columns(user_id: self.user_id)
+    Delayed::Job.find_by(:id => job.id).
+      update_columns(
+        owner_type: "Micropost",
+        owner_job_type: "4 Hour Reminder",
+        owner_id: self.id,
+        user_id: self.user_id
+      )
   end
 
   def schedule_new_day
