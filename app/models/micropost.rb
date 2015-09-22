@@ -11,11 +11,6 @@ class Micropost < ActiveRecord::Base
   has_many :recipients, through: :micropost_recipients
   validates :days_to_complete, presence: true
   accepts_nested_attributes_for :micropost_recipients
-  after_create :set_initial_state
-  after_create :schedule_new_day
-  after_create :send_user_status_sms
-
-  # DBL Logic
 
   # To run daemon:
   # bin/delayed_job start
@@ -30,9 +25,6 @@ class Micropost < ActiveRecord::Base
   # cd Desktop
   # ./ngrok http 3000
 
-
-  # Tested by hand
-  # UNTESTED BY RSPEC
   # Sets a default state for every freshly minted Micropost (goal)
   def set_initial_state
     self.check_in_current = false
@@ -42,9 +34,7 @@ class Micropost < ActiveRecord::Base
     self.active = true
     self.save
   end
-  
-  # Tested by hand
-  # UNTESTED BY RSPEC
+
   def next_day_tally
       self.days_remaining -= 1  # DB Column
       self.current_day += 1     # DB Column
@@ -52,7 +42,6 @@ class Micropost < ActiveRecord::Base
       self.save
   end
 
-  # UNTESTED BY RSPEC and HAND
   # Clean up INACTIVE tasks
   def inactive_cleanup
     # Finds referenced micropost from user's map and deletes itself
@@ -75,8 +64,6 @@ class Micropost < ActiveRecord::Base
     user.send_status_sms
   end
 
-  # Tested by hand
-  # UNTESTED BY RSPEC
   def send_day_completed_sms
     user = User.find_by(:id => self.user_id)
     activity = self.title
@@ -84,8 +71,6 @@ class Micropost < ActiveRecord::Base
     send_text_message(day_completed_message, user.phone_number)
   end
 
-  # Tested by hand
-  # UNTESTED BY RSPEC
   def send_day_incomplete_sms
     user = User.find_by(:id => self.user_id)
     activity = self.title
@@ -95,7 +80,6 @@ class Micropost < ActiveRecord::Base
     send_text_message(day_incomplete_message, user.phone_number)
   end
 
-  # UNTESTED BY RSPEC
   def send_bad_news_to_buddies
     user = User.find_by(:id => self.user_id)
     first_name = user.name
@@ -109,7 +93,6 @@ class Micropost < ActiveRecord::Base
     end  
   end
 
-  # UNTESTED BY RSPEC
   def send_four_hour_reminder  
     user = User.find_by(:id => self.user_id)
     activity = self.title
@@ -121,8 +104,6 @@ class Micropost < ActiveRecord::Base
     send_text_message(four_hour_message, user.phone_number)
   end
 
-  # Tested by hand
-  # UNTESTED BY RSPEC
   # After 24 hours, DBL runs this check-in
   def check_in 
     # User already checked in thru SMS before deadline
@@ -147,7 +128,6 @@ class Micropost < ActiveRecord::Base
     end
   end
 
-  # UNTESTED BY RSPEC
   # Finds Micropost from mapped number and checks it in
   def checking_in_number
     self.days_completed += 1
@@ -169,7 +149,6 @@ class Micropost < ActiveRecord::Base
     end
   end
 
-  # UNTESTED BY RSPEC
   # Schedule multiple delayed job based on number of days and task
   def schedule_check_in_deadline
     job = self.delay(run_at: 24.hours.from_now).check_in 
@@ -200,7 +179,6 @@ class Micropost < ActiveRecord::Base
     schedule_four_hour_reminder  # Reminder
   end
 
-  # UNTESTED BY RSPEC
   # Checks to see if selected Micropost is NOT already checked in
   def fresh_and_not_checked_in?
     !false ^ self.check_in_current

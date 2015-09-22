@@ -8,6 +8,9 @@ class MicropostsController < ApplicationController
   def create
     @micropost = current_user.microposts.build(micropost_params)
     @micropost.save
+    @micropost.set_initial_state
+    @micropost.schedule_new_day
+    @micropost.send_user_status_sms
 
     # Did the user add accountability buddies?
     buddies = params[:micropost][:micropost_recipient][:recipient_ids]

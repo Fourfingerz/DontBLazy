@@ -137,7 +137,6 @@ class User < ActiveRecord::Base
     update(phone_verified: true) if self.phone_pin == entered_pin
   end
 
-    # UNTESTED by Rspec
   # Send user's phone a SMS list of active goals menu on create
   def create_status_sms
     goals = self.microposts.where(:active => true)  # finds user's ACTIVE goals 
