@@ -13,6 +13,7 @@ RSpec.describe Micropost, :type => :model do
     micropost = build(:micropost, title: ' ')
     micropost.valid?
     expect(micropost.errors[:title]).to include("can't be blank")
+  end
 
   # A task must have SMS content
   it "is invalid without content(sms)" do
@@ -35,6 +36,7 @@ RSpec.describe Micropost, :type => :model do
     expect(micropost.errors[:user_id]).to include("can't be blank")
   end
 
+end
 # EXAMPLES OF MODEL METHOD TESTS
 #   it "adds to the list of addresses if the student's address changes" do
 #   student = build(:student)
@@ -74,4 +76,4 @@ RSpec.describe Micropost, :type => :model do
 #   end
 #   write_attribute(:addresses, list)
 # end
-end
+

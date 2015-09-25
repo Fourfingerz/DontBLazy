@@ -32,7 +32,7 @@ class MicropostTest < ActiveSupport::TestCase
 
   # DBL
   test "activity should be named" do
-    @micropost.activity = nil
+    @micropost.title = nil
     assert_not @micropost.valid?
   end
 end
