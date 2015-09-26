@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe Micropost, :type => :model do
 
   # Tests for proper DBL behavior
-  it "is valid with title, content(sms), a schedule_time, and belongs to a user" do
+  it "is valid with title, content, a schedule_time, and belongs to a user" do
     micropost = build(:micropost)
     expect(micropost).to be_valid
   end
