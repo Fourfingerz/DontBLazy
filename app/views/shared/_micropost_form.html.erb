@@ -9,7 +9,7 @@
     <%= f.label "Tell us more about your motivation:" %>
     <%= f.text_area :content, placeholder: "(optional) ex. working towards an epic novel, inventing a cure-all vaccine..." %>
   </div>
-  <div class="select">
+  <div class="select" id="micropost_days">
     <%= f.label "How many days should we remind you?" %>
     <%= f.select(:days_to_complete, options_for_select([
                                       ['Only today (one check-in)', 1], ['2 days (two check-ins)', 2],

@@ -13,7 +13,7 @@ feature "User lands on landing page for the first time ever" do
   	expect(page).to have_link("About")
   	expect(page).to have_link("Contact")
 
-  	# Ensure pitch is there
+  	# Ensure business pitch is there
   	expect(page).to have_content('Study for five hours. Write 200 words a night. Go for a morning run.')
   	expect(page).to have_content('Set your goals. Complete them. Check in before the end of the day. Miss a goal and your friends receive a text. It\'s that simple. Get stuff done.')
   	expect(page).to have_content('Created by Sze Chan 2015.')
@@ -73,17 +73,20 @@ feature "User lands on landing page for the first time ever" do
     fill_in 'Email', with: user.email
     fill_in 'Password', with: user.password
     click_button 'Log in'
-    expect(page).to have_content('Create goal with a VERB and SUBJECT:')
+    expect(page).to have_content('Create goal with a verb and subject:')
 
     # Making a new goal with valid input
     visit root_path
     expect{
       fill_in 'micropost_title', with: micropost.title
       fill_in 'micropost_content', with: micropost.content
-      select '2 days (two check-ins)', from: 'micropost_schedule_time'
+      find('#micropost_days').find(:days_to_complete, 'option[3]').select_option
       #fill_in 'recipients', with: recipients # Check box
       click_button 'Post'
     }.to change(Micropost, :count).by(1)
-    expect(current_path).to eq root_path
+
+    # Check redirect and displaying new content on page
+    #expect(current_path).to eq root_path
+    expect(page).to have_content(micropost.title)
   end
 end

@@ -3,7 +3,7 @@ FactoryGirl.define do
     name { Faker::Name.name }
     last_name { Faker::Name.last_name }
     email { Faker::Internet.email }
-    phone_number { Faker::PhoneNumber.phone_number }
+    phone_number { '13473063012' }
     password "foobar"
     password_confirmation "foobar"
     activated true
@@ -12,7 +12,7 @@ FactoryGirl.define do
   end
 
   factory :micropost do
-    title { Faker::Lorem.sentence }
+    title { Faker::Company.bs }
     content { Faker::Lorem.sentence }
     days_to_complete { 5 }
     user_id { 1 }
