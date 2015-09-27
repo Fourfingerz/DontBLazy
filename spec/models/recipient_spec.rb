@@ -16,10 +16,10 @@ describe Recipient do
   	expect(recipient.errors[:name]).to include("can't be blank")
   end
 
-  it "is invalid with a name shorter than three characters" do
-  	recipient = build(:recipient, name: 'Bo')
+  it "is invalid with a name shorter than two characters" do
+  	recipient = build(:recipient, name: 'B')
   	recipient.valid?	
-  	expect(recipient.errors[:name]).to include("is too short (minimum is 3 characters)")
+  	expect(recipient.errors[:name]).to include("is too short (minimum is 2 characters)")
   end
 
   it "is invalid without a phone" do
@@ -32,19 +32,5 @@ describe Recipient do
     recipient = build(:recipient, user_id: '')
     recipient.valid?
     expect(recipient.errors[:user_id]).to include("can't be blank")
-  end
-
-  it "does not allow duplicate phone numbers per user" do
-  	recipient = create(:recipient)
-  	create(:recipient,
-  	  user_id: rand(100),
-  	  phone: '17180000000'
-  	  )
-  	another_phone = build(:recipient,
-  	  user_id: rand(100),
-  	  phone: '17180000000'
-  	  )
-  	another_phone.valid?
-  	expect(another_phone.errors[:phone]).to include('has already been taken')
   end
 end

@@ -15,18 +15,11 @@ RSpec.describe Micropost, :type => :model do
     expect(micropost.errors[:title]).to include("can't be blank")
   end
 
-  # A task must have SMS content
-  it "is invalid without content(sms)" do
-    micropost = build(:micropost, content: '  ')
-    micropost.valid?
-    expect(micropost.errors[:content]).to include("can't be blank")
-  end
-
   # A task must be scheduled
-  it "is invalid without a scheduled time" do
-   micropost = build(:micropost, schedule_time: '')
+  it "is invalid without a specified number of days to complete" do
+   micropost = build(:micropost, days_to_complete: nil)
    micropost.valid?
-   expect(micropost.errors[:schedule_time]).to include("can't be blank")
+   expect(micropost.errors[:days_to_complete]).to include("can't be blank")
   end
 
   # A task can't be an orphan, it needs an account owner

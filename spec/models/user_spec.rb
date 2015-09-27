@@ -6,29 +6,23 @@ describe User do
   	expect(build(:user)).to be_valid
   end
 
-  it "is valid with a name, email, and phone" do
+  it "is valid with a name, email, and phone number" do
     user = build(:user)
     expect(user).to be_valid
   end
 
-  it "is invalid without a phone" do
-    user = build(:user, phone: '')
-    user.valid?
-    expect(user.errors[:phone]).to include("can't be blank")
-  end
-
-  it "does not allow duplicate phone numbers per user" do
+  it "users cannot make another account with the same phone number" do
     user = create(:user)
     create(:user,
-      user_id: rand(100),
-      phone: '17180000000'
+      id: 1,
+      phone_number: '17180000000'
       )
     another_phone = build(:user,
-      user_id: rand(100),
-      phone: '17180000000'
+      id: 2,
+      phone_number: '17180000000'
       )
     another_phone.valid?
-    expect(another_phone.errors[:phone]).to include('has already been taken')
+    expect(another_phone.errors[:phone_number]).to include('has already been taken')
   end
 
 end
