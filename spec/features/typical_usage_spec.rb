@@ -82,7 +82,7 @@ feature "User lands on landing page for the first time ever" do
       fill_in 'micropost_content', with: micropost.content
       find('#micropost_days').find(:days_to_complete, 'option[3]').select_option
       #fill_in 'recipients', with: recipients # Check box
-      #click_button 'Post'
+      click_button 'Post'
     }.to change(Micropost, :count).by(1)
 
     # Check redirect and displaying new content on page

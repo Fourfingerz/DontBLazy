@@ -10,7 +10,7 @@ RSpec.describe Micropost, :type => :model do
 
   # A task must have a title
   it "is invalid without a title" do
-    micropost = build(:micropost, title: ' ')
+    micropost = build(:micropost, title: '')
     micropost.valid?
     expect(micropost.errors[:title]).to include("can't be blank")
   end

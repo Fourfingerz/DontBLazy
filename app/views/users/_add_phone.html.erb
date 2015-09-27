@@ -1,15 +1,21 @@
 <!-- Form for phone after new sign up -->
 
 <div id="send-pin">
+
   <h3>First Post?</h3>
   <p>Let's Verify Your Phone Via SMS:</p>
+
   <%= form_for @user, remote: true, :url => phone_entry_users_path do |f| %>
-  <%= render 'shared/error_messages', object: f.object %>
-    <div class="form-group">
-      <%= f.text_field :phone_number, :placeholder => "MAKE SURE TO INCLUDE '1'. ex: 1718567890. " %>
-      <small>You may only associate one account per phone number.</small>
-    </div>
-      <%= f.submit "Send Verification PIN", class: "btn btn-primary", id: 'send-pin-link' %>
+
+    <%= render 'shared/error_messages', object: f.object %>
+
+      <div class='field' id="verify-phone">
+        <%= f.text_field :phone_number, :placeholder => "MAKE SURE TO INCLUDE '1'. ex: 1718567890. " %>
+        <small>You may only associate one account per phone number.</small>
+      </div>
+
+        <%= f.submit "Send Verification PIN", class: "btn btn-primary", id: 'send-pin-link' %>
+
   <% end %>
 </div>
 
@@ -17,7 +23,7 @@
   <h3>Enter your four-digit PIN</h3>
   <%= form_tag users_verify_path, remote: true do |f| %>
 	<%= hidden_field_tag 'hidden_phone_number', '' %>
-	  <div class="form-group">
+	  <div class='field' id="verify_pin_number">
 		<%= text_field_tag :phone_pin %>
 	  </div>
 	  <%= submit_tag "Verify PIN", class: "btn btn-primary" %>
