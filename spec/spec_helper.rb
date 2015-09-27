@@ -57,13 +57,7 @@ RSpec.configure do |config|
 end
 
 
-
-
-
-
-
-
-
+# Old code
 
   # Spec::Runner.configure do |config|
   #   config.include(SmsSpec::Helpers)
