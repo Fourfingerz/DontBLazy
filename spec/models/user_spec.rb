@@ -6,7 +6,7 @@ describe User do
   	expect(build(:user)).to be_valid
   end
 
-  it "is valid with a name, email, and phone number" do
+  it "is valid with a name, last name, valid email, and phone number" do
     user = build(:user)
     expect(user).to be_valid
   end

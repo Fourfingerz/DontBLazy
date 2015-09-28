@@ -31,6 +31,7 @@ gem 'protected_attributes'  # Allows use of attr_accessible in Rails 4
 gem 'figaro' # Secrets
 gem 'dotiw' # More precise distance_of_time_in_words
 gem 'best_in_place', github: 'bernat/best_in_place' # Inline edits of DB item
+gem 'shoulda-matchers'  # Rspec validation testing library
 
 group :development, :test do
   gem 'sqlite3',     '1.3.9'
