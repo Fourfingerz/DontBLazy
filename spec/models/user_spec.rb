@@ -30,18 +30,18 @@ describe User do
                   name: '3CPO',
                   last_name: 'de Emp1re'
                   ).should_not be_valid
-                )
+          )
   end
 
-  it "will not allow users to create account with a name that's over 50 characters" do
+  it "will not allow users to create account with a name that's over 25 characters" do
     expect(build(:user,
                   name: 'YZCxeUbMhiNgapHRTaszMQxrcj',
                   last_name: 'pSsviClrPqwyMeEgpMxfPQiGkw'
                   ).should_not be_valid 
-              )
+          )
   end
 
-  it "will not allow users to make another account with the same email"
+  it "will not allow users to make another account with the same email" do
     first_user = create(:user,
                     email: 'user@dontbelazy.com'
                     )
@@ -51,5 +51,5 @@ describe User do
     second_user.valid?
     expect(second_user.errors[:email]).to include('has already been taken')
   end
-  
+
 end
