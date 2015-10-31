@@ -90,7 +90,7 @@ class Micropost < ActiveRecord::Base
     shaming_message = "DontBLazy App: Your friend " + first_name + " " + last_name + " has promised to do task:" + activity + ". " + "They missed their goal today, tsk tsk! www.dontbelazy.today"
     recipients.each do |recipient|
       send_text_message(shaming_message, recipient.phone)
-    end  
+    end
   end
 
   def send_four_hour_reminder  
@@ -151,6 +151,7 @@ class Micropost < ActiveRecord::Base
 
   # Schedule multiple delayed job based on number of days and task
   def schedule_check_in_deadline
+    #if !ENV == test
     job = self.delay(run_at: 24.hours.from_now).check_in 
     update_column(:delayed_job_id, job.id)  # Update Delayed_job
     Delayed::Job.find_by(:id => job.id).

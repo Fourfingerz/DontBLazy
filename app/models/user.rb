@@ -125,8 +125,10 @@ class User < ActiveRecord::Base
 
   # Pin for phone verification.
   def generate_pin
-    self.phone_pin = rand(0000..9999).to_s.rjust(4, "0")
+    pin = rand(0000..9999).to_s.rjust(4, "0")
+    self.phone_pin = pin
     save
+    return pin
   end
 
   def send_pin
@@ -167,6 +169,7 @@ class User < ActiveRecord::Base
     active_goals = sms_arr.join(" ")
     active_goals.slice! " 0"  # Temporary solution for annoying ZERO
     active_goals_summary = "DontBLazy App: Reply to this message with the corresponding number to mark a task complete. " + active_goals
+    return active_goals_summary
   end
 
   def send_status_sms 

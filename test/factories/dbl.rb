@@ -16,6 +16,7 @@ FactoryGirl.define do
     content { Faker::Lorem.sentence }
     days_to_complete { 5 }
     user_id { 1 }
+    active true
   end
 
   factory :recipient do
