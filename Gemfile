@@ -37,7 +37,7 @@ group :development, :test do
   gem 'sqlite3',     '1.3.9'
   gem 'byebug',      '3.4.0'
   gem 'web-console', '2.0.0.beta3'
-  gem 'spring',      '1.1.3'
+  gem 'spring',      '1.4.0'
   gem 'timecop'
 
   # Testing / Troubleshooting tools
@@ -47,6 +47,7 @@ group :development, :test do
   gem 'pry-byebug'
   # Rspec 
   gem 'rspec-rails'
+  gem 'spring-commands-rspec'
   gem 'factory_girl_rails', '~> 4.4.1'
 end
 
