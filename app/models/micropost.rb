@@ -29,7 +29,7 @@ class Micropost < ActiveRecord::Base
   def set_initial_state
     self.check_in_current = false
     self.days_completed = 0
-    self.days_remaining = self.days_to_complete 
+    self.days_remaining = self.days_to_complete
     self.current_day = 1
     self.active = true
     self.save
@@ -50,7 +50,7 @@ class Micropost < ActiveRecord::Base
     user.save
 
     # Finds and removes all associated Delayed Jobs still lurking in the system
-    garbage_jobs = Delayed::Job.where(:owner_type => "Micropost", 
+    garbage_jobs = Delayed::Job.where(:owner_type => "Micropost",
                                       :owner_id => self.id
                                     )
     garbage_jobs.each do |job|
@@ -93,7 +93,7 @@ class Micropost < ActiveRecord::Base
     end
   end
 
-  def send_four_hour_reminder  
+  def send_four_hour_reminder
     user = User.find_by(:id => self.user_id)
     activity = self.title
     num = user.current_tasks_map.find{|id| id["micropost id"] == self.id}["task"]
@@ -105,7 +105,7 @@ class Micropost < ActiveRecord::Base
   end
 
   # After 24 hours, DBL runs this check-in
-  def check_in 
+  def check_in
     # User already checked in thru SMS before deadline
     if self.check_in_current == true
       next_day_tally
@@ -113,14 +113,14 @@ class Micropost < ActiveRecord::Base
       inactive_cleanup if self.days_remaining == 0 # Checks if days_remaining > 0 and schedules a new day (24 hour + 4 hour reminder)
       self.check_in_current = false  # Sets this column for next day
       self.save
-    else 
+    else
     # User has NOT checked in via SMS or website and is NOW DUE
       send_day_incomplete_sms # THIS ALWAYS GOES FIRST b/c CURRENT_DAY 
       next_day_tally # THEN YOU UPDATE THE DB TALLIES
       send_bad_news_to_buddies if !self.recipients.empty?
       schedule_new_day if self.days_remaining > 0
       if self.days_remaining == 0
-        inactive_cleanup 
+        inactive_cleanup
         self.active = false
       end
       self.check_in_current = false  # Sets this column for next day
@@ -140,8 +140,8 @@ class Micropost < ActiveRecord::Base
     self.save
 
     # Since you already checked in, delete reminder to check in again
-    sms_reminder_jobs = Delayed::Job.where(:owner_type => "Micropost", 
-                                           :owner_id => self.id, 
+    sms_reminder_jobs = Delayed::Job.where(:owner_type => "Micropost",
+                                           :owner_id => self.id,
                                            :owner_job_type => "4 Hour Reminder"
                                           )
     sms_reminder_jobs.each do |job|
@@ -185,7 +185,7 @@ class Micropost < ActiveRecord::Base
     !false ^ self.check_in_current
     # returns TRUE if it's CLEAN and hasn't been checked into
   end
-  
+
   def delayed_job
     Delayed::Job.find(delayed_job_id)
   end
@@ -212,7 +212,7 @@ class Micropost < ActiveRecord::Base
   handle_asynchronously :foo, :owner => Proc.new { |o| o  }
 
   private
-  
+
     # Validates the size of an uploaded picture.
     def picture_size
       if picture.size > 5.megabytes
@@ -220,4 +220,3 @@ class Micropost < ActiveRecord::Base
       end
     end
 end
- 
