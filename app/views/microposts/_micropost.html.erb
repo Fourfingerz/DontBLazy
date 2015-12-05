@@ -46,7 +46,7 @@
 
     <% else %> 
       <!-- Ruby Vars -->
-      <% due_time = Delayed::Job.where(:user_id => micropost.user.id, :owner_type => "Micropost", :owner_id => micropost.id, :owner_job_type => "24 Hour Deadline").order("created_at DESC").first.run_at %>
+      <% due_time = Delayed::Job.where(:user_id => micropost.user.id, :owner_type => "Micropost", :owner_id => micropost.id, :owner_job_type => "24 Hour Deadline").order("created_at DESC").first.try(:run_at) || Time.zone.now %>
       <% seconds_remaining = due_time - Time.current %>
       <% next_due_date = seconds_remaining + 24.hours %>
       <% user = micropost.user %>
