@@ -75,25 +75,37 @@ RSpec.describe Micropost, :type => :model do
   it "micropost#send_bad_news_to_buddies will send out SMS to recipients selected for Micropost when user fails a task"
   it "micropost#send_four_hour_reminder will send SMS to user if goal is 4 hours from due_time and user is not checked in"
 
-  it "micropost#check_in will properly check in a micropost depending on whether or not a user checked in" do
-    user = build(:user)
-    checked_post  = build(:micropost, user: user)
-    unchecked_post = build(:micropost, user: user)
+  describe "#check_in" do
+    let(:user) { create(:user) }
 
-    checked_post.set_initial_state
-    checked_post.check_in_current = true
-    checked_post.check_in
-    unchecked_post.set_initial_state
-    unchecked_post.check_in
+    context "when user did check in" do
+      let(:checked_post) do
+        micropost = build(:micropost, user: user)
+        micropost.set_initial_state
+        micropost.check_in_current = true
+        micropost.check_in
+        micropost
+      end
 
-    expect(checked_post.days_completed).to eq 1
-    expect(checked_post.days_remaining).to eq 4
-    expect(checked_post.current_day).to eq 2
-    expect(checked_post.check_in_current).to eq false
+      it { expect(checked_post.days_completed).to eq 1 }
+      it { expect(checked_post.days_remaining).to eq 4 }
+      it { expect(checked_post.current_day).to eq 2 }
+      it { expect(checked_post.check_in_current).to eq false }
+    end
 
-    expect(unchecked_post.days_completed).to eq 0
-    expect(unchecked_post.days_remaining).to eq 4
-    expect(unchecked_post.current_day).to eq 2
-    expect(unchecked_post.check_in_current).to eq false
+    context "when user did not check in" do
+      let(:unchecked_post) do
+        micropost = build(:micropost, user: user)
+        micropost.set_initial_state
+        micropost.check_in
+        micropost
+      end
+
+      it { expect(unchecked_post.days_completed).to eq 0 }
+
+      it { expect(unchecked_post.days_remaining).to eq 4 }
+      it { expect(unchecked_post.current_day).to eq 2 }
+      it { expect(unchecked_post.check_in_current).to eq false }
+    end
   end
 end
