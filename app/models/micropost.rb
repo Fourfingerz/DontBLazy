@@ -36,23 +36,27 @@ class Micropost < ActiveRecord::Base
   end
 
   def next_day_tally
-      self.days_remaining -= 1  # DB Column
-      self.current_day += 1     # DB Column
-      self.check_in_current = false
-      self.save
+    self.days_remaining -= 1  # DB Column
+    self.current_day += 1     # DB Column
+    self.check_in_current = false
+    self.save
   end
 
   # Clean up INACTIVE tasks
   def inactive_cleanup
     # Finds referenced micropost from user's map and deletes itself
     user = User.find_by(:id => self.user_id)
-    user.current_tasks_map = user.current_tasks_map.delete_if {|h| h["micropost id"] == self.id}
-    user.save
+    if user.current_tasks_map.present?
+      user.current_tasks_map = user.current_tasks_map.delete_if {|h| h["micropost id"] == self.id}
+      user.save
+    end
 
     # Finds and removes all associated Delayed Jobs still lurking in the system
-    garbage_jobs = Delayed::Job.where(:owner_type => "Micropost",
-                                      :owner_id => self.id
-                                    )
+    garbage_jobs = Delayed::Job.where(
+      :owner_type => "Micropost",
+      :owner_id => self.id
+    )
+
     garbage_jobs.each do |job|
       job.delete
     end
@@ -95,6 +99,8 @@ class Micropost < ActiveRecord::Base
 
   def send_four_hour_reminder
     user = User.find_by(:id => self.user_id)
+    return if user.current_tasks_map.nil?
+
     activity = self.title
     num = user.current_tasks_map.find{|id| id["micropost id"] == self.id}["task"]
     num_string = num.to_s
@@ -154,25 +160,31 @@ class Micropost < ActiveRecord::Base
     #if !ENV == test
     job = self.delay(run_at: 24.hours.from_now).check_in 
     update_column(:delayed_job_id, job.id)  # Update Delayed_job
-    Delayed::Job.find_by(:id => job.id).
-      update_columns(
+
+    job_2 = Delayed::Job.find_by(:id => job.id)
+    if job_2
+      job_2.update_columns(
         owner_type: "Micropost",
         owner_job_type: "24 Hour Deadline",
         owner_id: self.id,
         user_id: self.user_id,
       )
+    end
   end
 
   def schedule_four_hour_reminder  # eventually 4 hours will be a variable 
     job = self.delay(run_at: 20.hours.from_now).send_four_hour_reminder
     update_column(:delayed_job_id, job.id)  # Update Delayed_job
-    Delayed::Job.find_by(:id => job.id).
-      update_columns(
+
+    job_2 = Delayed::Job.find_by(:id => job.id)
+    if job_2
+      job_2.update_columns(
         owner_type: "Micropost",
         owner_job_type: "4 Hour Reminder",
         owner_id: self.id,
         user_id: self.user_id
       )
+    end
   end
 
   def schedule_new_day
@@ -199,11 +211,11 @@ class Micropost < ActiveRecord::Base
 
     @twilio_client = Twilio::REST::Client.new twilio_sid, twilio_token
 
-      @twilio_client.messages.create(
-        :from => twilio_phone_number,
-        :to => target_phone,
-        :body => content
-      )
+    @twilio_client.messages.create(
+      :from => twilio_phone_number,
+      :to => target_phone,
+      :body => content
+    )
   end
 
   # Associates Delayed Jobs with "owners" models
